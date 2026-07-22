@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -37,9 +38,11 @@ export function Services() {
               call and we'll design the right mix for your business.
             </p>
             <div className="mt-8">
-              <Button size="lg">
-                Book a Free Strategy Call <ArrowRight size={16} />
-              </Button>
+              <Link to="/contact">
+                <Button size="lg">
+                  Book a Free Strategy Call <ArrowRight size={16} />
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </Container>

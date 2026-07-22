@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 const links = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/pricing", label: "Pricing" },
   { to: "/portfolio", label: "Portfolio" },
   { to: "/contact", label: "Contact" },
 ];
@@ -51,7 +52,9 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:block">
-          <Button size="md">Book a Call</Button>
+          <NavLink to="/contact">
+            <Button size="md">Book a Call</Button>
+          </NavLink>
         </div>
 
         <button
@@ -82,7 +85,9 @@ export function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
-              <Button className="w-full">Book a Call</Button>
+              <NavLink to="/contact">
+                <Button className="w-full">Book a Call</Button>
+              </NavLink>
             </Container>
           </motion.nav>
         )}

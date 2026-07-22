@@ -49,8 +49,11 @@ export function Contact() {
             <GlassCard hoverLift={false} className="lg:col-span-3">
               <h2 className="text-lg font-semibold text-ink">Send us a message</h2>
               <div className="mt-6">
-                <ContactForm />
-              </div>
+                  <h2 className="text-lg font-semibold text-ink">Book Now</h2>
+                  <div className="mt-4">
+                    <ContactForm />
+                  </div>
+                </div>
             </GlassCard>
 
             <div className="space-y-6 lg:col-span-2">

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -56,10 +57,12 @@ export function Home() {
               finds, qualifies, and books your next customer — on autopilot.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button size="lg">
-                Book a Free Strategy Call <ArrowRight size={18} />
-              </Button>
-              <Button size="lg" variant="secondary">
+              <Link to="/contact">
+                <Button size="lg">
+                  Book a Free Strategy Call <ArrowRight size={18} />
+                </Button>
+              </Link>
+                <Button size="lg" variant="secondary">
                 See Case Studies
               </Button>
             </div>
@@ -263,12 +266,14 @@ export function Home() {
                 next 90 days of leads are coming from.
               </p>
               <div className="mt-8">
-                <Button
-                  size="lg"
-                  className="bg-white text-base font-semibold text-navy shadow-none hover:brightness-95"
-                >
-                  Book a Free Strategy Call <ArrowRight size={18} />
-                </Button>
+                <Link to="/contact">
+                  <Button
+                    size="lg"
+                    className="bg-white text-base font-semibold text-navy shadow-none hover:brightness-95"
+                  >
+                    Book a Free Strategy Call <ArrowRight size={18} />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

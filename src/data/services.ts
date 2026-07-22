@@ -26,6 +26,10 @@ export interface ServiceDetail {
   results: string;
   idealClient: string;
   pricingNote: string;
+  timeline?: string;
+  videoUrl?: string;
+  process?: string[];
+  price?: string;
 }
 
 export const services: ServiceDetail[] = [
@@ -132,6 +136,15 @@ export const services: ServiceDetail[] = [
     results: "Clients get a single, unified pipeline from first click through to closed deal — not disconnected tools.",
     idealClient: "Businesses launching a new website or migrating CRMs that need reliable lead capture.",
     pricingNote: "Scoped as a combined build + CRM setup project; pricing varies by scope.",
+    timeline: "2 days",
+    price: "From $1,200",
+    videoUrl: "https://www.youtube.com/embed/ScMzIvxBSi4",
+    process: [
+      "Discovery & goals — 1 day",
+      "Design & landing page build — 1 day",
+      "CRM wiring & testing — same day",
+      "Launch & QA — final checks"
+    ],
   },
   {
     slug: "cro",

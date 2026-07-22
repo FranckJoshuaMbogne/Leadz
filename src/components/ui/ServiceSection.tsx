@@ -43,9 +43,11 @@ export function ServiceSection({ service, index }: { service: ServiceDetail; ind
             </div>
 
             <div className="mt-8">
-              <Button size="lg">
-                Book a Free Strategy Call <ArrowRight size={16} />
-              </Button>
+              <Link to="/contact">
+                <Button size="lg">
+                  Book a Free Strategy Call <ArrowRight size={16} />
+                </Button>
+              </Link>
               <div className="mt-3">
                 <Link to={`/services/${service.slug}`} className="text-sm text-electric underline">
                   Learn more about {service.title}

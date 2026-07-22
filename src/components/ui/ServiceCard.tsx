@@ -12,7 +12,7 @@ interface ServiceCardProps {
 
 export function ServiceCard({ icon: Icon, title, description, anchor }: ServiceCardProps) {
   return (
-    <Link to={`/services#${anchor}`}>
+    <Link to={`/services/${anchor}`}>
       <GlassCard className="group h-full">
         <div className="flex items-start justify-between">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.06]">

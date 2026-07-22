@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Search, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -121,12 +122,14 @@ export function Portfolio() {
                 for your business.
               </p>
               <div className="mt-8">
-                <Button
-                  size="lg"
-                  className="bg-white text-base font-semibold text-navy shadow-none hover:brightness-95"
-                >
-                  Book a Free Strategy Call <ArrowRight size={18} />
-                </Button>
+                <Link to="/contact">
+                  <Button
+                    size="lg"
+                    className="bg-white text-base font-semibold text-navy shadow-none hover:brightness-95"
+                  >
+                    Book a Free Strategy Call <ArrowRight size={18} />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

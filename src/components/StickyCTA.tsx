@@ -21,9 +21,11 @@ export function StickyCTA() {
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 md:hidden"
         >
-          <Button size="lg" className="shadow-glow">
-            Book a Free Call
-          </Button>
+          <a href="/contact">
+            <Button size="lg" className="shadow-glow">
+              Book a Free Call
+            </Button>
+          </a>
         </motion.div>
       )}
     </AnimatePresence>

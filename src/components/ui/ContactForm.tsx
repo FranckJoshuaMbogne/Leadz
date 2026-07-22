@@ -13,6 +13,17 @@ const inputClass =
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [detectedCode] = useState(() => {
+    try {
+      const lang = navigator.language || (navigator as any).userLanguage || "en-US";
+      if (/in|india/i.test(lang)) return "+91";
+      if (/gb|uk|en-?gb/i.test(lang)) return "+44";
+      if (/us|en-?us/i.test(lang)) return "+1";
+      return "+91";
+    } catch {
+      return "+91";
+    }
+  });
   const {
     register,
     handleSubmit,
@@ -35,9 +46,9 @@ export function ContactForm() {
         className="flex h-full flex-col items-center justify-center py-16 text-center"
       >
         <CheckCircle2 size={40} className="text-electric" />
-        <h3 className="mt-4 text-lg font-semibold text-ink">Message sent</h3>
+        <h3 className="mt-4 text-lg font-semibold text-ink">Booking requested</h3>
         <p className="mt-2 max-w-xs text-sm text-silver">
-          A strategist will reach out within one business day to schedule your free call.
+          Thanks — a strategist will reach out within one business day to schedule your booking.
         </p>
         <button
           onClick={() => setSubmitted(false)}
@@ -96,7 +107,19 @@ export function ContactForm() {
           <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-ink">
             Phone
           </label>
-          <input id="phone" type="tel" className={inputClass} {...register("phone")} />
+          <div className="flex items-stretch gap-2">
+            <select
+              {...register("countryCode")}
+              defaultValue={detectedCode}
+              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-ink"
+            >
+              <option value="+91">+91</option>
+              <option value="+1">+1</option>
+              <option value="+44">+44</option>
+              <option value="+61">+61</option>
+            </select>
+            <input id="phone" type="tel" className={inputClass + " flex-1"} {...register("phone")} />
+          </div>
           <AnimatePresence>
             {errors.phone && (
               <motion.p
@@ -178,7 +201,7 @@ export function ContactForm() {
       </div>
 
       <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Send Message"} <Send size={16} />
+        {isSubmitting ? "Booking..." : "Book Now"} <Send size={16} />
       </Button>
     </form>
   );
