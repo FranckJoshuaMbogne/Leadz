@@ -73,3 +73,15 @@
     --color-ink: #0B1220;
   }
 }
+
+/* Allow an explicit light theme via data-theme="light" on the <html> element */
+[data-theme="light"] {
+  --color-base: #ffffff;
+  --color-elevated: #f6f7fb;
+  --color-navy: #0A1128;
+  --color-electric: #3D7BFF;
+  --color-cyan: #22D3EE;
+  --color-purple: #7C5CFF;
+  --color-silver: #4B5563;
+  --color-ink: #0B1220;
+}

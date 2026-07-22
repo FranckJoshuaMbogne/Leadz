@@ -14,12 +14,12 @@ export function StickyCTA() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
+          <motion.div
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 md:hidden"
+          className="hidden"
         >
           <a href="/contact">
             <Button size="lg" className="shadow-glow">

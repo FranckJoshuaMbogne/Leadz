@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Container } from "./ui/Container";
 import { Button } from "./ui/Button";
+import { ThemeToggle } from "./ui/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -31,10 +32,8 @@ export function Navbar() {
         scrolled ? "glass" : "bg-transparent border-b border-transparent"
       )}
     >
-      <Container className="flex h-16 items-center justify-between md:h-20">
-        <NavLink to="/" className="font-display text-lg font-bold text-ink">Leadz.in</NavLink>
-
-        <nav className="hidden items-center gap-8 md:flex">
+      <Container className="relative flex h-16 items-center justify-between md:h-20">
+        <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <NavLink
               key={l.to}
@@ -51,15 +50,23 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <NavLink
+          to="/"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-lg font-bold text-ink md:static md:translate-x-0"
+        >
+          LeadZ<span className="text-gradient">.in</span>
+        </NavLink>
+
+        <div className="hidden md:flex items-center">
+          <ThemeToggle />
           <NavLink to="/contact">
-            <Button size="md">Book a Call</Button>
+            <Button size="md" className="ml-3">Book a Call</Button>
           </NavLink>
         </div>
 
         <button
           aria-label="Toggle menu"
-          className="text-ink md:hidden"
+          className="text-ink md:hidden absolute right-4"
           onClick={() => setOpen((o) => !o)}
         >
           {open ? <X size={24} /> : <Menu size={24} />}

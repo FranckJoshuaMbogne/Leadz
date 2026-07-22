@@ -6,6 +6,8 @@ export const contactFormSchema = z.object({
   countryCode: z.string().trim().optional(),
   phone: z.string().trim().min(5, "Enter a valid phone number"),
   company: z.string().trim().optional(),
+  city: z.string().trim().optional(),
+  country: z.string().trim().optional(),
   service: z.string().min(1, "Select what you're interested in"),
   message: z.string().trim().min(10, "Tell us a bit more (10+ characters)"),
 });

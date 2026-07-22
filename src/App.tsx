@@ -9,6 +9,8 @@ import { Portfolio } from "@/pages/Portfolio";
 import { Contact } from "@/pages/Contact";
 import { ServiceLanding } from "@/pages/ServiceLanding";
 import { Pricing } from "@/pages/Pricing";
+import AdminLogin from "@/pages/AdminLogin";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/dashboard" element={<AdminDashboard />} />
         </Routes>
       </main>
       <Footer />

@@ -31,9 +31,37 @@ export function ContactForm() {
     reset,
   } = useForm<ContactFormValues>({ resolver: zodResolver(contactFormSchema) });
 
-  const onSubmit = async () => {
-    // Wire this up to your form backend / CRM webhook of choice.
-    await new Promise((r) => setTimeout(r, 700));
+  const onSubmit = async (data: ContactFormValues) => {
+    const WEBHOOK = (import.meta as any).env.VITE_WEBHOOK_URL || "https://example.com/webhook";
+
+    // Save to localStorage for admin dashboard
+    try {
+      const existing = JSON.parse(localStorage.getItem("contact_submissions") || "[]");
+      existing.unshift({ ...data, createdAt: new Date().toISOString() });
+      localStorage.setItem("contact_submissions", JSON.stringify(existing));
+    } catch (e) {
+      // ignore
+    }
+
+    // Send minimal payload (includes selected service prominently)
+    try {
+      await fetch(WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          phone: `${data.countryCode || ""} ${data.phone || ""}`.trim(),
+          service: data.service,
+          city: data.city,
+          country: data.country,
+          message: data.message,
+        }),
+      });
+    } catch (e) {
+      // network errors are non-fatal for now
+    }
+
     setSubmitted(true);
     reset();
   };
@@ -139,6 +167,22 @@ export function ContactForm() {
             Company <span className="text-silver">(optional)</span>
           </label>
           <input id="company" className={inputClass} {...register("company")} />
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="city" className="mb-1.5 block text-sm font-medium text-ink">
+            City
+          </label>
+          <input id="city" className={inputClass} {...register("city")} />
+        </div>
+
+        <div>
+          <label htmlFor="country" className="mb-1.5 block text-sm font-medium text-ink">
+            Country
+          </label>
+          <input id="country" className={inputClass} {...register("country")} />
         </div>
       </div>
 
