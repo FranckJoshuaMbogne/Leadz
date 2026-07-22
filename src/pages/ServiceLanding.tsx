@@ -49,7 +49,18 @@ export function ServiceLanding() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-              {service.videoUrl && (
+              {service.lottieUrl ? (
+                <div className="aspect-video w-full overflow-hidden rounded-card bg-transparent flex items-center justify-center">
+                  <lottie-player
+                    src={service.lottieUrl}
+                    background="transparent"
+                    speed="1"
+                    loop
+                    autoplay
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+              ) : service.videoUrl ? (
                 <div className="aspect-video w-full overflow-hidden rounded-card bg-black">
                   <iframe
                     className="h-full w-full"
@@ -60,7 +71,7 @@ export function ServiceLanding() {
                     allowFullScreen
                   />
                 </div>
-              )}
+              ) : null}
 
               <div className="mt-6 space-y-6">
                 <h3 className="text-lg font-semibold text-ink">What we deliver</h3>

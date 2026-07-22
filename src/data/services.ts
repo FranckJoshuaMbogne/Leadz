@@ -28,6 +28,7 @@ export interface ServiceDetail {
   pricingNote: string;
   timeline?: string;
   videoUrl?: string;
+  lottieUrl?: string;
   process?: string[];
   price?: string;
 }
@@ -49,6 +50,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically reach a stable, repeatable lead volume within 30–45 days of launch.",
     idealClient: "Local and service businesses with a defined offer and the capacity to handle 20+ new leads per month.",
     pricingNote: "Scoped to your target lead volume — full breakdown on your strategy call.",
+    timeline: "30–45 days",
+    price: "From ₹25,000/month",
   },
   {
     slug: "google-ads",
@@ -66,6 +69,8 @@ export const services: ServiceDetail[] = [
     results: "Most accounts see a meaningful drop in cost per qualified lead within the first billing cycle.",
     idealClient: "Businesses in markets with active search demand — legal, medical, home services, real estate.",
     pricingNote: "Management fee plus ad spend — sized to your market and goals.",
+    timeline: "Ongoing",
+    price: "From ₹12,000/month + ad spend",
   },
   {
     slug: "meta-ads",
@@ -83,6 +88,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically see engagement and lead quality improve within the first 2–3 creative cycles.",
     idealClient: "Businesses with a visual offer or story — hospitality, real estate, clinics, retail.",
     pricingNote: "Management fee plus ad spend — sized to your market and goals.",
+    timeline: "Ongoing",
+    price: "From ₹12,000/month + ad spend",
   },
   {
     slug: "local-seo",
@@ -100,6 +107,8 @@ export const services: ServiceDetail[] = [
     results: "Most clients see measurable ranking improvement for priority keywords within 60–90 days.",
     idealClient: "Businesses that depend on nearby, in-person customers — clinics, restaurants, law firms, home services.",
     pricingNote: "Flat monthly retainer based on number of locations and keyword targets.",
+    timeline: "60–90 days",
+    price: "From ₹15,000/month",
   },
   {
     slug: "landing-pages",
@@ -117,6 +126,9 @@ export const services: ServiceDetail[] = [
     results: "New landing pages typically outperform generic homepage conversion rates within the first split test.",
     idealClient: "Any business running paid traffic that currently lands on a general website.",
     pricingNote: "Per-page build fee, or included in full-funnel packages.",
+    timeline: "2 days",
+    price: "From ₹8,000 per page",
+    lottieUrl: "https://assets10.lottiefiles.com/packages/lf20_tfb3estd.json",
   },
   {
     slug: "website-crm",
@@ -137,8 +149,8 @@ export const services: ServiceDetail[] = [
     idealClient: "Businesses launching a new website or migrating CRMs that need reliable lead capture.",
     pricingNote: "Scoped as a combined build + CRM setup project; pricing varies by scope.",
     timeline: "2 days",
-    price: "From $1,200",
-    videoUrl: "https://www.youtube.com/embed/ScMzIvxBSi4",
+    price: "From ₹25,000",
+    lottieUrl: "https://assets10.lottiefiles.com/packages/lf20_tfb3estd.json",
     process: [
       "Discovery & goals — 1 day",
       "Design & landing page build — 1 day",
@@ -162,6 +174,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically see incremental conversion rate gains compounding over each 90-day testing cycle.",
     idealClient: "Businesses already generating meaningful traffic that want more from the same spend.",
     pricingNote: "Monthly retainer scoped to testing volume and page count.",
+    timeline: "Ongoing",
+    price: "From ₹18,000/month",
   },
   {
     slug: "crm-automation",
@@ -179,6 +193,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically cut lead response time from hours to under a minute after setup.",
     idealClient: "Any business currently tracking leads manually or with disconnected tools.",
     pricingNote: "One-time setup fee, with optional ongoing management.",
+    timeline: "1–5 days (depending on complexity)",
+    price: "From ₹10,000",
   },
   {
     slug: "marketing-automation",
@@ -196,6 +212,8 @@ export const services: ServiceDetail[] = [
     results: "Automated nurture sequences typically recover a meaningful share of leads that would otherwise go cold.",
     idealClient: "Businesses with longer sales cycles or high lead volume that can't be manually followed up.",
     pricingNote: "Included in full-funnel packages, or scoped separately by sequence count.",
+    timeline: "1–2 weeks",
+    price: "From ₹20,000",
   },
   {
     slug: "ai-chatbots",
@@ -213,6 +231,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically capture a meaningful share of after-hours leads that were previously lost entirely.",
     idealClient: "Businesses that receive inbound messages outside business hours or struggle with response speed.",
     pricingNote: "Monthly platform fee plus one-time setup and training.",
+    timeline: "1–2 weeks",
+    price: "From ₹12,000",
   },
   {
     slug: "sales-funnels",
@@ -230,6 +250,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically identify and fix at least one major drop-off point within the first funnel audit.",
     idealClient: "Businesses with multiple offers or a multi-step sales process that isn't yet mapped or measured.",
     pricingNote: "Scoped project fee based on funnel complexity.",
+    timeline: "1–3 weeks",
+    price: "From ₹30,000",
   },
   {
     slug: "email-marketing",
@@ -247,6 +269,8 @@ export const services: ServiceDetail[] = [
     results: "Reactivated lists typically produce a measurable number of new booked calls within the first campaign cycle.",
     idealClient: "Businesses with an existing list that isn't being actively nurtured.",
     pricingNote: "Monthly retainer based on list size and send frequency.",
+    timeline: "Ongoing",
+    price: "From ₹8,000/month",
   },
   {
     slug: "business-intelligence",
@@ -264,6 +288,8 @@ export const services: ServiceDetail[] = [
     results: "Clients typically identify their true cost per booked call, by channel, for the first time.",
     idealClient: "Businesses running multiple channels or locations that lack a single source of truth.",
     pricingNote: "One-time build fee, with optional ongoing maintenance.",
+    timeline: "2–4 weeks",
+    price: "From ₹40,000",
   },
   {
     slug: "analytics",
@@ -281,5 +307,7 @@ export const services: ServiceDetail[] = [
     results: "Clients typically reallocate budget toward top-performing channels within the first reporting cycle.",
     idealClient: "Businesses spending meaningfully on paid channels without clear attribution today.",
     pricingNote: "Included in full-funnel packages, or scoped as a standalone audit and setup.",
+    timeline: "1–2 weeks",
+    price: "From ₹15,000",
   },
 ];
