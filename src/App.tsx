@@ -7,6 +7,7 @@ import { Home } from "@/pages/Home";
 import { Services } from "@/pages/Services";
 import { Portfolio } from "@/pages/Portfolio";
 import { Contact } from "@/pages/Contact";
+import { ServiceLanding } from "@/pages/ServiceLanding";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/:slug" element={<ServiceLanding />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>

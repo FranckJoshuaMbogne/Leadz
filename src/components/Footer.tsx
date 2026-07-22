@@ -33,9 +33,7 @@ export function Footer() {
     <footer className="border-t border-white/[0.08] bg-elevated">
       <Container className="grid gap-12 py-16 md:grid-cols-4">
         <div>
-          <p className="font-display text-lg font-bold text-ink">
-            Nexus<span className="text-gradient">Growth</span>
-          </p>
+          <p className="font-display text-lg font-bold text-ink">Leadz.in</p>
           <p className="mt-3 max-w-xs text-sm text-silver">
             We turn ad spend into booked calls — predictably.
           </p>
@@ -65,7 +63,7 @@ export function Footer() {
 
       <div className="border-t border-white/[0.08] py-6">
         <Container className="flex flex-col items-center justify-between gap-2 text-xs text-silver md:flex-row">
-          <p>© {new Date().getFullYear()} Nexus Growth. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Leadz.in. All rights reserved.</p>
           <p>Built for businesses that want predictable revenue.</p>
         </Container>
       </div>

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight, Check } from "lucide-react";
 import { Container } from "./Container";
 import { Button } from "./Button";
@@ -45,6 +46,11 @@ export function ServiceSection({ service, index }: { service: ServiceDetail; ind
               <Button size="lg">
                 Book a Free Strategy Call <ArrowRight size={16} />
               </Button>
+              <div className="mt-3">
+                <Link to={`/services/${service.slug}`} className="text-sm text-electric underline">
+                  Learn more about {service.title}
+                </Link>
+              </div>
             </div>
           </motion.div>
 

@@ -115,6 +115,25 @@ export const services: ServiceDetail[] = [
     pricingNote: "Per-page build fee, or included in full-funnel packages.",
   },
   {
+    slug: "website-crm",
+    icon: LayoutTemplate,
+    title: "Website & CRM Building",
+    tagline: "Websites and CRM that capture and convert — built together.",
+    problem:
+      "Websites and CRM are often built by different teams, leaving gaps where leads fall through and tracking is lost.",
+    solution:
+      "We design high-converting websites and wire them directly into your CRM so every click becomes a tracked lead, tagged, and routed automatically.",
+    benefits: [
+      "Integrated website forms and booking flows tied straight into your CRM",
+      "Landing pages and site funnels optimized to book calls",
+      "Full tracking from ad click to CRM lead and booked call",
+      "Ongoing A/B testing and iterative improvements"
+    ],
+    results: "Clients get a single, unified pipeline from first click through to closed deal — not disconnected tools.",
+    idealClient: "Businesses launching a new website or migrating CRMs that need reliable lead capture.",
+    pricingNote: "Scoped as a combined build + CRM setup project; pricing varies by scope.",
+  },
+  {
     slug: "cro",
     icon: TrendingUp,
     title: "Conversion Rate Optimization",

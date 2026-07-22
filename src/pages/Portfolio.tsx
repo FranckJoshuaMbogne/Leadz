@@ -11,7 +11,7 @@ import { caseStudies, industryFilters } from "@/data/portfolio";
 
 export function Portfolio() {
   useSEO(
-    "Portfolio — Nexus Growth",
+    "Portfolio — Leadz.in",
     "Real case studies across dental, legal, real estate, hospitality, clinics, and SaaS — with the metrics behind every result."
   );
 

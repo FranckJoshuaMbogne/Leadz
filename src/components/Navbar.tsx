@@ -31,9 +31,7 @@ export function Navbar() {
       )}
     >
       <Container className="flex h-16 items-center justify-between md:h-20">
-        <NavLink to="/" className="font-display text-lg font-bold text-ink">
-          Nexus<span className="text-gradient">Growth</span>
-        </NavLink>
+        <NavLink to="/" className="font-display text-lg font-bold text-ink">Leadz.in</NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
           {links.map((l) => (

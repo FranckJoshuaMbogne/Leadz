@@ -12,7 +12,7 @@ import { socialLinks, businessHours, contactFaqs } from "@/data/contact";
 
 export function Contact() {
   useSEO(
-    "Contact — Nexus Growth",
+    "Contact — Leadz.in",
     "Book a free strategy call or send us a message. We typically respond within one business day."
   );
 
@@ -59,7 +59,7 @@ export function Contact() {
                   <CalendarCheck size={18} /> Book a Call on Calendly
                 </Button>
                 <a
-                  href="https://wa.me/10000000000"
+                  href="https://wa.me/918522997932"
                   target="_blank"
                   rel="noreferrer"
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-pill glass py-3.5 text-sm font-semibold text-ink hover:bg-white/[0.08]"
@@ -72,14 +72,14 @@ export function Contact() {
                 <ul className="space-y-4 text-sm">
                   <li className="flex items-start gap-3">
                     <Mail size={16} className="mt-0.5 shrink-0 text-electric" />
-                    <a href="mailto:hello@nexusgrowth.io" className="text-silver hover:text-ink">
-                      hello@nexusgrowth.io
+                    <a href="mailto:hello@leadz.in" className="text-silver hover:text-ink">
+                      hello@leadz.in
                     </a>
                   </li>
                   <li className="flex items-start gap-3">
                     <Phone size={16} className="mt-0.5 shrink-0 text-electric" />
-                    <a href="tel:+10000000000" className="text-silver hover:text-ink">
-                      +1 (000) 000-0000
+                    <a href="tel:+918522997932" className="text-silver hover:text-ink">
+                      +91 85229 97932
                     </a>
                   </li>
                   <li className="flex items-start gap-3">

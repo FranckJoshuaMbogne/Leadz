@@ -10,7 +10,7 @@ import { services } from "@/data/services";
 
 export function Services() {
   useSEO(
-    "Services — Nexus Growth",
+    "Services — Leadz.in",
     "Lead generation, Google Ads, Meta Ads, local SEO, CRO, CRM automation, AI chatbots, and more — one connected growth system."
   );
 

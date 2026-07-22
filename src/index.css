@@ -48,3 +48,28 @@
     @apply py-section-sm md:py-section;
   }
 }
+
+/* CSS variables for automatic light/dark adaptation */
+:root {
+  --color-base: #05070D;
+  --color-elevated: #0B0F1A;
+  --color-navy: #0A1128;
+  --color-electric: #3D7BFF;
+  --color-cyan: #22D3EE;
+  --color-purple: #7C5CFF;
+  --color-silver: #C7CDD9;
+  --color-ink: #F5F7FB;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-base: #ffffff;
+    --color-elevated: #f6f7fb;
+    --color-navy: #0A1128;
+    --color-electric: #3D7BFF;
+    --color-cyan: #22D3EE;
+    --color-purple: #7C5CFF;
+    --color-silver: #4B5563;
+    --color-ink: #0B1220;
+  }
+}

@@ -29,7 +29,7 @@ import {
 
 export function Home() {
   useSEO(
-    "Nexus Growth — AI-Powered Lead Generation Agency",
+    "Leadz.in — AI-Powered Lead Generation Agency",
     "We turn ad spend into booked calls. AI, automation, and paid media combined into one predictable revenue system."
   );
 
@@ -52,7 +52,7 @@ export function Home() {
               We turn ad spend into <GradientText>booked calls.</GradientText>
             </h1>
             <p className="mt-6 text-lg text-silver md:text-xl">
-              Nexus Growth combines AI, automation, and paid media into one system that
+              Leadz.in combines AI, automation, and paid media into one system that
               finds, qualifies, and books your next customer — on autopilot.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -86,7 +86,7 @@ export function Home() {
       <section className="section-y">
         <Container>
           <SectionHeading
-            eyebrow="Why Nexus Growth"
+            eyebrow="Why Leadz.in"
             title="Built to be measured, not just admired"
             subtitle="Every system we build reports back to one number: cost per booked call."
           />
