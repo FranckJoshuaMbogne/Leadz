@@ -33,7 +33,14 @@ export function Navbar() {
       )}
     >
       <Container className="relative flex h-16 items-center justify-between md:h-20">
-        <nav className="hidden md:flex items-center gap-8">
+        <NavLink
+          to="/"
+          className="font-display text-lg font-bold text-ink md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2"
+        >
+          LeadZ<span className="text-gradient">.in</span>
+        </NavLink>
+
+        <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex">
           {links.map((l) => (
             <NavLink
               key={l.to}
@@ -50,14 +57,7 @@ export function Navbar() {
           ))}
         </nav>
 
-        <NavLink
-          to="/"
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-lg font-bold text-ink md:static md:translate-x-0"
-        >
-          LeadZ<span className="text-gradient">.in</span>
-        </NavLink>
-
-        <div className="hidden md:flex items-center">
+        <div className="ml-auto hidden items-center md:flex">
           <ThemeToggle />
           <NavLink to="/contact">
             <Button size="md" className="ml-3">Book a Call</Button>
