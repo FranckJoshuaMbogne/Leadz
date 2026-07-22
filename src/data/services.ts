@@ -128,7 +128,7 @@ export const services: ServiceDetail[] = [
     pricingNote: "Per-page build fee, or included in full-funnel packages.",
     timeline: "2 days",
     price: "From ₹8,000 per page",
-    lottieUrl: "https://assets10.lottiefiles.com/packages/lf20_tfb3estd.json",
+    lottieUrl: "/lotties/landing-pages.json",
   },
   {
     slug: "website-crm",
@@ -150,7 +150,7 @@ export const services: ServiceDetail[] = [
     pricingNote: "Scoped as a combined build + CRM setup project; pricing varies by scope.",
     timeline: "2 days",
     price: "From ₹25,000",
-    lottieUrl: "https://assets10.lottiefiles.com/packages/lf20_tfb3estd.json",
+    lottieUrl: "/lotties/website-crm.json",
     process: [
       "Discovery & goals — 1 day",
       "Design & landing page build — 1 day",
