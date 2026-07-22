@@ -1,0 +1,185 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, Send } from "lucide-react";
+import { useState } from "react";
+import { Button } from "./Button";
+import { cn } from "@/lib/utils";
+import { contactFormSchema, type ContactFormValues } from "@/lib/validation";
+import { serviceOptions } from "@/data/contact";
+
+const inputClass =
+  "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-ink placeholder:text-silver/50 focus:border-electric focus:outline-none";
+
+export function ContactForm() {
+  const [submitted, setSubmitted] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ContactFormValues>({ resolver: zodResolver(contactFormSchema) });
+
+  const onSubmit = async () => {
+    // Wire this up to your form backend / CRM webhook of choice.
+    await new Promise((r) => setTimeout(r, 700));
+    setSubmitted(true);
+    reset();
+  };
+
+  if (submitted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex h-full flex-col items-center justify-center py-16 text-center"
+      >
+        <CheckCircle2 size={40} className="text-electric" />
+        <h3 className="mt-4 text-lg font-semibold text-ink">Message sent</h3>
+        <p className="mt-2 max-w-xs text-sm text-silver">
+          A strategist will reach out within one business day to schedule your free call.
+        </p>
+        <button
+          onClick={() => setSubmitted(false)}
+          className="mt-6 text-sm font-medium text-electric hover:underline"
+        >
+          Send another message
+        </button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-ink">
+            Full name
+          </label>
+          <input id="name" className={inputClass} {...register("name")} />
+          <AnimatePresence>
+            {errors.name && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                role="alert"
+                className="mt-1.5 text-xs text-red-400"
+              >
+                {errors.name.message}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div>
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">
+            Email
+          </label>
+          <input id="email" type="email" className={inputClass} {...register("email")} />
+          <AnimatePresence>
+            {errors.email && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                role="alert"
+                className="mt-1.5 text-xs text-red-400"
+              >
+                {errors.email.message}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-ink">
+            Phone
+          </label>
+          <input id="phone" type="tel" className={inputClass} {...register("phone")} />
+          <AnimatePresence>
+            {errors.phone && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                role="alert"
+                className="mt-1.5 text-xs text-red-400"
+              >
+                {errors.phone.message}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div>
+          <label htmlFor="company" className="mb-1.5 block text-sm font-medium text-ink">
+            Company <span className="text-silver">(optional)</span>
+          </label>
+          <input id="company" className={inputClass} {...register("company")} />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="service" className="mb-1.5 block text-sm font-medium text-ink">
+          What are you interested in?
+        </label>
+        <select
+          id="service"
+          defaultValue=""
+          className={cn(inputClass, "appearance-none")}
+          {...register("service")}
+        >
+          <option value="" disabled>
+            Select an option
+          </option>
+          {serviceOptions.map((opt) => (
+            <option key={opt} value={opt} className="bg-elevated">
+              {opt}
+            </option>
+          ))}
+        </select>
+        <AnimatePresence>
+          {errors.service && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              role="alert"
+              className="mt-1.5 text-xs text-red-400"
+            >
+              {errors.service.message}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div>
+        <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink">
+          Message
+        </label>
+        <textarea
+          id="message"
+          rows={4}
+          className={inputClass}
+          placeholder="Tell us a bit about your business and goals..."
+          {...register("message")}
+        />
+        <AnimatePresence>
+          {errors.message && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              role="alert"
+              className="mt-1.5 text-xs text-red-400"
+            >
+              {errors.message.message}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? "Sending..." : "Send Message"} <Send size={16} />
+      </Button>
+    </form>
+  );
+}
