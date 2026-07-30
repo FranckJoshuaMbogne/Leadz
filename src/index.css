@@ -7,6 +7,12 @@
     scroll-behavior: smooth;
   }
 
+  body {
+    background: var(--color-base);
+    color: var(--color-ink);
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
   ::selection {
     background: rgba(61, 123, 255, 0.35);
     color: #ffffff;
@@ -35,7 +41,9 @@
 
 @layer components {
   .glass {
-    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08];
+    background: var(--color-glass);
+    border: 1px solid var(--color-border);
+    @apply backdrop-blur-xl;
   }
 
   .text-gradient {
@@ -49,7 +57,7 @@
   }
 }
 
-/* CSS variables for automatic light/dark adaptation */
+/* Dark is the default. Explicit data-theme values always win over the OS setting. */
 :root {
   --color-base: #05070D;
   --color-elevated: #0B0F1A;
@@ -59,29 +67,48 @@
   --color-purple: #7C5CFF;
   --color-silver: #C7CDD9;
   --color-ink: #F5F7FB;
+  --color-glass: rgba(11, 15, 26, 0.78);
+  --color-border: rgba(255, 255, 255, 0.08);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
+[data-theme="light"] {
     --color-base: #ffffff;
-    --color-elevated: #f6f7fb;
+    --color-elevated: #ffffff;
     --color-navy: #0A1128;
     --color-electric: #3D7BFF;
     --color-cyan: #22D3EE;
     --color-purple: #7C5CFF;
     --color-silver: #4B5563;
     --color-ink: #0B1220;
-  }
+    --color-glass: rgba(255, 255, 255, 0.88);
+    --color-border: rgba(11, 18, 32, 0.1);
 }
 
-/* Allow an explicit light theme via data-theme="light" on the <html> element */
-[data-theme="light"] {
-  --color-base: #ffffff;
-  --color-elevated: #f6f7fb;
+[data-theme="dark"] {
+  --color-base: #05070D;
+  --color-elevated: #0B0F1A;
   --color-navy: #0A1128;
   --color-electric: #3D7BFF;
   --color-cyan: #22D3EE;
   --color-purple: #7C5CFF;
-  --color-silver: #4B5563;
-  --color-ink: #0B1220;
+  --color-silver: #C7CDD9;
+  --color-ink: #F5F7FB;
+  --color-glass: rgba(11, 15, 26, 0.78);
+  --color-border: rgba(255, 255, 255, 0.08);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --color-base: #fbfaf7;
+    --color-elevated: #ffffff;
+    --color-silver: #4B5563;
+    --color-ink: #0B1220;
+    --color-glass: rgba(255, 255, 255, 0.88);
+    --color-border: rgba(11, 18, 32, 0.1);
+  }
+}
+
+[data-theme="light"] .bg-gradient-radial-glow,
+[data-theme="light"] .bg-base {
+  background-image: none;
 }

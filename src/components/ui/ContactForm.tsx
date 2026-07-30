@@ -23,6 +23,28 @@ export function ContactForm() {
     } catch {
       return "+91";
     }
+  //   try {
+  // // 1. Get browser language (e.g., "en-US", "hi-IN", "fr-FR")
+  //     const lang = navigator.language || (navigator as any).userLanguage || 'en-US';
+  
+  // // 2. Extract the 2-letter country code suffix (e.g., "US", "IN", "GB")
+  //     const parts = lang.split('-');
+  //     const country = parts.length > 1 ? parts[1].toUpperCase() : parts[0].toUpperCase();
+
+  // // 3. Complete country-to-calling-code mapping
+  //     const countryCodes = {
+  //   'US': 1, 'CA': 1, 'GB': 44, 'IN': 91, 'AU': 61, 'DE': 49, 'FR': 33, 
+  //   'IT': 39, 'JP': 81, 'CN': 86, 'BR': 55, 'RU': 7, 'ZA': 27, 'MX': 52,
+  //   // Add any remaining specific country pairs here as needed...
+  //    };
+
+  // // 4. Return matching code, defaulting to +91 if not found
+  //     return countryCodes[country] ? `+${countryCodes[country]}` : '+91';
+
+  //   } catch {
+  //     return '+91'; // Fallback for unexpected browser errors
+  //     }
+
   });
   const {
     register,

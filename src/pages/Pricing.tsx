@@ -29,7 +29,7 @@ export function Pricing() {
     <main>
       <section className="section-y">
         <Container className="text-center">
-          <h1 className="text-display-lg font-display font-bold text-ink">Pricing & Plans</h1>
+          <h1 className="text-display-lg font-display font-bold text-ink">Pricing</h1>
           <p className="mt-4 text-silver">Choose a bundle to get started — all plans are custom scoped.</p>
         </Container>
       </section>

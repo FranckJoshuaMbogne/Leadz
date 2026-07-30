@@ -35,7 +35,7 @@ export function Contact() {
               Let's build your <GradientText>growth system.</GradientText>
             </h1>
             <p className="mt-5 text-lg text-silver">
-              Send a message, book a call directly, or reach us on WhatsApp — we typically
+              Send a message, book a call directly, or reach us on WhatsApp, we typically
               respond within one business day.
             </p>
           </motion.div>
@@ -47,9 +47,8 @@ export function Contact() {
         <Container>
           <div className="grid gap-8 lg:grid-cols-5">
             <GlassCard hoverLift={false} className="lg:col-span-3">
-              <h2 className="text-lg font-semibold text-ink">Send us a message</h2>
+              <h1 className="text-lg font-semibold text-ink">Book Now</h1>
               <div className="mt-6">
-                  <h2 className="text-lg font-semibold text-ink">Book Now</h2>
                   <div className="mt-4">
                     <ContactForm />
                   </div>
@@ -58,9 +57,12 @@ export function Contact() {
 
             <div className="space-y-6 lg:col-span-2">
               <GlassCard hoverLift={false}>
-                <Button size="lg" className="w-full">
-                  <CalendarCheck size={18} /> Book a Call on Calendly
-                </Button>
+                 <a
+                  href="https://calendly.com/farz-partners/30min"
+                  target="_blank"
+                  rel="noreferrer"
+                 ><Button size="lg" className="w-full"><CalendarCheck size={18} /> Book a Call on Calendly
+                </Button></a>
                 <a
                   href="https://wa.me/918522997932"
                   target="_blank"
@@ -159,7 +161,7 @@ export function Contact() {
             Get growth tips in your inbox
           </h2>
           <p className="mt-3 text-silver">
-            One email a month. No fluff — just what's working in paid acquisition right now.
+            One email a month. No fluff, just what's working in paid acquisition right now.
           </p>
           <div className="mt-6">
             <Newsletter />

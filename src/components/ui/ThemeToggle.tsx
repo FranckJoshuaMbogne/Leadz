@@ -18,7 +18,7 @@ export function ThemeToggle() {
         document.documentElement.setAttribute("data-theme", "light");
         localStorage.setItem("site_theme", "light");
       } else {
-        document.documentElement.removeAttribute("data-theme");
+        document.documentElement.setAttribute("data-theme", "dark");
         localStorage.setItem("site_theme", "dark");
       }
     } catch (e) {
@@ -29,6 +29,8 @@ export function ThemeToggle() {
   return (
     <button
       aria-label="Toggle theme"
+      aria-pressed={light}
+      title={light ? "Passer au thème sombre" : "Passer au thème clair"}
       onClick={() => setLight((s) => !s)}
       className="ml-3 inline-flex items-center justify-center rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-1 text-sm text-ink"
     >
