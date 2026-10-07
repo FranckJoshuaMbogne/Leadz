@@ -109,7 +109,7 @@ const routes = [
 
 const assets = await fs.readdir(path.join(dist, "assets"));
 const preloadFonts = assets
-  .filter((f) => /^(bodoni-moda-latin-opsz-(normal|italic)|dm-sans-latin-wght-normal)-.*\.woff2$/.test(f))
+  .filter((f) => /^(bodoni-moda-latin-opsz-(normal|italic)|dm-sans-latin-wght-normal|instrument-serif-latin-400-normal|playfair-display-latin-wght-italic)-.*\.woff2$/.test(f))
   .map((f) => `<link rel="preload" href="/assets/${f}" as="font" type="font/woff2" crossorigin>`)
   .join("\n    ");
 

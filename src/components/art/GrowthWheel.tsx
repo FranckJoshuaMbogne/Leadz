@@ -73,7 +73,7 @@ export function GrowthWheel({ active, progress, className }: { active: number; p
         );
       })}
 
-      <text x={C} y={C - 8} textAnchor="middle" fontFamily="Bodoni Moda Variable, Bodoni Moda, serif" fontSize="64" fill="#F5F1E8" fontStyle="italic">
+      <text x={C} y={C - 8} textAnchor="middle" fontFamily="Playfair Display Variable, Playfair Display, serif" fontSize="60" fill="#F5F1E8" fontStyle="italic">
         360
       </text>
       <text x={C} y={C + 32} textAnchor="middle" fontFamily="DM Sans Variable, DM Sans, sans-serif" fontSize="11" letterSpacing="4" fill="#F5F1E8" fillOpacity="0.55">

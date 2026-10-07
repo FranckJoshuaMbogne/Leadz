@@ -17,8 +17,8 @@ export function Hero() {
         <div className="anim-fade-up" style={{ animationDelay: "0.05s" }}>
           <Eyebrow light>A 360° growth agency</Eyebrow>
         </div>
-        <h1 id="hero-title" className="mt-7 font-display text-display-2xl">
-          <MaskText lines={["We build", <em key="g" className="font-normal italic text-ivory">growth systems.</em>]} delay={0.12} step={0.14} />
+        <h1 id="hero-title" className="mt-7 font-hero text-display-2xl">
+          <MaskText lines={["We build", <em key="g" className="font-hero font-normal italic text-ivory">growth systems.</em>]} delay={0.12} step={0.14} />
         </h1>
 
         <div className="mt-10 grid gap-10 md:mt-14 md:grid-cols-12 md:items-end">

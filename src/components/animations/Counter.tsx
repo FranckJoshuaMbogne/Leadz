@@ -46,7 +46,7 @@ export function Counter({ value, className }: { value: string; className?: strin
 
 /**
  * Renders a metric with any leading sign (+, -, <, ~) set in the sans face —
- * Bodoni's hairline signs disappear at display sizes.
+ * display-serif signs are too light at large sizes.
  */
 export function MetricText({ value }: { value: string }) {
   const m = value.match(/^([+\-<>~−]+)(.*)$/);

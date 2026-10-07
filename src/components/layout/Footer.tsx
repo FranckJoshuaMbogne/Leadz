@@ -105,7 +105,7 @@ export function Footer() {
 
       <p
         aria-hidden="true"
-        className="pointer-events-none select-none whitespace-nowrap text-center font-display leading-[0.78] tracking-[-0.04em] text-ivory/[0.06]"
+        className="pointer-events-none select-none whitespace-nowrap text-center font-hero leading-[0.78] tracking-[-0.04em] text-ivory/[0.06]"
         style={{ fontSize: "clamp(4.5rem, 19vw, 19rem)" }}
       >
         Springs <span className="italic">360</span>
