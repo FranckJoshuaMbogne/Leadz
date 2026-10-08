@@ -1,33 +1,73 @@
+@import "@fontsource-variable/bodoni-moda/opsz.css";
+@import "@fontsource-variable/bodoni-moda/opsz-italic.css";
+@import "@fontsource-variable/dm-sans/wght.css";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+@import "@fontsource-variable/playfair-display/wght-italic.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   html {
-    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    background: var(--color-base);
-    color: var(--color-ink);
-    transition: background-color 180ms ease, color 180ms ease;
+    @apply bg-ivory font-sans text-ink antialiased;
+    font-feature-settings: "ss01", "kern";
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /*
+   * Type roles
+   *   font-hero    Bodoni Moda       — hero banner + wordmark only
+   *   font-display Instrument Serif  — headings and editorial moments
+   *   font-accent  Playfair Display  — italic accent words inside headings
+   */
+  .font-display em,
+  .font-display .italic,
+  .font-display.italic,
+  .font-accent {
+    font-family: "Playfair Display Variable", "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
   }
 
   ::selection {
-    background: rgba(61, 123, 255, 0.35);
-    color: #ffffff;
+    background: #123b2a;
+    color: #f5f1e8;
   }
 
   :focus-visible {
-    outline: 2px solid #3d7bff;
+    outline: 2px solid #b89b62;
     outline-offset: 3px;
-    border-radius: 4px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: #d2bc8e;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
     *,
     *::before,
     *::after {
@@ -40,75 +80,180 @@
 }
 
 @layer components {
-  .glass {
-    background: var(--color-glass);
-    border: 1px solid var(--color-border);
-    @apply backdrop-blur-xl;
+  .container-site {
+    @apply mx-auto w-full max-w-site px-gutter;
   }
 
-  .text-gradient {
-    @apply bg-gradient-brand bg-clip-text text-transparent;
+  .eyebrow {
+    @apply font-sans text-eyebrow font-medium uppercase;
+  }
+
+  .hairline {
+    @apply border-ink/15;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 250ms var(--ease-editorial);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* Long-form article typography */
+  .prose-editorial {
+    @apply text-[1.075rem] leading-[1.75] text-ink sm:text-[1.15rem];
+  }
+  .prose-editorial > * + * {
+    margin-top: 1.35em;
+  }
+  .prose-editorial h2 {
+    @apply font-display text-display-sm text-ink;
+    margin-top: 2.2em;
+  }
+  .prose-editorial h3 {
+    @apply font-sans text-xl font-semibold text-ink;
+    margin-top: 1.8em;
+  }
+  .prose-editorial a {
+    @apply text-forest-600 underline decoration-gold decoration-1 underline-offset-4 hover:text-forest;
+  }
+  .prose-editorial ul,
+  .prose-editorial ol {
+    padding-left: 1.25em;
+  }
+  .prose-editorial ul {
+    list-style: none;
+  }
+  .prose-editorial ul > li {
+    position: relative;
+  }
+  .prose-editorial ul > li::before {
+    content: "";
+    position: absolute;
+    left: -1.1em;
+    top: 0.78em;
+    width: 0.45em;
+    height: 1px;
+    background: #b89b62;
+  }
+  .prose-editorial ol {
+    list-style: decimal;
+  }
+  .prose-editorial ol > li::marker {
+    @apply font-medium text-ink-soft;
+  }
+  .prose-editorial li + li {
+    margin-top: 0.5em;
+  }
+  .prose-editorial blockquote {
+    @apply border-l border-gold pl-6 font-display text-display-sm italic text-forest;
+  }
+  .prose-editorial strong {
+    @apply font-semibold;
+  }
+  .prose-editorial code {
+    @apply rounded-sm bg-sage-100 px-1.5 py-0.5 text-[0.9em];
+  }
+  .prose-editorial hr {
+    @apply my-12 border-ink/15;
   }
 }
 
 @layer utilities {
-  .section-y {
-    @apply py-section-sm md:py-section;
+  .py-section {
+    padding-top: theme("spacing.section");
+    padding-bottom: theme("spacing.section");
+  }
+  .py-section-sm {
+    padding-top: theme("spacing.section-sm");
+    padding-bottom: theme("spacing.section-sm");
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
-/* Dark is the default. Explicit data-theme values always win over the OS setting. */
-:root {
-  --color-base: #05070D;
-  --color-elevated: #0B0F1A;
-  --color-navy: #0A1128;
-  --color-electric: #3D7BFF;
-  --color-cyan: #22D3EE;
-  --color-purple: #7C5CFF;
-  --color-silver: #C7CDD9;
-  --color-ink: #F5F7FB;
-  --color-glass: rgba(11, 15, 26, 0.78);
-  --color-border: rgba(255, 255, 255, 0.08);
+/* ---------- Motion primitives (CSS so they run before hydration) ---------- */
+@keyframes mask-rise {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
-
-[data-theme="light"] {
-    --color-base: #ffffff;
-    --color-elevated: #ffffff;
-    --color-navy: #0A1128;
-    --color-electric: #3D7BFF;
-    --color-cyan: #22D3EE;
-    --color-purple: #7C5CFF;
-    --color-silver: #4B5563;
-    --color-ink: #0B1220;
-    --color-glass: rgba(255, 255, 255, 0.88);
-    --color-border: rgba(11, 18, 32, 0.1);
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-
-[data-theme="dark"] {
-  --color-base: #05070D;
-  --color-elevated: #0B0F1A;
-  --color-navy: #0A1128;
-  --color-electric: #3D7BFF;
-  --color-cyan: #22D3EE;
-  --color-purple: #7C5CFF;
-  --color-silver: #C7CDD9;
-  --color-ink: #F5F7FB;
-  --color-glass: rgba(11, 15, 26, 0.78);
-  --color-border: rgba(255, 255, 255, 0.08);
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --color-base: #fbfaf7;
-    --color-elevated: #ffffff;
-    --color-silver: #4B5563;
-    --color-ink: #0B1220;
-    --color-glass: rgba(255, 255, 255, 0.88);
-    --color-border: rgba(11, 18, 32, 0.1);
+@keyframes flow {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-1.5%, 1%, 0) rotate(-1.2deg);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-[data-theme="light"] .bg-gradient-radial-glow,
-[data-theme="light"] .bg-base {
-  background-image: none;
+.mask-line {
+  animation: mask-rise 1.1s var(--ease-editorial) both;
+}
+.anim-fade-up {
+  animation: fade-up 1s var(--ease-editorial) both;
+}
+.anim-fade-in {
+  animation: fade-in 1.6s ease-out both;
+}
+.anim-flow {
+  animation: flow 38s linear infinite;
+}
+.anim-drift {
+  animation: drift 22s ease-in-out infinite;
+  transform-origin: 60% 50%;
+}
+.anim-spin-slow {
+  animation: spin-slow 120s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(300%);
+  }
+}
+.anim-scroll-cue {
+  animation: scroll-cue 2.2s var(--ease-editorial) infinite;
 }

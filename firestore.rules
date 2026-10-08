@@ -1,18 +1,83 @@
-rules_version='2'
+rules_version = '2';
+
+// Springs 360 — Firestore security rules
+//
+// Collections
+//   leads/{id}      Website enquiries. Anyone may CREATE a well-formed lead;
+//                   only admins may read, update or delete.
+//   insights/{slug} Insights CMS. Public may read PUBLISHED articles only;
+//                   admins have full access.
+//   admins/{uid}    Admin allow-list. Create these documents manually in the
+//                   Firebase console (document ID = the user's Auth UID).
+//                   Never writable from the client.
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function optString(d, k, max) {
+      return !(k in d) || (d[k] is string && d[k].size() <= max);
+    }
+
+    function validLead(d) {
+      return d.keys().hasOnly([
+          'intent', 'name', 'email', 'phone', 'company', 'website', 'industry',
+          'channels', 'budget', 'challenge', 'outcome', 'message', 'page',
+          'status', 'createdAt'
+        ])
+        && d.keys().hasAll(['intent', 'name', 'email', 'status', 'createdAt'])
+        && d.intent in ['strategy-call', 'general']
+        && d.name is string && d.name.size() >= 2 && d.name.size() <= 100
+        && d.email is string && d.email.size() <= 160
+        && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && d.status == 'new'
+        && d.createdAt == request.time
+        && optString(d, 'phone', 30)
+        && optString(d, 'company', 120)
+        && optString(d, 'website', 200)
+        && optString(d, 'industry', 80)
+        && optString(d, 'budget', 60)
+        && optString(d, 'challenge', 80)
+        && optString(d, 'outcome', 1500)
+        && optString(d, 'message', 1500)
+        && optString(d, 'page', 200)
+        && (!('channels' in d) || (d.channels is list && d.channels.size() <= 10));
+    }
+
+    function validInsight(d) {
+      return d.keys().hasAll(['slug', 'title', 'excerpt', 'category', 'content', 'publishedAt', 'status'])
+        && d.slug is string && d.slug.matches('^[a-z0-9]+(-[a-z0-9]+)*$') && d.slug.size() <= 90
+        && d.title is string && d.title.size() > 0 && d.title.size() <= 200
+        && d.excerpt is string && d.excerpt.size() <= 600
+        && d.content is string && d.content.size() <= 200000
+        && d.status in ['draft', 'published'];
+    }
+
+    match /leads/{leadId} {
+      allow create: if validLead(request.resource.data);
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes']);
+    }
+
+    match /insights/{slug} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isAdmin() && validInsight(request.resource.data) && request.resource.data.slug == slug;
+      allow delete: if isAdmin();
+    }
+
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Everything else is closed.
     match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2026, 8, 29);
+      allow read, write: if false;
     }
   }
 }

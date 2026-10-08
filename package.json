@@ -1,14 +1,20 @@
 {
-  "name": "lead-gen-agency",
+  "name": "springs-360",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "build:client": "tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/bodoni-moda": "^5.3.0",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
     "@hookform/resolvers": "^3.9.1",
     "clsx": "^2.1.1",
     "firebase": "^12.16.0",
