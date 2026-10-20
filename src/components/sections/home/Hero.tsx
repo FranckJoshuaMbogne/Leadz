@@ -1,55 +1,62 @@
-import { HeroField } from "@/components/art/HeroField";
+import { Check } from "lucide-react";
 import { MaskText } from "@/components/animations/MaskText";
-import { ButtonLink } from "@/components/ui/Button";
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { ButtonA, ButtonLink } from "@/components/ui/Button";
+import { HeroCollage } from "@/components/sections/HeroCollage";
+import { site } from "@/config/site";
 
-const disciplines = ["Strategy", "Marketing", "Technology", "AI", "Data"];
+const reassurance = ["Free 30-minute strategy call", "Clear quote, no obligation", "Reply within one business day"];
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="on-dark relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-deep text-ivory">
-      <div aria-hidden="true" className="anim-fade-in absolute inset-0 -z-10" style={{ animationDuration: "2.4s" }}>
-        <HeroField className="absolute right-[-55%] top-[-6%] h-[78%] w-[190%] opacity-60 sm:right-[-30%] sm:w-[140%] md:right-[-8%] md:top-0 md:h-full md:w-[95%] md:opacity-100" />
-        <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/40 to-transparent md:bg-gradient-to-r md:from-deep md:via-deep/60 md:to-transparent" />
-      </div>
-
-      <div className="container-site flex flex-1 flex-col justify-end pb-10 pt-32 md:pb-14">
-        <div className="anim-fade-up" style={{ animationDelay: "0.05s" }}>
-          <Eyebrow light>A 360° growth agency</Eyebrow>
-        </div>
-        <h1 id="hero-title" className="mt-7 font-hero text-display-2xl">
-          <MaskText lines={["We build", <em key="g" className="font-hero font-normal italic text-ivory">growth systems.</em>]} delay={0.12} step={0.14} />
-        </h1>
-
-        <div className="mt-10 grid gap-10 md:mt-14 md:grid-cols-12 md:items-end">
-          <p className="anim-fade-up max-w-xl text-lead text-ivory/80 md:col-span-6" style={{ animationDelay: "0.45s" }}>
-            Strategy, marketing, technology and AI — connected to help ambitious businesses attract, convert and retain customers.
+    <section aria-labelledby="hero-title" className="on-dark relative isolate overflow-hidden bg-deep text-ivory">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_75%_35%,rgba(44,106,79,0.55),transparent_60%)]"
+      />
+      <div className="container-site grid items-center gap-12 pb-16 pt-28 lg:min-h-[100svh] lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-32">
+        <div className="lg:col-span-7">
+          <p className="anim-fade-up eyebrow flex items-center gap-3 text-ivory/75" style={{ animationDelay: "0.05s" }}>
+            <span aria-hidden="true" className="h-px w-8 bg-gold" />
+            Springs 360 · Digital marketing agency
           </p>
-          <div className="anim-fade-up flex flex-col gap-4 xs:flex-row xs:items-center xs:gap-8 md:col-span-6 md:justify-end" style={{ animationDelay: "0.55s" }}>
+          <h1 id="hero-title" className="mt-6 font-hero leading-[0.98] tracking-[-0.03em]" style={{ fontSize: "clamp(2.3rem, 5.9vw, 5.6rem)" }}>
+            <MaskText
+              lines={[
+                "Your All-in-One",
+                <span key="d">
+                  <em className="font-hero font-normal italic text-gold-light">360°</em> Digital
+                </span>,
+                "Marketing Agency",
+              ]}
+              delay={0.1}
+              step={0.12}
+            />
+          </h1>
+          <p className="anim-fade-up mt-7 font-accent text-[clamp(1.4rem,2.6vw,2.1rem)] italic leading-snug text-ivory" style={{ animationDelay: "0.4s" }}>
+            Chill... We take care of your brand.
+          </p>
+          <p className="anim-fade-up mt-4 max-w-xl text-lead text-ivory/75" style={{ animationDelay: "0.5s" }}>
+            Social media, ads, websites, content and lead follow-up — one team handling everything that brings you customers.
+          </p>
+          <div className="anim-fade-up mt-9 flex flex-col gap-3 xs:flex-row xs:flex-wrap xs:items-center" style={{ animationDelay: "0.6s" }}>
             <ButtonLink to="/book" variant="light" size="lg">
-              Start a Conversation
+              Get a Free Strategy Call
             </ButtonLink>
-            <ButtonLink to="/work" variant="text-light">
-              Explore Our Work
-            </ButtonLink>
+            <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+              Chat on WhatsApp
+            </ButtonA>
           </div>
-        </div>
-
-        <div className="anim-fade-in mt-14 flex items-center justify-between border-t border-ivory/15 pt-6 text-sm text-ivory/60" style={{ animationDelay: "0.8s" }}>
-          <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Disciplines">
-            {disciplines.map((d, i) => (
-              <li key={d} className="flex items-center gap-5">
-                {d}
-                {i < disciplines.length - 1 && <span aria-hidden="true" className="h-1 w-1 rounded-full bg-gold" />}
+          <ul className="anim-fade-up mt-8 flex flex-col gap-2 text-sm text-ivory/75 sm:flex-row sm:flex-wrap sm:gap-x-6" style={{ animationDelay: "0.7s" }}>
+            {reassurance.map((r) => (
+              <li key={r} className="flex items-center gap-2">
+                <Check size={16} className="text-gold-light" aria-hidden="true" />
+                {r}
               </li>
             ))}
           </ul>
-          <span className="hidden items-center gap-3 md:flex" aria-hidden="true">
-            Scroll
-            <span className="relative h-8 w-px overflow-hidden bg-ivory/20">
-              <span className="anim-scroll-cue absolute inset-x-0 top-0 h-3 bg-gold" />
-            </span>
-          </span>
+        </div>
+        <div className="hidden lg:col-span-5 lg:block">
+          <HeroCollage />
         </div>
       </div>
     </section>

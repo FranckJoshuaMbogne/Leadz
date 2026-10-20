@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
+import { StickyCta } from "./StickyCta";
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -33,6 +34,7 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <StickyCta />
     </>
   );
 }

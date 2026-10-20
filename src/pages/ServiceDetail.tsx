@@ -8,7 +8,8 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { FaqList } from "@/components/sections/FaqList";
 import { Reveal } from "@/components/animations/Reveal";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Arrow, ButtonLink } from "@/components/ui/Button";
+import { Arrow, ButtonA, ButtonLink } from "@/components/ui/Button";
+import { site } from "@/config/site";
 import { CaseStudyCard } from "@/components/cards/CaseStudyCard";
 import { InsightCard } from "@/components/cards/InsightCard";
 import NotFound from "./NotFound";
@@ -108,7 +109,7 @@ function PillarPage({ pillar }: { pillar: Pillar }) {
       />
       <PageHero eyebrow={`${pillar.index} — ${pillar.name}`} titleLines={[pillar.headline]} intro={pillar.summary} breadcrumbs={crumbs} art={{ seed: pillar.slug, variant: pillar.art }}>
         <ButtonLink to="/book" variant="light" size="lg">
-          {pillar.cta}
+          Get a Free Strategy Call
         </ButtonLink>
       </PageHero>
 
@@ -178,7 +179,7 @@ function PillarPage({ pillar }: { pillar: Pillar }) {
       </section>
 
       <RelatedInsights serviceSlugs={detail.map((d) => d.slug)} />
-      <CtaBand title="Find your growth opportunity." cta="Find Your Growth Opportunity" />
+      <CtaBand />
     </>
   );
 }
@@ -203,9 +204,14 @@ function ServicePage({ service }: { service: Service }) {
         jsonLd={[serviceLd({ name: service.name, description: service.intro, path, category: pillar.name }), breadcrumbLd(crumbs)]}
       />
       <PageHero eyebrow={pillar.name} titleLines={[service.name]} intro={service.short} breadcrumbs={crumbs} art={{ seed: service.slug, variant: pillar.art }}>
-        <ButtonLink to="/book" variant="light" size="lg">
-          Find Your Growth Opportunity
-        </ButtonLink>
+        <div className="flex flex-col gap-3 xs:flex-row xs:flex-wrap">
+          <ButtonLink to="/book" variant="light" size="lg">
+            Get a Free Strategy Call
+          </ButtonLink>
+          <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+            Chat on WhatsApp
+          </ButtonA>
+        </div>
       </PageHero>
 
       <section className="bg-ivory py-section">
@@ -242,6 +248,25 @@ function ServicePage({ service }: { service: Service }) {
         </div>
       </section>
 
+      <section aria-label={`Get started with ${service.name}`} className="bg-ivory pb-section-sm">
+        <div className="container-site">
+          <div className="on-dark flex flex-col gap-6 rounded-lg bg-forest p-7 text-ivory sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="font-display text-display-sm font-bold">Ready to get started with {service.name}?</p>
+              <p className="mt-2 text-ivory/75">Tell us about your business — we'll reply within one business day with a clear plan and quote.</p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-3 xs:flex-row">
+              <ButtonLink to="/book" variant="light" size="lg">
+                Get a Free Strategy Call
+              </ButtonLink>
+              <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+                WhatsApp
+              </ButtonA>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <RelatedWork serviceSlugs={[service.slug]} />
 
       {related.length > 0 && (
@@ -268,7 +293,7 @@ function ServicePage({ service }: { service: Service }) {
       )}
 
       <RelatedInsights serviceSlugs={[service.slug, ...service.related]} />
-      <CtaBand title="Find your growth opportunity." cta="Find Your Growth Opportunity" />
+      <CtaBand />
     </>
   );
 }

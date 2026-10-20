@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { primaryNav, site } from "@/config/site";
-import { pillars } from "@/data/services";
+import { topServices } from "@/data/catalog";
 import { Logo } from "./Logo";
 import { Arrow } from "@/components/ui/Button";
 
@@ -15,14 +15,14 @@ export function Footer() {
               <Logo />
             </Link>
             <p className="mt-6 max-w-sm text-[0.95rem] leading-relaxed text-ivory/70">
-              A 360° growth agency. We connect strategy, marketing, technology, AI and data into one system that helps
-              ambitious businesses attract, convert and retain customers.
+              Your all-in-one 360° digital marketing agency. Social media, ads, websites, content and lead follow-up —
+              one team that takes care of your brand and brings you customers.
             </p>
             <Link
               to="/book"
               className="group/btn mt-8 inline-flex items-center gap-3 border-b border-gold/60 pb-1 text-[0.95rem] text-ivory hover:border-gold"
             >
-              Book a Strategy Call <Arrow />
+              Get a Free Strategy Call <Arrow />
             </Link>
           </div>
 
@@ -40,15 +40,20 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <p className="eyebrow text-ivory/55">Capabilities</p>
+              <p className="eyebrow text-ivory/55">Services</p>
               <ul className="mt-5 space-y-3 text-[0.95rem]">
-                {pillars.map((p) => (
+                {topServices.slice(0, 7).map((p) => (
                   <li key={p.slug}>
                     <Link to={`/services/${p.slug}`} className="link-underline text-ivory/80 hover:text-ivory">
-                      {p.name}
+                      {p.label}
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link to="/services" className="link-underline text-gold-light hover:text-ivory">
+                    All services →
+                  </Link>
+                </li>
               </ul>
             </div>
             <div className="col-span-2 sm:col-span-1">

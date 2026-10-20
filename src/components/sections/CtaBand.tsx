@@ -1,15 +1,14 @@
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonA, ButtonLink } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/animations/Reveal";
-import { HeroField } from "@/components/art/HeroField";
 import { site } from "@/config/site";
 
 /** Closing conversion section. Copy is contextual per page. */
 export function CtaBand({
   eyebrow = "Next step",
-  title = "Let's build your growth system.",
-  body = "Book a 30-minute strategy call. We'll look at where growth is being lost today and what a connected system would change — whether or not we end up working together.",
-  cta = "Book a Strategy Call",
+  title = "Ready for more customers? Let's talk.",
+  body = "Book a free 30-minute strategy call. We'll look at your marketing, show you where sales are slipping away, and tell you exactly what we'd do first. No obligation.",
+  cta = "Get a Free Strategy Call",
   to = "/book",
 }: {
   eyebrow?: string;
@@ -20,7 +19,7 @@ export function CtaBand({
 }) {
   return (
     <section className="on-dark relative isolate overflow-hidden bg-forest text-ivory">
-      <HeroField className="pointer-events-none absolute -right-1/4 top-1/2 -z-10 h-[140%] w-[110%] -translate-y-1/2 opacity-40 md:-right-[10%] md:w-[80%]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_85%_20%,rgba(184,155,98,0.18),transparent_55%)]" />
       <div className="container-site py-section">
         <div className="max-w-4xl">
           <Reveal>
@@ -32,13 +31,13 @@ export function CtaBand({
           <Reveal delay={0.12}>
             <p className="mt-8 max-w-2xl text-lead text-ivory/75">{body}</p>
           </Reveal>
-          <Reveal delay={0.18} className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+          <Reveal delay={0.18} className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
             <ButtonLink to={to} variant="light" size="lg">
               {cta}
             </ButtonLink>
-            <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="group/btn inline-flex min-h-[44px] items-center gap-2 text-ivory/80 hover:text-ivory">
-              <span className="link-underline">Or message us on WhatsApp</span>
-            </a>
+            <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+              Chat on WhatsApp
+            </ButtonA>
           </Reveal>
         </div>
       </div>

@@ -53,16 +53,17 @@ export default {
       },
       fontFamily: {
         hero: ['"Bodoni Moda Variable"', '"Bodoni Moda"', "Didot", "Georgia", "serif"],
-        display: ['"Instrument Serif"', "Georgia", "serif"],
+        // Headings use the same family as the navigation (DM Sans), set bold.
+        display: ['"DM Sans Variable"', '"DM Sans"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
         accent: ['"Playfair Display Variable"', '"Playfair Display"', "Georgia", "serif"],
         sans: ['"DM Sans Variable"', '"DM Sans"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       },
       fontSize: {
         "display-2xl": ["clamp(3.3rem, 9vw, 9rem)", { lineHeight: "0.95", letterSpacing: "-0.035em" }],
-        "display-xl": ["clamp(2.8rem, 6.8vw, 6.75rem)", { lineHeight: "0.98", letterSpacing: "-0.015em" }],
-        "display-lg": ["clamp(2.4rem, 5vw, 4.9rem)", { lineHeight: "1.02", letterSpacing: "-0.012em" }],
-        "display-md": ["clamp(1.95rem, 3.4vw, 3.25rem)", { lineHeight: "1.08", letterSpacing: "-0.01em" }],
-        "display-sm": ["clamp(1.55rem, 2.4vw, 2.15rem)", { lineHeight: "1.18", letterSpacing: "-0.005em" }],
+        "display-xl": ["clamp(2.4rem, 5.6vw, 5.5rem)", { lineHeight: "1.02", letterSpacing: "-0.035em" }],
+        "display-lg": ["clamp(2rem, 4.2vw, 4rem)", { lineHeight: "1.06", letterSpacing: "-0.03em" }],
+        "display-md": ["clamp(1.65rem, 2.8vw, 2.6rem)", { lineHeight: "1.12", letterSpacing: "-0.025em" }],
+        "display-sm": ["clamp(1.3rem, 1.9vw, 1.75rem)", { lineHeight: "1.25", letterSpacing: "-0.015em" }],
         lead: ["clamp(1.075rem, 1.4vw, 1.3rem)", { lineHeight: "1.6" }],
         eyebrow: ["0.75rem", { lineHeight: "1", letterSpacing: "0.18em" }],
       },

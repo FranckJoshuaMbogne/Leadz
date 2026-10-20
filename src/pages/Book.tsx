@@ -4,7 +4,6 @@ import { StrategyCallForm } from "@/components/forms/StrategyCallForm";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { MaskText } from "@/components/animations/MaskText";
-import { HeroField } from "@/components/art/HeroField";
 
 const expectations = [
   { t: "Before the call", d: "We review your website, channels and anything you share, so the conversation starts with substance." },
@@ -15,12 +14,12 @@ const expectations = [
 export default function Book() {
   const crumbs = [
     { name: "Home", path: "/" },
-    { name: "Book a Strategy Call", path: "/book" },
+    { name: "Free Strategy Call", path: "/book" },
   ];
   return (
     <>
       <Seo
-        title="Book a Strategy Call"
+        title="Book a Free Strategy Call"
         description="Book a 30-minute strategy call with Springs 360. We'll identify where growth is being lost and what a connected growth system would change."
         path="/book"
         jsonLd={[breadcrumbLd(crumbs)]}
@@ -28,10 +27,9 @@ export default function Book() {
       <section className="bg-ivory">
         <div className="grid lg:min-h-screen lg:grid-cols-12">
           <div className="on-dark relative isolate overflow-hidden bg-deep px-gutter pb-14 pt-32 text-ivory lg:col-span-5 lg:pb-16 lg:pt-40 lg:pr-12">
-            <HeroField className="absolute -bottom-1/4 -right-1/2 -z-10 h-[80%] w-[160%] opacity-30" />
             <div className="lg:sticky lg:top-32">
               <Breadcrumbs items={crumbs} light className="anim-fade-up mb-10" />
-              <Eyebrow light>Strategy call</Eyebrow>
+              <Eyebrow light>Free strategy call</Eyebrow>
               <h1 className="mt-6 font-display text-display-lg">
                 <MaskText lines={["Let's find your", <em key="g" className="italic">growth opportunity.</em>]} delay={0.1} />
               </h1>

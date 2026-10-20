@@ -19,9 +19,9 @@ function stripSlash(url: string) {
 export const site = {
   name: "Springs 360",
   wordmark: "SPRINGS 360",
-  tagline: "We build growth systems.",
+  tagline: "Your All-in-One 360° Digital Marketing Agency",
   description:
-    "Springs 360 is a 360° growth agency connecting strategy, marketing, technology, AI and data into one growth system — so ambitious businesses attract, convert and retain customers.",
+    "Springs 360 is an all-in-one 360° digital marketing agency — social media, ads, websites, content, branding and lead management, handled by one team to boost your sales.",
   url: stripSlash(env.VITE_SITE_URL || "https://leadzindb.web.app"),
   locale: "en_IN",
   defaultOgImage: "/og/springs360-og.png",
@@ -52,8 +52,8 @@ export const site = {
 } as const;
 
 export const primaryNav = [
-  { to: "/work", label: "Work" },
   { to: "/services", label: "Services" },
+  { to: "/work", label: "Work" },
   { to: "/industries", label: "Industries" },
   { to: "/insights", label: "Insights" },
   { to: "/about", label: "About" },

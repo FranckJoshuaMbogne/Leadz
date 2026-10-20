@@ -10,9 +10,9 @@ export function SelectedWork() {
     <section aria-labelledby="work-title" className="bg-sage-100 py-section">
       <div className="container-site">
         <SectionHeader
-          index="05"
+         
           eyebrow="Selected work"
-          title={<span id="work-title">What a connected system <em className="italic">looks like.</em></span>}
+          title={<span id="work-title">How we grow businesses <em className="italic">like yours.</em></span>}
           intro={
             hasVerifiedWork
               ? "A selection of engagements across acquisition, conversion, automation and data."
