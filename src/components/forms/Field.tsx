@@ -2,7 +2,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAt
 import { cn } from "@/lib/utils";
 
 export const inputBase =
-  "block w-full rounded-sm border border-ink/20 bg-ivory-50 px-4 text-[1rem] text-ink placeholder:text-ink-soft/80 transition-colors focus:border-forest focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-0 aria-[invalid=true]:border-[#9B2C2C]";
+  "block w-full rounded-xl border border-ink/20 bg-ivory-50 px-4 text-[1rem] text-ink placeholder:text-ink-soft/80 transition-colors focus:border-forest focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-0 aria-[invalid=true]:border-[#9B2C2C]";
 
 export function FieldShell({
   id,

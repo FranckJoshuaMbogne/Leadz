@@ -43,3 +43,5 @@ Collections: `leads` (public create-only, validated), `insights` (public read wh
 
 - Case studies in `src/data/caseStudies.ts` are **illustrative** (carried over from demo data) and labelled as such on the site. Add real ones with `verified: true`.
 - Insights published in the CMS appear immediately (client-side) and are prerendered + added to the sitemap on the next build/deploy.
+
+See **CUSTOMIZE.md** for where to change fonts, illustrations, colours and content.

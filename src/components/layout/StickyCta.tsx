@@ -36,7 +36,7 @@ export function StickyCta() {
           <Link
             to="/book"
             tabIndex={show ? 0 : -1}
-            className="flex min-h-[48px] flex-1 items-center justify-center rounded-sm bg-ivory px-4 text-[0.95rem] font-semibold text-deep"
+            className="flex min-h-[48px] flex-1 items-center justify-center rounded-full bg-ivory px-4 text-[0.95rem] font-semibold text-deep"
           >
             Get a Free Strategy Call
           </Link>
@@ -46,7 +46,7 @@ export function StickyCta() {
             rel="noopener noreferrer"
             tabIndex={show ? 0 : -1}
             aria-label="Chat on WhatsApp"
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-ivory/30 text-ivory"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-ivory/30 text-ivory"
           >
             <MessageCircle size={22} />
           </a>

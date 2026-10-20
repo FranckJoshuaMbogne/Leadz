@@ -6,7 +6,7 @@ type Variant = "primary" | "light" | "outline" | "outline-light" | "text" | "tex
 type Size = "md" | "lg";
 
 const base =
-  "group/btn inline-flex min-h-[48px] items-center justify-center gap-3 rounded-sm font-sans font-medium tracking-[0.01em] transition-[background-color,color,border-color] duration-200 ease-editorial disabled:cursor-not-allowed disabled:opacity-60";
+  "group/btn inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full font-sans font-medium tracking-[0.01em] transition-[background-color,color,border-color] duration-200 ease-editorial disabled:cursor-not-allowed disabled:opacity-60";
 
 const variants: Record<Variant, string> = {
   primary: "bg-forest text-ivory hover:bg-deep",

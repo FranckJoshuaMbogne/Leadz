@@ -4,7 +4,7 @@ import { homeFaqs } from "@/data/faqs";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { HowItWorks } from "@/components/sections/HowItWorks";
-import { EcosystemStages } from "@/components/sections/EcosystemStages";
+import { GrowthSystem } from "@/components/sections/GrowthSystem";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { ServiceTile } from "@/components/cards/ServiceTile";
 import { Reveal } from "@/components/animations/Reveal";
@@ -87,13 +87,7 @@ export default function Services() {
         </div>
       </section>
 
-      <EcosystemStages
-        title={
-          <>
-            Why 360°? Because sales need <em>every step</em> to work.
-          </>
-        }
-      />
+      <GrowthSystem />
       <HowItWorks light />
       <FaqSection faqs={engagementFaqs} />
       <CtaBand eyebrow="Not sure where to start?" title="Tell us your goal. We'll suggest the right mix." cta="Get a Free Strategy Call" />

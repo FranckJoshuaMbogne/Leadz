@@ -38,7 +38,7 @@ export function ContactForm() {
       <TextField id="c-company" label="Company" optional autoComplete="organization" {...register("company")} />
       <TextAreaField id="c-message" label="How can we help?" rows={5} error={errors.message?.message} {...register("message")} />
       {failed && (
-        <p role="alert" className="rounded-sm border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 p-4 text-sm text-ink">
+        <p role="alert" className="rounded-xl border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 p-4 text-sm text-ink">
           Your message could not be sent. Please try again or{" "}
           <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="underline">
             message us on WhatsApp

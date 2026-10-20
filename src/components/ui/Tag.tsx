@@ -5,7 +5,7 @@ export function Tag({ children, light = false, className }: { children: ReactNod
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-sm border px-2.5 py-1 text-xs font-medium tracking-wide",
+        "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium tracking-wide",
         light ? "border-ivory/25 text-ivory/80" : "border-ink/20 text-ink-muted",
         className
       )}
@@ -20,7 +20,7 @@ export function IllustrativeBadge({ light = false, className }: { light?: boolea
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-sm px-2.5 py-1 text-[0.7rem] font-medium uppercase tracking-[0.14em]",
+        "inline-flex items-center gap-2 rounded-full px-3 py-1 text-[0.7rem] font-medium uppercase tracking-[0.14em]",
         light ? "bg-ivory/10 text-gold-light" : "bg-gold/15 text-gold-dark",
         className
       )}
