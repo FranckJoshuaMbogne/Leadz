@@ -25,7 +25,7 @@ export function WhySprings() {
     <section aria-labelledby="why-title" className="bg-ivory py-section">
       <div className="container-site">
         <SectionHeader
-          index="06"
+         
           eyebrow="Why Springs 360"
           title={<span id="why-title">Most agencies do one of these. <em className="italic">Growth needs all four.</em></span>}
         />

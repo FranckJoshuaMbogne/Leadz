@@ -106,7 +106,7 @@ export function Navbar() {
             variant={solid ? "primary" : "light"}
             className="hidden min-h-[42px] px-5 text-sm md:inline-flex"
           >
-            Book a Strategy Call
+            Free Strategy Call
           </ButtonLink>
           <button
             ref={toggleRef}
@@ -152,7 +152,7 @@ export function Navbar() {
                       to={item.to}
                       end={item.to === "/"}
                       className={({ isActive }) =>
-                        cn("flex items-baseline gap-4 py-2 font-display text-[2.4rem] leading-tight xs:text-5xl", isActive ? "text-ivory" : "text-ivory/70")
+                        cn("flex items-baseline gap-4 py-2.5 font-sans text-[1.9rem] font-semibold leading-tight tracking-[-0.02em] xs:text-[2.2rem]", isActive ? "text-ivory" : "text-ivory/70")
                       }
                     >
                       <span className="font-sans text-xs tabular-nums text-gold-light">0{i + 1}</span>
@@ -164,7 +164,7 @@ export function Navbar() {
             </nav>
             <div className="mt-auto space-y-6 pt-12">
               <ButtonLink to="/book" variant="light" size="lg" className="w-full">
-                Book a Strategy Call
+                Get a Free Strategy Call
               </ButtonLink>
               <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-ivory/70">
                 <a href={site.contact.phoneHref} className="py-1">{site.contact.phoneDisplay}</a>

@@ -10,11 +10,11 @@ const fragmented = [
 ];
 
 const connected = [
-  "One strategy that gives every channel a defined job",
-  "One customer journey, designed end to end",
-  "One CRM as the source of truth for every lead",
-  "One set of numbers, from spend to revenue",
-  "One team accountable for the outcome",
+  "One point of contact for all your marketing",
+  "Content, ads and website working to the same goal",
+  "Every enquiry answered fast and followed up",
+  "One simple monthly report: leads, customers, cost",
+  "A team accountable for sales — not just likes",
 ];
 
 function Scatter() {
@@ -53,18 +53,18 @@ export function Problem() {
         <div className="grid gap-8 border-t border-ink/15 pt-section-sm lg:grid-cols-12">
           <div className="lg:col-span-5">
             <Reveal>
-              <Eyebrow index="02">The problem</Eyebrow>
+              <Eyebrow>Sound familiar?</Eyebrow>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 id="problem-title" className="mt-6 font-display text-display-lg text-ink">
-                Fragmented marketing creates <em className="italic">fragmented growth.</em>
+                Too many vendors. <em className="italic">Not enough sales.</em>
               </h2>
             </Reveal>
           </div>
           <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-7 lg:self-end">
             <p className="text-lead text-ink-muted">
-              When every vendor optimises their own metric, the business optimises nothing. Leads are bought but not followed
-              up. Sites launch but are never improved. Reports disagree. Growth becomes a matter of luck.
+              One person posts on social media, another runs ads, someone else built the website — and nobody follows up the
+              enquiries. You pay for everything, but no one is responsible for sales. We take all of it off your plate.
             </p>
           </Reveal>
         </div>
@@ -74,7 +74,7 @@ export function Problem() {
             <div className="flex items-start justify-between gap-6">
               <div>
                 <p className="eyebrow text-ink-muted">The usual setup</p>
-                <p className="mt-3 font-display text-display-sm text-ink">Five vendors. Five versions of success.</p>
+                <p className="mt-3 font-display text-display-sm text-ink">Five vendors. Five reports. No one owns sales.</p>
               </div>
               <div className="hidden sm:block"><Scatter /></div>
             </div>
@@ -90,8 +90,8 @@ export function Problem() {
           <Reveal delay={0.12} className="on-dark rounded bg-forest p-7 text-ivory sm:p-10">
             <div className="flex items-start justify-between gap-6">
               <div>
-                <p className="eyebrow text-ivory/65">A Springs 360 growth system</p>
-                <p className="mt-3 font-display text-display-sm">One journey. One number that matters.</p>
+                <p className="eyebrow text-ivory/65">With Springs 360</p>
+                <p className="mt-3 font-display text-display-sm">One team. One plan. More customers.</p>
               </div>
               <div className="hidden sm:block"><Loop /></div>
             </div>

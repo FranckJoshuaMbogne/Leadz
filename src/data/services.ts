@@ -4,7 +4,7 @@ import type { ArtVariant } from "@/components/art/CoverArt";
 /* Strategic pillars                                                   */
 /* ================================================================== */
 
-export type PillarSlug = "strategy" | "performance" | "digital-experience" | "ai-automation" | "data-intelligence";
+export type PillarSlug = "strategy" | "content-brand" | "performance" | "digital-experience" | "ai-automation" | "data-intelligence";
 
 export interface Pillar {
   slug: PillarSlug;
@@ -60,8 +60,44 @@ export const pillars: Pillar[] = [
     ],
   },
   {
-    slug: "performance",
+    slug: "content-brand",
     index: "02",
+    name: "Content & Brand",
+    headline: "Show up every week with content people actually stop for.",
+    summary:
+      "Social media, branding, design, video and content marketing — produced and published on a schedule, so your brand stays visible and recognisable.",
+    problem:
+      "Most businesses post when they remember to. Visuals change from post to post, videos never get edited, and nobody connects the content to enquiries. The audience scrolls past a brand it doesn't recognise.",
+    approach: [
+      { title: "Define", text: "Agree your brand look, tone of voice and the topics your customers care about." },
+      { title: "Produce", text: "Design, shoot or edit posts, reels, carousels, ads and articles in monthly batches." },
+      { title: "Publish & learn", text: "Schedule, engage and report on what drives reach, saves, messages and enquiries." },
+    ],
+    services: [
+      { name: "Social media management & automation", slug: "social-media-management" },
+      { name: "Content marketing", slug: "content-marketing" },
+      { name: "Content & branding", slug: "branding" },
+      { name: "Graphic design & video editing", slug: "graphic-design-video" },
+    ],
+    measures: ["Reach and follower growth", "Engagement and saves", "Messages and enquiries from content", "Posting consistency"],
+    art: "flow",
+    cta: "Plan your content",
+    faqs: [
+      {
+        question: "Do you create the content or do we?",
+        answer:
+          "We can do either. Most clients send raw material — product photos, short videos, updates — and we turn it into finished posts, reels and designs. We can also plan and run shoots.",
+      },
+      {
+        question: "Which platforms do you manage?",
+        answer:
+          "Instagram, Facebook, LinkedIn, YouTube and Google Business Profile are the most common. We recommend the platforms where your customers actually spend time rather than being everywhere.",
+      },
+    ],
+  },
+  {
+    slug: "performance",
+    index: "03",
     name: "Performance",
     headline: "Paid and organic acquisition, managed against revenue — not clicks.",
     summary:
@@ -76,8 +112,10 @@ export const pillars: Pillar[] = [
     services: [
       { name: "Google Ads", slug: "google-ads" },
       { name: "Meta Ads", slug: "meta-ads" },
-      { name: "Lead generation systems", slug: "lead-generation" },
+      { name: "Client acquisition", slug: "lead-generation" },
       { name: "SEO & local SEO", slug: "local-seo" },
+      { name: "Product & event promotions", slug: "promotions" },
+      { name: "Google Business Profile", slug: "google-business-profile" },
       { name: "Retargeting" },
     ],
     measures: ["Cost per qualified lead", "Cost per acquisition", "Return on ad spend", "Share of organic and local search"],
@@ -98,7 +136,7 @@ export const pillars: Pillar[] = [
   },
   {
     slug: "digital-experience",
-    index: "03",
+    index: "04",
     name: "Digital Experience",
     headline: "Websites and landing pages built to turn attention into action.",
     summary:
@@ -135,7 +173,7 @@ export const pillars: Pillar[] = [
   },
   {
     slug: "ai-automation",
-    index: "04",
+    index: "05",
     name: "AI & Automation",
     headline: "Respond in minutes, follow up every time, and let people focus on selling.",
     summary:
@@ -148,12 +186,12 @@ export const pillars: Pillar[] = [
       { title: "Automate", text: "Add instant responses, AI-assisted qualification, nurture sequences and routing rules — with humans in the loop where it matters." },
     ],
     services: [
-      { name: "CRM setup & automation", slug: "crm-automation" },
+      { name: "Leads management & CRM", slug: "crm-automation" },
       { name: "WhatsApp automation", slug: "whatsapp-automation" },
       { name: "AI chatbots & assistants", slug: "ai-chatbots" },
       { name: "Lead nurturing & email", slug: "email-marketing" },
       { name: "Marketing automation", slug: "marketing-automation" },
-      { name: "Sales funnels & automation", slug: "sales-funnels" },
+      { name: "Sales closing systems", slug: "sales-funnels" },
     ],
     measures: ["Speed to first response", "Lead-to-meeting rate", "Pipeline velocity", "Hours of manual work removed"],
     art: "orbit",
@@ -173,7 +211,7 @@ export const pillars: Pillar[] = [
   },
   {
     slug: "data-intelligence",
-    index: "05",
+    index: "06",
     name: "Data & Intelligence",
     headline: "One honest view of what marketing returns.",
     summary:
@@ -186,11 +224,11 @@ export const pillars: Pillar[] = [
       { title: "Decide", text: "Dashboards and a reporting rhythm that turn numbers into budget, creative and sales decisions." },
     ],
     services: [
-      { name: "Analytics & tracking", slug: "analytics" },
+      { name: "Analysis & reporting", slug: "analytics" },
       { name: "Attribution" },
       { name: "BI dashboards", slug: "business-intelligence" },
       { name: "Reporting" },
-      { name: "Performance optimisation" },
+      { name: "Performance management", slug: "performance-management" },
     ],
     measures: ["Marketing ROI by channel", "Cost per customer", "Customer lifetime value", "Forecast accuracy"],
     art: "rings",
@@ -230,6 +268,146 @@ export interface Service {
 
 export const services: Service[] = [
   {
+    slug: "social-media-management",
+    pillar: "content-brand",
+    name: "Social Media Management & Automation",
+    short: "Consistent posting, community replies and automated DMs — handled for you.",
+    intro:
+      "We plan, create, schedule and manage your social media, and automate the repetitive parts — welcome messages, FAQ replies and lead capture from comments and DMs.",
+    problem:
+      "Posting irregularly, replying late and losing enquiries in DMs makes even good brands look inactive. Social media becomes a chore instead of a sales channel.",
+    approach: [
+      { title: "Plan", text: "A monthly content calendar built around your offers, seasons and launches." },
+      { title: "Create", text: "Posts, reels, stories and carousels designed in your brand style." },
+      { title: "Automate", text: "Scheduled publishing plus automated replies and DM flows that capture leads." },
+      { title: "Engage & report", text: "Community management and a monthly report on reach, engagement and enquiries." },
+    ],
+    deliverables: ["Monthly content calendar", "Designed posts, reels and stories", "Scheduling and publishing", "DM and comment automation", "Monthly performance report"],
+    measures: ["Reach and engagement", "Profile visits and follows", "DMs and enquiries generated", "Response time"],
+    fit: "Brands that know social media matters but don't have the time or team to do it well every week.",
+    related: ["meta-ads", "graphic-design-video", "whatsapp-automation"],
+  },
+  {
+    slug: "content-marketing",
+    pillar: "content-brand",
+    name: "Content Marketing",
+    short: "Articles, guides and videos that bring the right people to you.",
+    intro:
+      "We create useful content — blog articles, guides, videos and newsletters — that answers your customers' questions and brings them to your website.",
+    problem:
+      "Customers research before they buy. If your business doesn't answer their questions, a competitor's article, video or post will — and earn their trust first.",
+    approach: [
+      { title: "Research", text: "Find the questions and searches your customers use before buying." },
+      { title: "Plan", text: "A content plan that maps topics to services and stages of the buying journey." },
+      { title: "Produce", text: "Well-written articles, scripts, videos and newsletters in your voice." },
+      { title: "Distribute", text: "Publish, optimise for search and repurpose across social and email." },
+    ],
+    deliverables: ["Content strategy and calendar", "SEO-optimised articles", "Video scripts and short-form edits", "Newsletter content", "Repurposed social posts"],
+    measures: ["Organic traffic", "Time on page and engagement", "Leads from content", "Search rankings for target topics"],
+    fit: "Businesses whose customers compare options and research before they decide.",
+    related: ["local-seo", "social-media-management", "email-marketing"],
+  },
+  {
+    slug: "branding",
+    pillar: "content-brand",
+    name: "Content & Branding",
+    short: "A recognisable brand — logo, look, voice and messaging that sells.",
+    intro:
+      "We shape how your brand looks and sounds — from logo and visual identity to tone of voice and key messages — so every post, ad and page feels like the same business.",
+    problem:
+      "When fonts, colours and messages change from one post to the next, customers don't remember you. An inconsistent brand looks smaller and less trustworthy than it is.",
+    approach: [
+      { title: "Discover", text: "Understand your customers, competitors and what makes you different." },
+      { title: "Position", text: "Define your promise, key messages and tone of voice." },
+      { title: "Design", text: "Logo, colours, typography and templates that work across every channel." },
+      { title: "Roll out", text: "Brand guidelines and ready-to-use templates for social, ads and print." },
+    ],
+    deliverables: ["Brand positioning and messaging", "Logo and visual identity", "Brand guidelines", "Social and ad templates", "Stationery and print assets"],
+    measures: ["Brand consistency across channels", "Recognition and recall", "Conversion on branded pages and ads"],
+    fit: "New businesses, rebrands, and established brands whose look no longer matches their quality.",
+    related: ["graphic-design-video", "website-development", "social-media-management"],
+  },
+  {
+    slug: "graphic-design-video",
+    pillar: "content-brand",
+    name: "Graphic Design & Video Editing",
+    short: "Scroll-stopping visuals, reels and ad creatives — made to convert.",
+    intro:
+      "We design social posts, ad creatives, brochures and presentations, and edit reels, product videos and event highlights — fast, on-brand and built for each platform.",
+    problem:
+      "Weak visuals waste good offers. Ads and posts with poor design or unedited video get scrolled past, no matter how much you spend to show them.",
+    approach: [
+      { title: "Brief", text: "Clarify the goal, audience and platform for every piece." },
+      { title: "Design & edit", text: "Create visuals and videos in the right format and length for each channel." },
+      { title: "Review", text: "Quick feedback rounds so work goes live on time." },
+      { title: "Test", text: "Produce variations for ads so we can learn what performs best." },
+    ],
+    deliverables: ["Social posts and carousels", "Ad creatives in all formats", "Reels and short videos", "Product and event videos", "Brochures, menus and presentations"],
+    measures: ["Creative engagement rate", "Ad click-through rate", "Cost per result by creative", "Turnaround time"],
+    fit: "Brands that need a steady flow of quality visuals without hiring an in-house design team.",
+    related: ["meta-ads", "social-media-management", "branding"],
+  },
+  {
+    slug: "promotions",
+    pillar: "performance",
+    name: "Product & Event Promotions",
+    short: "Launches, offers and events promoted to fill seats and sell stock.",
+    intro:
+      "We plan and run promotion campaigns for product launches, seasonal offers, openings and events — across social, ads, WhatsApp and email — with a clear date and target.",
+    problem:
+      "Launches and events often get a few last-minute posts. Without a plan, reach is low, sign-ups trickle in and the opportunity passes.",
+    approach: [
+      { title: "Plan", text: "Set the goal, audience, timeline and offer for the promotion." },
+      { title: "Build", text: "Landing page or registration form, creatives and messages." },
+      { title: "Launch", text: "Coordinated teasers, ads, posts, WhatsApp and email in the right sequence." },
+      { title: "Follow up", text: "Reminders, retargeting and a post-campaign report." },
+    ],
+    deliverables: ["Promotion plan and timeline", "Creatives and ad campaigns", "Landing or registration page", "WhatsApp and email reminders", "Results report"],
+    measures: ["Registrations or sales", "Cost per registration or sale", "Attendance or redemption rate"],
+    fit: "Businesses launching a product, running a seasonal offer, or hosting an event or opening.",
+    related: ["meta-ads", "landing-pages", "whatsapp-automation"],
+  },
+  {
+    slug: "google-business-profile",
+    pillar: "performance",
+    name: "Google Business Profile Management",
+    short: "Get found on Google Maps — and turn searches into calls and visits.",
+    intro:
+      "We optimise and manage your Google Business Profile — information, photos, posts, products, questions and reviews — so you appear and stand out in local searches and on Maps.",
+    problem:
+      "For local businesses, the Google profile is often the first thing customers see. Outdated hours, few photos and unanswered reviews quietly send customers to competitors.",
+    approach: [
+      { title: "Audit & fix", text: "Correct categories, information, hours and service areas." },
+      { title: "Optimise", text: "Photos, services, products and descriptions that match what people search." },
+      { title: "Stay active", text: "Regular posts, offers and answers to questions." },
+      { title: "Reviews", text: "A simple system to collect reviews and reply to every one." },
+    ],
+    deliverables: ["Profile audit and optimisation", "Weekly posts and photo updates", "Review collection and replies", "Monthly insights report"],
+    measures: ["Profile views and searches", "Calls, direction requests and website clicks", "Review volume and response rate", "Map-pack visibility"],
+    fit: "Shops, clinics, studios, restaurants and service businesses that serve customers locally.",
+    related: ["local-seo", "google-ads", "content-marketing"],
+  },
+  {
+    slug: "performance-management",
+    pillar: "data-intelligence",
+    name: "Performance Management",
+    short: "Every campaign watched, tuned and reported — so budget goes where it works.",
+    intro:
+      "We manage the performance of your marketing week by week — budgets, bids, creatives, audiences and pages — and tell you clearly what changed and why.",
+    problem:
+      "Campaigns that are set up and left alone get more expensive over time. Without someone owning the numbers, budget keeps flowing to what stopped working.",
+    approach: [
+      { title: "Set targets", text: "Agree the numbers that matter: cost per lead, cost per sale, return on spend." },
+      { title: "Monitor", text: "Weekly checks across ads, website and CRM." },
+      { title: "Optimise", text: "Shift budget, refresh creatives, test audiences and fix leaks." },
+      { title: "Report", text: "A clear monthly report with decisions, not just charts." },
+    ],
+    deliverables: ["KPI targets", "Weekly optimisation", "Budget reallocation", "Creative and audience testing", "Monthly performance review"],
+    measures: ["Cost per lead and per sale", "Return on ad spend", "Lead-to-customer rate", "Month-on-month improvement"],
+    fit: "Businesses already spending on ads or marketing who want better results from the same budget.",
+    related: ["analytics", "google-ads", "meta-ads"],
+  },
+  {
     slug: "growth-strategy",
     pillar: "strategy",
     name: "Growth Strategy",
@@ -252,7 +430,7 @@ export const services: Service[] = [
   {
     slug: "lead-generation",
     pillar: "performance",
-    name: "Lead Generation Systems",
+    name: "Client Acquisition",
     short: "A consistent flow of qualified enquiries, built as a system rather than a campaign.",
     intro:
       "We combine targeting, offer, landing experience and follow-up into one system engineered for a steady volume of qualified leads.",
@@ -310,7 +488,7 @@ export const services: Service[] = [
   {
     slug: "local-seo",
     pillar: "performance",
-    name: "SEO & Local SEO",
+    name: "SEO & Local Search",
     short: "Durable visibility in search results and Google Maps for the queries that matter.",
     intro: "We improve how search engines understand, trust and rank your business — from technical foundations to content and local presence.",
     problem:
@@ -329,7 +507,7 @@ export const services: Service[] = [
   {
     slug: "website-development",
     pillar: "digital-experience",
-    name: "Website Design & Development",
+    name: "Website Development",
     short: "Fast, editorial, conversion-led websites that your team can run.",
     intro: "We design and build websites that explain clearly, load quickly and guide visitors to the next step — on every screen size.",
     problem:
@@ -405,7 +583,7 @@ export const services: Service[] = [
   {
     slug: "crm-automation",
     pillar: "ai-automation",
-    name: "CRM Setup & Automation",
+    name: "Leads Management & CRM",
     short: "One place for every lead, with follow-up that happens automatically.",
     intro: "We set up or rebuild your CRM so every enquiry is captured, assigned, followed up and reported on — without spreadsheets.",
     problem:
@@ -500,7 +678,7 @@ export const services: Service[] = [
   {
     slug: "sales-funnels",
     pillar: "ai-automation",
-    name: "Sales Funnels & Automation",
+    name: "Sales Closing Systems",
     short: "A clear path from first interest to signed customer.",
     intro: "We design the steps between enquiry and purchase — qualification, booking, proposals, reminders — and automate the parts that slow deals down.",
     problem:
@@ -519,7 +697,7 @@ export const services: Service[] = [
   {
     slug: "analytics",
     pillar: "data-intelligence",
-    name: "Analytics & Tracking",
+    name: "Analysis & Reporting",
     short: "Measurement you can trust, from first click to closed revenue.",
     intro: "We set up analytics and conversion tracking properly — so every other decision is made on accurate data.",
     problem:

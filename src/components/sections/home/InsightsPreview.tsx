@@ -14,7 +14,7 @@ export function InsightsPreview() {
     <section aria-labelledby="insights-title" className="bg-ivory py-section">
       <div className="container-site">
         <SectionHeader
-          index="08"
+         
           eyebrow="Insights"
           title={<span id="insights-title">Thinking on growth, <em className="italic">in practice.</em></span>}
           intro="Practical writing on acquisition, conversion, automation and measurement — the decisions growing businesses actually face."

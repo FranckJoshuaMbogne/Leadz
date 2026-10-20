@@ -268,7 +268,7 @@ export function StrategyCallForm() {
           </Button>
         ) : (
           <Button type="submit" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? "Sending…" : "Request my strategy call"}
+            {isSubmitting ? "Sending…" : "Book my free strategy call"}
           </Button>
         )}
       </div>

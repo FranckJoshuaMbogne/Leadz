@@ -27,7 +27,7 @@ export default function Contact() {
               <p className="mt-4 font-display text-display-sm">The fastest route is a strategy call.</p>
               <p className="mt-3 text-ivory/75">Answer a few questions and we'll come prepared.</p>
               <ButtonLink to="/book" variant="light" className="mt-8">
-                Book a Strategy Call
+                Get a Free Strategy Call
               </ButtonLink>
             </div>
             <dl className="mt-12 space-y-8">

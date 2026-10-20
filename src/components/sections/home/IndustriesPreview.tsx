@@ -9,7 +9,7 @@ export function IndustriesPreview() {
     <section aria-labelledby="industries-title" className="bg-ivory-200 py-section">
       <div className="container-site">
         <SectionHeader
-          index="07"
+         
           eyebrow="Industries"
           title={<span id="industries-title">Built for businesses where <em className="italic">every customer counts.</em></span>}
           intro="The system is the same; the problems differ. We adapt channels, messaging and compliance to the way your market buys."

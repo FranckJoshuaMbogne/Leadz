@@ -15,7 +15,7 @@ export function Philosophy() {
       <div className="container-site grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <Reveal>
-            <Eyebrow index="09">How we work</Eyebrow>
+            <Eyebrow>How we work</Eyebrow>
           </Reveal>
           <Reveal delay={0.05}>
             <blockquote className="mt-8">
