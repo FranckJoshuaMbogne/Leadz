@@ -7,6 +7,16 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <!--app-head-->
+    <script>
+  if (window.location.hostname === "leadzindb.web.app") {
+    window.location.replace(
+      "https://springs360.in" +
+      window.location.pathname +
+      window.location.search +
+      window.location.hash
+    );
+  }
+</script>
     <noscript>
       <style>
         [style*="opacity:0"],
