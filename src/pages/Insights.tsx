@@ -81,7 +81,7 @@ export default function Insights() {
                   aria-pressed={category === c}
                   onClick={() => update("category", c)}
                   className={cn(
-                    "min-h-[42px] shrink-0 rounded-sm border px-4 text-sm transition-colors",
+                    "min-h-[42px] shrink-0 rounded-full border px-4 text-sm transition-colors",
                     category === c ? "border-forest bg-forest text-ivory" : "border-ink/20 text-ink-muted hover:border-ink hover:text-ink"
                   )}
                 >
@@ -99,7 +99,7 @@ export default function Insights() {
                 value={q}
                 onChange={(e) => update("q", e.target.value)}
                 placeholder="Search articles"
-                className="h-12 w-full rounded-sm border border-ink/20 bg-ivory-50 px-4 text-ink placeholder:text-ink-soft focus:border-forest focus:outline-none focus-visible:outline-2"
+                className="h-12 w-full rounded-full border border-ink/20 bg-ivory-50 px-4 text-ink placeholder:text-ink-soft focus:border-forest focus:outline-none focus-visible:outline-2"
               />
             </div>
           </div>

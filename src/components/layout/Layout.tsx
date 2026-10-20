@@ -24,7 +24,7 @@ export function Layout() {
     <>
       <a
         href="#main"
-        className="sr-only z-[100] rounded-sm bg-ivory px-4 py-3 text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-[100] rounded-full bg-ivory px-4 py-3 text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
         Skip to content
       </a>

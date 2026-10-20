@@ -1,5 +1,15 @@
 import type { Config } from "tailwindcss";
 
+/* ------------------------------------------------------------------
+ * FONTS — change the site's typefaces here.
+ * 1. Install the font:   npm i @fontsource-variable/<font-name>
+ * 2. Import it at the top of src/index.css
+ * 3. Put its family name first in the matching list below.
+ * ------------------------------------------------------------------ */
+const FONT_MAIN = ['"Plus Jakarta Sans Variable"', '"Plus Jakarta Sans"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"]; // body, navigation, buttons AND all headings
+const FONT_ACCENT = ['"Playfair Display Variable"', '"Playfair Display"', "Georgia", "serif"]; // italic accent words inside headings
+const FONT_BRAND = ['"Bodoni Moda Variable"', '"Bodoni Moda"', "Didot", "Georgia", "serif"]; // the "360" in the logo and the footer wordmark
+
 /**
  * Springs 360 design tokens.
  * Ivory + forest carry the system. Gold is a restrained accent only.
@@ -52,11 +62,10 @@ export default {
         },
       },
       fontFamily: {
-        hero: ['"Bodoni Moda Variable"', '"Bodoni Moda"', "Didot", "Georgia", "serif"],
-        // Headings use the same family as the navigation (DM Sans), set bold.
-        display: ['"DM Sans Variable"', '"DM Sans"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
-        accent: ['"Playfair Display Variable"', '"Playfair Display"', "Georgia", "serif"],
-        sans: ['"DM Sans Variable"', '"DM Sans"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        sans: FONT_MAIN,
+        display: FONT_MAIN, // headings (bold) — same family as the navigation
+        accent: FONT_ACCENT,
+        brand: FONT_BRAND,
       },
       fontSize: {
         "display-2xl": ["clamp(3.3rem, 9vw, 9rem)", { lineHeight: "0.95", letterSpacing: "-0.035em" }],

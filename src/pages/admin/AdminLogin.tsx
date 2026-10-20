@@ -52,7 +52,7 @@ export default function AdminLogin() {
         <Link to="/" className="inline-block text-ink">
           <Logo />
         </Link>
-        <div className="mt-10 rounded border border-ink/10 bg-ivory-50 p-8 shadow-soft">
+        <div className="mt-10 rounded-2xl border border-ink/10 bg-ivory-50 p-8 shadow-soft">
           <h1 className="font-display text-3xl text-ink">Admin</h1>
           {admin.status === "forbidden" ? (
             <div className="mt-6 space-y-4 text-ink-muted">

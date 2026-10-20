@@ -31,7 +31,7 @@ export function HeroCollage({ className }: { className?: string }) {
         </div>
         <div className="mt-3 aspect-[16/10] overflow-hidden rounded-md bg-gradient-to-br from-sage-300 via-sage to-ivory-200">
           <div className="flex h-full items-end p-3">
-            <span className="rounded-sm bg-deep/85 px-2 py-1 text-xs font-medium text-ivory">New collection — now live</span>
+            <span className="rounded-full bg-deep/85 px-2 py-1 text-xs font-medium text-ivory">New collection — now live</span>
           </div>
         </div>
         <div className="mt-3 h-2 w-3/4 rounded-full bg-ink/10" />

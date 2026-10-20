@@ -162,7 +162,7 @@ export function StrategyCallForm() {
                     <label
                       key={c}
                       className={cn(
-                        "flex min-h-[52px] cursor-pointer items-center gap-3 rounded-sm border px-4 py-3 text-[0.95rem] transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-gold",
+                        "flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-[0.95rem] transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-gold",
                         challenge === c ? "border-forest bg-forest text-ivory" : "border-ink/20 bg-ivory-50 text-ink hover:border-ink/50"
                       )}
                     >
@@ -191,7 +191,7 @@ export function StrategyCallForm() {
                       <label
                         key={c}
                         className={cn(
-                          "inline-flex min-h-[42px] cursor-pointer items-center rounded-sm border px-3.5 text-sm transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-gold",
+                          "inline-flex min-h-[42px] cursor-pointer items-center rounded-full border px-4 text-sm transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-gold",
                           on ? "border-forest bg-sage text-ink" : "border-ink/20 bg-ivory-50 text-ink-muted hover:border-ink/50"
                         )}
                       >
@@ -245,7 +245,7 @@ export function StrategyCallForm() {
       </AnimatePresence>
 
       {failed && (
-        <div role="alert" className="mt-8 rounded-sm border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 p-4 text-sm text-ink">
+        <div role="alert" className="mt-8 rounded-xl border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 p-4 text-sm text-ink">
           Something went wrong sending your request. Please try again, or{" "}
           <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="underline">
             message us on WhatsApp

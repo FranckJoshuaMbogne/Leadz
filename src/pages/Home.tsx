@@ -6,7 +6,8 @@ import { Hero } from "@/components/sections/home/Hero";
 import { ServicesGrid } from "@/components/sections/home/ServicesGrid";
 import { Problem } from "@/components/sections/home/Problem";
 import { HowItWorks } from "@/components/sections/HowItWorks";
-import { EcosystemStages } from "@/components/sections/EcosystemStages";
+import { GrowthSystem } from "@/components/sections/GrowthSystem";
+import { BrandStatement } from "@/components/sections/home/BrandStatement";
 import { SelectedWork } from "@/components/sections/home/SelectedWork";
 import { WhySprings } from "@/components/sections/home/WhySprings";
 import { IndustriesPreview } from "@/components/sections/home/IndustriesPreview";
@@ -30,9 +31,10 @@ export default function Home() {
       />
       <Hero />
       <ServicesGrid />
+      <BrandStatement />
       <Problem />
       <HowItWorks />
-      <EcosystemStages />
+      <GrowthSystem />
       <SelectedWork />
       <WhySprings />
       <IndustriesPreview />

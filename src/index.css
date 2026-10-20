@@ -1,6 +1,6 @@
 @import "@fontsource-variable/bodoni-moda/opsz.css";
 @import "@fontsource-variable/bodoni-moda/opsz-italic.css";
-@import "@fontsource-variable/dm-sans/wght.css";
+@import "@fontsource-variable/plus-jakarta-sans/wght.css";
 @import "@fontsource-variable/playfair-display/wght-italic.css";
 
 @tailwind base;
@@ -37,19 +37,18 @@
 
   /*
    * Type roles
-   *   font-hero    Bodoni Moda       — hero banner + wordmark only
-   *   font-display DM Sans (the navigation font) — headings: bold for H1/H2,
-   *                semibold elsewhere
+   *   font-sans / font-display  Plus Jakarta Sans — everything; headings bold
+   *   font-brand   Bodoni Moda       — the "360" in the logo + footer wordmark
    *   font-accent  Playfair Display  — italic accent words inside headings
    */
   .font-display {
-    font-weight: 600;
+    font-weight: 700;
   }
   h1.font-display,
   h2.font-display,
   h1 .font-display,
   h2 .font-display {
-    font-weight: 700;
+    font-weight: 800;
   }
   .font-display em,
   .font-display .italic,

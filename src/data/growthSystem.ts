@@ -1,65 +1,53 @@
-import type { PillarSlug } from "./services";
+import type { StageKey } from "./catalog";
 
 export interface GrowthStage {
+  key: StageKey;
   index: string;
   name: string;
   verb: string;
   description: string;
-  capabilities: string[];
-  pillar: PillarSlug;
   question: string;
 }
 
-/** The Springs 360 Growth System — the journey every engagement is designed around. */
+/**
+ * The Springs 360 growth wheel — four steps every engagement is built around.
+ * The services shown in each step come from src/data/catalog.ts (field `stage`).
+ */
 export const growthStages: GrowthStage[] = [
   {
+    key: "seen",
     index: "01",
-    name: "Attract",
-    verb: "Earn attention from the right people",
+    name: "Get seen",
+    verb: "Be visible where your customers spend time",
     description:
-      "Reach the customers most likely to buy — with paid media, search, social and content that each have a defined role in the journey.",
-    capabilities: ["Paid media", "SEO", "Social", "Content"],
-    pillar: "performance",
-    question: "Are we reaching the people who will actually buy?",
+      "Consistent social media, content, design and a strong Google presence — so the right people notice your brand and remember it.",
+    question: "Do the right people see us every week?",
   },
   {
+    key: "customers",
     index: "02",
-    name: "Capture",
-    verb: "Turn interest into a conversation",
+    name: "Get customers",
+    verb: "Turn attention into enquiries",
     description:
-      "Websites, landing pages and offers designed around how your customers decide, so attention becomes an enquiry, a booking or a sale.",
-    capabilities: ["Websites", "Landing pages", "Offers", "CRO"],
-    pillar: "digital-experience",
-    question: "When they arrive, is the next step obvious and worth taking?",
+      "Meta and Google Ads, promotions, websites and landing pages built to bring real enquiries — not just likes and clicks.",
+    question: "Are we getting enquiries from people ready to buy?",
   },
   {
+    key: "close",
     index: "03",
-    name: "Nurture",
-    verb: "Stay relevant until they are ready",
+    name: "Close the sale",
+    verb: "Answer fast and follow up every time",
     description:
-      "CRM, email, WhatsApp and AI assistants that respond instantly, answer questions and keep you present through the buying cycle.",
-    capabilities: ["CRM", "Email", "WhatsApp", "AI"],
-    pillar: "ai-automation",
-    question: "What happens to the leads who are not ready today?",
+      "Every lead captured, answered quickly on WhatsApp, email or phone, followed up and guided to a booking or a purchase.",
+    question: "What happens to an enquiry in the first hour?",
   },
   {
+    key: "grow",
     index: "04",
-    name: "Convert",
-    verb: "Make buying the easy part",
+    name: "Grow what works",
+    verb: "Measure, improve, repeat",
     description:
-      "Funnels, qualification and sales automation that route the right prospects to the right people with full context — and follow up every time.",
-    capabilities: ["Funnels", "Automation", "Sales systems", "Lead qualification"],
-    pillar: "ai-automation",
-    question: "Are sales conversations happening with the right people, fast enough?",
-  },
-  {
-    index: "05",
-    name: "Retain",
-    verb: "Grow the value of every customer",
-    description:
-      "Analytics, remarketing and customer experience work that turns first purchases into repeat business — and shows what to improve next.",
-    capabilities: ["Analytics", "Remarketing", "Customer experience", "Growth optimisation"],
-    pillar: "data-intelligence",
-    question: "Do customers come back, and do we know why?",
+      "Performance management, analysis and clear monthly reports — so budget moves to what brings customers, and results keep improving.",
+    question: "Do we know which marketing brings our customers?",
   },
 ];

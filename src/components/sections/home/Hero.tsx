@@ -19,12 +19,12 @@ export function Hero() {
             <span aria-hidden="true" className="h-px w-8 bg-gold" />
             Springs 360 · Digital marketing agency
           </p>
-          <h1 id="hero-title" className="mt-6 font-hero leading-[0.98] tracking-[-0.03em]" style={{ fontSize: "clamp(2.3rem, 5.9vw, 5.6rem)" }}>
+          <h1 id="hero-title" className="mt-6 font-display font-extrabold leading-[1.02] tracking-[-0.035em]" style={{ fontSize: "clamp(2.4rem, 5.6vw, 5.4rem)" }}>
             <MaskText
               lines={[
                 "Your All-in-One",
                 <span key="d">
-                  <em className="font-hero font-normal italic text-gold-light">360°</em> Digital
+                  <span className="text-gold-light">360°</span> Digital
                 </span>,
                 "Marketing Agency",
               ]}

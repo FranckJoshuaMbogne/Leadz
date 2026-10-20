@@ -51,7 +51,7 @@ export default function Work() {
                 aria-pressed={filter === ind}
                 onClick={() => setFilter(ind)}
                 className={cn(
-                  "min-h-[42px] shrink-0 rounded-sm border px-4 text-sm transition-colors",
+                  "min-h-[42px] shrink-0 rounded-full border px-4 text-sm transition-colors",
                   filter === ind ? "border-forest bg-forest text-ivory" : "border-ink/20 text-ink-muted hover:border-ink hover:text-ink"
                 )}
               >

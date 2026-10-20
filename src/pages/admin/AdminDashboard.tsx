@@ -81,7 +81,7 @@ function LeadsPanel() {
               type="button"
               aria-pressed={filter === s}
               onClick={() => setFilter(s)}
-              className={cn("min-h-[36px] rounded-sm border px-3 text-sm capitalize", filter === s ? "border-forest bg-forest text-ivory" : "border-ink/20 text-ink-muted")}
+              className={cn("min-h-[36px] rounded-full border px-4 text-sm capitalize", filter === s ? "border-forest bg-forest text-ivory" : "border-ink/20 text-ink-muted")}
             >
               {s}
             </button>
@@ -113,7 +113,7 @@ function LeadsPanel() {
                 <label className="sr-only" htmlFor={`st-${l.id}`}>
                   Status
                 </label>
-                <select id={`st-${l.id}`} value={l.status} onChange={(e) => setStatus(l.id, e.target.value)} className="h-9 rounded-sm border border-ink/20 bg-ivory px-2 text-sm capitalize">
+                <select id={`st-${l.id}`} value={l.status} onChange={(e) => setStatus(l.id, e.target.value)} className="h-9 rounded-full border border-ink/20 bg-ivory px-3 text-sm capitalize">
                   {leadStatuses.map((s) => (
                     <option key={s} value={s}>
                       {s}
@@ -276,7 +276,7 @@ function InsightEditor({ initial, onSaved, onCancel }: { initial: Draft; onSaved
               </button>
             </div>
             {preview ? (
-              <div className="prose-editorial max-h-[70vh] overflow-auto rounded-sm border border-ink/15 bg-ivory p-6">
+              <div className="prose-editorial max-h-[70vh] overflow-auto rounded-xl border border-ink/15 bg-ivory p-6">
                 <Markdown source={d.content} />
               </div>
             ) : (
