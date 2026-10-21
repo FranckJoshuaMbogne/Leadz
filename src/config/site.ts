@@ -22,7 +22,7 @@ export const site = {
   tagline: "Your All-in-One 360° Digital Marketing Agency",
   description:
     "Springs 360 is an all-in-one 360° digital marketing agency — social media, ads, websites, content, branding and lead management, handled by one team to boost your sales.",
-  url: stripSlash(env.VITE_SITE_URL || "https://leadzindb.web.app"),
+  url: stripSlash(env.VITE_SITE_URL || "https://springs360.in"),
   locale: "en_IN",
   defaultOgImage: "/og/springs360-og.png",
 
