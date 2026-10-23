@@ -1,10 +1,11 @@
-import { sortedCaseStudies, hasVerifiedWork } from "@/data/caseStudies";
+import { useSite } from "@/content/useSite";
 import { CaseStudyCard } from "@/components/cards/CaseStudyCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/animations/Reveal";
 
 export function SelectedWork() {
+  const { sortedCaseStudies, hasVerifiedWork } = useSite();
   const [first, second, third] = sortedCaseStudies;
   return (
     <section aria-labelledby="work-title" className="bg-sage-100 py-section">

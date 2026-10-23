@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
-import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { useContact } from "@/content/ContentProvider";
 
 const HIDDEN_ON = ["/book", "/contact", "/thank-you"];
 
@@ -11,6 +11,7 @@ const HIDDEN_ON = ["/book", "/contact", "/thank-you"];
  * scrolls past the first screen. Desktop: a discreet WhatsApp button.
  */
 export function StickyCta() {
+  const contact = useContact();
   const { pathname } = useLocation();
   const [show, setShow] = useState(false);
 
@@ -41,7 +42,7 @@ export function StickyCta() {
             Get a Free Strategy Call
           </Link>
           <a
-            href={site.contact.whatsappHref}
+            href={contact.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
             tabIndex={show ? 0 : -1}
@@ -54,7 +55,7 @@ export function StickyCta() {
       </div>
 
       <a
-        href={site.contact.whatsappHref}
+        href={contact.whatsappHref}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"

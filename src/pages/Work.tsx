@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Seo, breadcrumbLd } from "@/lib/seo";
-import { sortedCaseStudies, hasVerifiedWork } from "@/data/caseStudies";
+import { useSite } from "@/content/useSite";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { CaseStudyCard } from "@/components/cards/CaseStudyCard";
@@ -8,7 +8,8 @@ import { Reveal } from "@/components/animations/Reveal";
 import { cn } from "@/lib/utils";
 
 export default function Work() {
-  const industries = useMemo(() => ["All", ...Array.from(new Set(sortedCaseStudies.map((c) => c.industry)))], []);
+  const { sortedCaseStudies, hasVerifiedWork } = useSite();
+  const industries = useMemo(() => ["All", ...Array.from(new Set(sortedCaseStudies.map((c) => c.industry)))], [sortedCaseStudies]);
   const [filter, setFilter] = useState("All");
   const list = filter === "All" ? sortedCaseStudies : sortedCaseStudies.filter((c) => c.industry === filter);
 

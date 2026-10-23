@@ -1,7 +1,9 @@
 import { Link, useParams } from "react-router-dom";
 import { Seo, breadcrumbLd, faqLd, serviceLd } from "@/lib/seo";
-import { getPillar, getService, servicesForPillar, type Pillar, type Service } from "@/data/services";
-import { caseStudies } from "@/data/caseStudies";
+import type { Pillar, Service } from "@/data/services";
+import { useSite } from "@/content/useSite";
+import { useContentState } from "@/content/ContentProvider";
+import { PageLoading } from "@/components/ui/PageLoading";
 import { staticInsights } from "@/data/insights";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -9,10 +11,10 @@ import { FaqList } from "@/components/sections/FaqList";
 import { Reveal } from "@/components/animations/Reveal";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Arrow, ButtonA, ButtonLink } from "@/components/ui/Button";
-import { site } from "@/config/site";
 import { CaseStudyCard } from "@/components/cards/CaseStudyCard";
 import { InsightCard } from "@/components/cards/InsightCard";
 import NotFound from "./NotFound";
+import { useContact } from "@/content/ContentProvider";
 
 function Approach({ steps }: { steps: { title: string; text: string }[] }) {
   return (
@@ -45,6 +47,7 @@ function ListBlock({ title, items }: { title: string; items: string[] }) {
 }
 
 function RelatedWork({ serviceSlugs }: { serviceSlugs: string[] }) {
+  const { sortedCaseStudies: caseStudies } = useSite();
   const work = caseStudies.filter((c) => c.services.some((s) => serviceSlugs.includes(s))).slice(0, 2);
   if (!work.length) return null;
   return (
@@ -92,6 +95,7 @@ function RelatedInsights({ serviceSlugs }: { serviceSlugs: string[] }) {
 }
 
 function PillarPage({ pillar }: { pillar: Pillar }) {
+  const { servicesForPillar } = useSite();
   const detail = servicesForPillar(pillar.slug);
   const path = `/services/${pillar.slug}`;
   const crumbs = [
@@ -185,7 +189,9 @@ function PillarPage({ pillar }: { pillar: Pillar }) {
 }
 
 function ServicePage({ service }: { service: Service }) {
-  const pillar = getPillar(service.pillar)!;
+  const contact = useContact();
+  const { getPillar, getService } = useSite();
+  const pillar = getPillar(service.pillar) ?? { slug: service.pillar, name: "Services", index: "", headline: "", summary: "", problem: "", approach: [], services: [], measures: [], art: "flow", cta: "", faqs: [] } as unknown as Pillar;
   const path = `/services/${service.slug}`;
   const crumbs = [
     { name: "Home", path: "/" },
@@ -208,7 +214,7 @@ function ServicePage({ service }: { service: Service }) {
           <ButtonLink to="/book" variant="light" size="lg">
             Get a Free Strategy Call
           </ButtonLink>
-          <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+          <ButtonA href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
             Chat on WhatsApp
           </ButtonA>
         </div>
@@ -259,7 +265,7 @@ function ServicePage({ service }: { service: Service }) {
               <ButtonLink to="/book" variant="light" size="lg">
                 Get a Free Strategy Call
               </ButtonLink>
-              <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+              <ButtonA href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
                 WhatsApp
               </ButtonA>
             </div>
@@ -300,9 +306,11 @@ function ServicePage({ service }: { service: Service }) {
 
 export default function ServiceDetail() {
   const { slug = "" } = useParams();
+  const { getPillar, getService } = useSite();
+  const { ready } = useContentState();
   const pillar = getPillar(slug);
   if (pillar) return <PillarPage pillar={pillar} />;
   const service = getService(slug);
   if (service) return <ServicePage service={service} />;
-  return <NotFound />;
+  return ready ? <NotFound /> : <PageLoading />;
 }

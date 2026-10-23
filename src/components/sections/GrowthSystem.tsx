@@ -1,8 +1,8 @@
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { growthStages, type GrowthStage } from "@/data/growthSystem";
-import { catalog } from "@/data/catalog";
+import type { GrowthStage } from "@/data/growthSystem";
+import { useContent } from "@/content/ContentProvider";
 import { GrowthWheel } from "@/components/art/GrowthWheel";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/animations/Reveal";
@@ -15,7 +15,7 @@ function StagePanel({ stage, i, onActive, active }: { stage: GrowthStage; i: num
   useEffect(() => {
     if (inView) onActive(i);
   }, [inView, i, onActive]);
-  const items = catalog.filter((c) => c.stage === stage.key);
+  const items = useContent().catalog.filter((c) => c.stage === stage.key);
 
   return (
     <div ref={ref} className="relative pb-16 pl-10 lg:flex lg:min-h-[78vh] lg:flex-col lg:justify-center lg:pb-0 lg:pl-0">
@@ -64,6 +64,7 @@ function StagePanel({ stage, i, onActive, active }: { stage: GrowthStage; i: num
 }
 
 export function GrowthSystem() {
+  const growthStages = useContent().growth;
   const [active, setActive] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 60%", "end 60%"] });

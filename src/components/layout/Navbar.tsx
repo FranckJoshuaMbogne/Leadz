@@ -5,8 +5,10 @@ import { primaryNav, site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { ButtonLink } from "@/components/ui/Button";
+import { useContact } from "@/content/ContentProvider";
 
 export function Navbar() {
+  const contact = useContact();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -167,11 +169,11 @@ export function Navbar() {
                 Get a Free Strategy Call
               </ButtonLink>
               <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-ivory/70">
-                <a href={site.contact.phoneHref} className="py-1">{site.contact.phoneDisplay}</a>
-                <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="py-1">
+                <a href={contact.phoneHref} className="py-1">{contact.phoneDisplay}</a>
+                <a href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="py-1">
                   WhatsApp
                 </a>
-                {site.contact.email && <a href={`mailto:${site.contact.email}`} className="py-1">{site.contact.email}</a>}
+                {contact.email && <a href={`mailto:${contact.email}`} className="py-1">{contact.email}</a>}
               </div>
             </div>
           </motion.div>

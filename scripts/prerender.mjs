@@ -19,7 +19,7 @@ const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
 const server = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
-const { render, site, staticInsights, services, pillars, caseStudies, industries, docToInsight } = server;
+const { render, site, staticInsights, docToInsight, defaultContent, mergeContent } = server;
 
 const template = await fs.readFile(path.join(dist, "index.html"), "utf8");
 
@@ -75,6 +75,60 @@ async function fetchCmsInsights() {
 const cms = await fetchCmsInsights();
 
 /* ---------------------------------------------------------------- */
+/* Site content (edited in /admin → collection `content`)            */
+/* ---------------------------------------------------------------- */
+
+const fsProject = process.env.VITE_FIREBASE_PROJECT_ID || "leadzindb";
+const fsKey = process.env.VITE_FIREBASE_API_KEY || "AIzaSyBmf_mejrKZrC4WVn6JLQMWXgPh1kNnaX8";
+const fsApi = `https://firestore.googleapis.com/v1/projects/${fsProject}/databases/(default)/documents`;
+
+async function getJson(url) {
+  const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+let content = defaultContent;
+if (process.env.PRERENDER_CMS !== "false") {
+  try {
+    const json = await getJson(`${fsApi}/content?key=${fsKey}&pageSize=50`);
+    const docs = Object.fromEntries((json.documents ?? []).map((d) => [d.name.split("/").pop(), fromFirestoreValue({ mapValue: { fields: d.fields ?? {} } })]));
+    content = mergeContent(docs);
+    console.log(`  Content: ${Object.keys(docs).length} section(s) from Firestore`);
+  } catch (err) {
+    console.warn(`  Content: skipped (${err.message}) — built-in content`);
+  }
+}
+
+// Export uploaded images ("media:<id>") as static files.
+const mediaIds = new Set();
+JSON.stringify(content, (_k, v) => {
+  if (typeof v === "string" && v.startsWith("media:")) mediaIds.add(v.slice(6));
+  return v;
+});
+const builtMedia = [];
+await fs.mkdir(path.join(dist, "media"), { recursive: true });
+for (const id of mediaIds) {
+  if (!/^[\w-]+\.(webp|jpe?g|png|gif|svg)$/i.test(id)) continue;
+  try {
+    const doc = await getJson(`${fsApi}/media/${id}?key=${fsKey}`);
+    const data = fromFirestoreValue(doc.fields?.data);
+    const m = /^data:[^;]+;base64,(.*)$/.exec(data ?? "");
+    if (!m) continue;
+    await fs.writeFile(path.join(dist, "media", id), Buffer.from(m[1], "base64"));
+    builtMedia.push(id);
+  } catch (err) {
+    console.warn(`  media ${id}: ${err.message}`);
+  }
+}
+if (mediaIds.size) console.log(`  Media: exported ${builtMedia.length}/${mediaIds.size} image(s)`);
+
+const initial = { content, builtMedia };
+const contentPayload = `<script id="__CONTENT__" type="application/json">${JSON.stringify(initial).replace(/</g, "\\u003c")}</script>`;
+const { pillars, services, industries } = content;
+const caseStudies = content.work.filter((c) => c.published !== false);
+
+/* ---------------------------------------------------------------- */
 /* Routes                                                            */
 /* ---------------------------------------------------------------- */
 
@@ -122,22 +176,24 @@ function cmsPayload(routePath) {
   return `<script id="__CMS_INSIGHTS__" type="application/json">${JSON.stringify(data).replace(/</g, "\\u003c")}</script>`;
 }
 
-function fill(head, html, data) {
+function fill(head, html, data, fallback = false) {
   return template
-    .replace("<!--app-head-->", `${preloadFonts}\n    ${head}`)
-    .replace("<!--app-html-->", html)
-    .replace("<!--app-data-->", data);
+    .replace("<!--app-head-->", () => `${preloadFonts}\n    ${head}`)
+    .replace("<!--app-html-->", () => html)
+    .replace("<!--app-data-->", () => `${data}${contentPayload}`)
+    // 404.html is served for any unknown URL, so it re-renders instead of hydrating.
+    .replace('<div id="root">', fallback ? '<div id="root" data-fallback>' : '<div id="root">');
 }
 
 let count = 0;
 for (const r of routes) {
   // Article pages need their own CMS content available during render.
-  const { html, head, status } = await render(r.path, cms);
+  const { html, head, status } = await render(r.path, cms, initial);
   if (status !== 200 && !r.noindex) throw new Error(`Route ${r.path} rendered with status ${status}`);
   const file = r.file ?? (r.path === "/" ? "index.html" : `${r.path.slice(1)}.html`);
   const out = path.join(dist, file);
   await fs.mkdir(path.dirname(out), { recursive: true });
-  await fs.writeFile(out, fill(head, html, cmsPayload(r.path)));
+  await fs.writeFile(out, fill(head, html, cmsPayload(r.path), r.file === "404.html"));
   count++;
 }
 
@@ -147,7 +203,7 @@ await fs.writeFile(
   template
     .replace("<!--app-head-->", `${preloadFonts}\n    <title>${site.name}</title>\n    <meta name="robots" content="noindex">`)
     .replace("<!--app-html-->", "")
-    .replace("<!--app-data-->", "")
+    .replace("<!--app-data-->", () => contentPayload)
 );
 
 /* ---------------------------------------------------------------- */

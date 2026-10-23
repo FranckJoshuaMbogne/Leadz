@@ -4,7 +4,7 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { Reveal } from "@/components/animations/Reveal";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { principles } from "@/components/sections/home/Philosophy";
-import { growthStages } from "@/data/growthSystem";
+import { useContent } from "@/content/ContentProvider";
 import { CoverArt } from "@/components/art/CoverArt";
 import { Parallax } from "@/components/animations/Parallax";
 
@@ -22,6 +22,7 @@ const technology = [
 ];
 
 export default function About() {
+  const growthStages = useContent().growth;
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },

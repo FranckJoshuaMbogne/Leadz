@@ -4,25 +4,26 @@ import { StaticRouter } from "react-router-dom/server";
 import App from "./App";
 import { HeadProvider, buildHeadTags, headTagsToString, type HeadCollector } from "./lib/seo";
 import { InsightsProvider } from "./lib/insights";
+import { ContentProvider, type InitialContent } from "./content/ContentProvider";
 import type { Insight } from "./data/insights";
 
 export { staticInsights } from "./data/insights";
-export { services, pillars } from "./data/services";
-export { caseStudies } from "./data/caseStudies";
-export { industries } from "./data/industries";
+export { defaultContent, mergeContent } from "./content/defaults";
 export { site } from "./config/site";
 export { docToInsight } from "./lib/insights";
 
-export async function render(url: string, cmsInsights: Insight[]) {
+export async function render(url: string, cmsInsights: Insight[], initial: InitialContent) {
   const collector: HeadCollector = {};
   const { prelude } = await prerenderToNodeStream(
     <StrictMode>
       <HeadProvider collector={collector}>
-        <InsightsProvider initial={cmsInsights}>
-          <StaticRouter location={url}>
-            <App />
-          </StaticRouter>
-        </InsightsProvider>
+        <ContentProvider initial={initial} live={false}>
+          <InsightsProvider initial={cmsInsights}>
+            <StaticRouter location={url}>
+              <App />
+            </StaticRouter>
+          </InsightsProvider>
+        </ContentProvider>
       </HeadProvider>
     </StrictMode>
   );

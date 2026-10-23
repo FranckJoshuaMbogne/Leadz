@@ -19,6 +19,7 @@ export interface Pillar {
   art: ArtVariant;
   cta: string;
   faqs: { question: string; answer: string }[];
+  image?: string;
 }
 
 export const pillars: Pillar[] = [
@@ -264,6 +265,7 @@ export interface Service {
   measures: string[];
   fit: string;
   related: string[];
+  image?: string;
 }
 
 export const services: Service[] = [

@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { Seo, breadcrumbLd } from "@/lib/seo";
-import { industries } from "@/data/industries";
-import { getService } from "@/data/services";
+import { useSite } from "@/content/useSite";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
-import { CoverArt } from "@/components/art/CoverArt";
+import { Cover } from "@/components/art/Cover";
 import { Reveal } from "@/components/animations/Reveal";
 import { Arrow } from "@/components/ui/Button";
 
 export default function Industries() {
+  const { industries, getService } = useSite();
   return (
     <>
       <Seo
@@ -41,7 +41,7 @@ export default function Industries() {
                 <Link to={`/industries/${ind.slug}`} className="group/btn grid gap-6 py-10 md:grid-cols-12 md:gap-8">
                   <div className="md:col-span-3">
                     <div className="mb-5 aspect-[3/2] overflow-hidden rounded md:hidden">
-                      <CoverArt seed={ind.slug} variant={ind.art} tone="sage" />
+                      <Cover image={ind.image} seed={ind.slug} variant={ind.art} tone="sage" />
                     </div>
                     <h2 className="font-display text-display-sm text-ink transition-transform duration-300 ease-editorial group-hover/btn:translate-x-1.5">{ind.name}</h2>
                     <p className="mt-2 text-ink-muted">{ind.summary}</p>

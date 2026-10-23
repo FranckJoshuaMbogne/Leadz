@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { Seo, articleLd, breadcrumbLd } from "@/lib/seo";
 import { useInsights } from "@/lib/insights";
 import { insightContent } from "@/data/insights/content";
-import { getService, getPillar } from "@/data/services";
+import { useSite } from "@/content/useSite";
 import { Markdown, headingsOf } from "@/lib/markdown";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { InsightCard, InsightCover } from "@/components/cards/InsightCard";
@@ -14,6 +14,7 @@ import { formatDate } from "@/lib/utils";
 import NotFound from "./NotFound";
 
 export default function Article() {
+  const { getService, getPillar } = useSite();
   const { slug = "" } = useParams();
   const { insights, live } = useInsights({ live: true });
   const meta = insights.find((i) => i.slug === slug);

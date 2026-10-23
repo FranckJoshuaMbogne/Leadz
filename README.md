@@ -45,3 +45,26 @@ Collections: `leads` (public create-only, validated), `insights` (public read wh
 - Insights published in the CMS appear immediately (client-side) and are prerendered + added to the sitemap on the next build/deploy.
 
 See **CUSTOMIZE.md** for where to change fonts, illustrations, colours and content.
+
+
+## Admin dashboard (/admin)
+
+Sign in at **https://springs360.in/admin** (Google or email). `/dashboard` redirects there.
+
+| Tab | What you manage |
+|---|---|
+| Leads | Strategy-call and contact enquiries — status (new → contacted → qualified → won/closed/spam), private notes, WhatsApp/email/call, search, CSV export |
+| Insights (blog) | Write, publish and edit articles |
+| Hero, contact & links | Home hero text (*asterisks* = gold), hero image, main button text + link, phone/WhatsApp, email, hours, social links |
+| Services menu | Service cards: name, outcome, icon, growth step, “most requested” on home |
+| Growth wheel | The steps of the 360° wheel |
+| Capabilities / Service pages | Every /services page: text, approach, deliverables, FAQ, images |
+| Work / case studies | Create, edit, delete, publish case studies with cover image, gallery, video and live link |
+| Industries, FAQ | As named |
+
+Changes are live as soon as you save; the site also rebuilds every night so Google sees them.
+Images are compressed and stored in Firestore (no paid Storage plan needed). Videos are links.
+
+**One-time setup (Firebase console → project leadzindb):** Authentication → Sign-in method → enable Google;
+Authentication → Settings → Authorized domains → add `springs360.in` and `www.springs360.in`;
+then `firebase deploy --only firestore:rules`. Admins = emails in `firestore.rules` → `isAdmin()` or documents in `admins/{uid}`.

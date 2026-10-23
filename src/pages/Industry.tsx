@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import { Seo, breadcrumbLd } from "@/lib/seo";
-import { getIndustry, industries } from "@/data/industries";
-import { getService, getPillar } from "@/data/services";
-import { caseStudies } from "@/data/caseStudies";
+import { useSite } from "@/content/useSite";
+import { useContentState } from "@/content/ContentProvider";
+import { PageLoading } from "@/components/ui/PageLoading";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Reveal } from "@/components/animations/Reveal";
@@ -13,8 +13,10 @@ import NotFound from "./NotFound";
 
 export default function IndustryPage() {
   const { slug = "" } = useParams();
+  const { getIndustry, industries, getService, getPillar, work: caseStudies } = useSite();
+  const { ready } = useContentState();
   const ind = getIndustry(slug);
-  if (!ind) return <NotFound />;
+  if (!ind) return ready ? <NotFound /> : <PageLoading />;
   const path = `/industries/${ind.slug}`;
   const crumbs = [
     { name: "Home", path: "/" },

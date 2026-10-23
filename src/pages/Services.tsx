@@ -1,6 +1,5 @@
 import { Seo, breadcrumbLd, faqLd, professionalServiceLd } from "@/lib/seo";
-import { catalog, topServices } from "@/data/catalog";
-import { homeFaqs } from "@/data/faqs";
+import { useSite } from "@/content/useSite";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -10,9 +9,13 @@ import { ServiceTile } from "@/components/cards/ServiceTile";
 import { Reveal } from "@/components/animations/Reveal";
 import { ButtonA, ButtonLink } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { site } from "@/config/site";
+import { useContact } from "@/content/ContentProvider";
 
-const engagementFaqs = [
+
+export default function Services() {
+  const contact = useContact();
+  const { catalog, topServices, faqs: homeFaqs } = useSite();
+  const engagementFaqs = [
   homeFaqs[0],
   homeFaqs[1],
   {
@@ -22,9 +25,7 @@ const engagementFaqs = [
   },
   homeFaqs[3],
   homeFaqs[4],
-];
-
-export default function Services() {
+  ].filter(Boolean) as { question: string; answer: string }[];
   const more = catalog.filter((c) => !c.top);
   return (
     <>
@@ -55,7 +56,7 @@ export default function Services() {
           <ButtonLink to="/book" variant="light" size="lg">
             Get a Free Strategy Call
           </ButtonLink>
-          <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+          <ButtonA href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
             Chat on WhatsApp
           </ButtonA>
         </div>

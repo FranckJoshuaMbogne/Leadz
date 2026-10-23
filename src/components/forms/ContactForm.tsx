@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generalContactSchema, type GeneralContactValues } from "@/lib/validation";
 import { submitLead } from "@/lib/leads";
-import { site } from "@/config/site";
 import { Button } from "@/components/ui/Button";
 import { Honeypot, TextAreaField, TextField } from "./Field";
+import { useContact } from "@/content/ContentProvider";
 
 export function ContactForm() {
+  const contact = useContact();
   const navigate = useNavigate();
   const [failed, setFailed] = useState(false);
   const {
@@ -40,7 +41,7 @@ export function ContactForm() {
       {failed && (
         <p role="alert" className="rounded-xl border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 p-4 text-sm text-ink">
           Your message could not be sent. Please try again or{" "}
-          <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="underline">
+          <a href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="underline">
             message us on WhatsApp
           </a>
           .

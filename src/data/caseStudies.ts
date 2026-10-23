@@ -35,6 +35,12 @@ export interface CaseStudy {
   testimonial?: { quote: string; author: string; role: string };
   services: string[];
   art: { variant: ArtVariant; tone: ArtTone };
+  /** Cover image ("media:…" from the admin, or a URL). Replaces the generated art. */
+  image?: string;
+  gallery?: string[];
+  video?: string;
+  url?: string;
+  published?: boolean;
 }
 
 export const caseStudies: CaseStudy[] = [

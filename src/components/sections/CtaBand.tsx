@@ -1,7 +1,7 @@
 import { ButtonA, ButtonLink } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/animations/Reveal";
-import { site } from "@/config/site";
+import { useContact } from "@/content/ContentProvider";
 
 /** Closing conversion section. Copy is contextual per page. */
 export function CtaBand({
@@ -17,6 +17,7 @@ export function CtaBand({
   cta?: string;
   to?: string;
 }) {
+  const contact = useContact();
   return (
     <section className="on-dark relative isolate overflow-hidden bg-forest text-ivory">
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_85%_20%,rgba(184,155,98,0.18),transparent_55%)]" />
@@ -35,7 +36,7 @@ export function CtaBand({
             <ButtonLink to={to} variant="light" size="lg">
               {cta}
             </ButtonLink>
-            <ButtonA href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
+            <ButtonA href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" variant="outline-light" size="lg" arrow={false}>
               Chat on WhatsApp
             </ButtonA>
           </Reveal>

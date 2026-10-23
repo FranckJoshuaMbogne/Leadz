@@ -1,8 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import { Seo, breadcrumbLd } from "@/lib/seo";
-import { caseStudies, getCaseStudy } from "@/data/caseStudies";
-import { getService } from "@/data/services";
-import { CoverArt } from "@/components/art/CoverArt";
+import { useSite } from "@/content/useSite";
+import { useContentState } from "@/content/ContentProvider";
+import { PageLoading } from "@/components/ui/PageLoading";
+import { Cover } from "@/components/art/Cover";
+import { MediaImage } from "@/components/ui/MediaImage";
+import { VideoEmbed } from "@/components/ui/VideoEmbed";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { IllustrativeBadge, Tag } from "@/components/ui/Tag";
 import { Counter } from "@/components/animations/Counter";
@@ -28,8 +31,10 @@ function Row({ label, index, children }: { label: string; index: string; childre
 
 export default function CaseStudyPage() {
   const { slug = "" } = useParams();
+  const { getCaseStudy, getService, sortedCaseStudies: caseStudies } = useSite();
+  const { ready } = useContentState();
   const study = getCaseStudy(slug);
-  if (!study) return <NotFound />;
+  if (!study) return ready ? <NotFound /> : <PageLoading />;
 
   const path = `/work/${study.slug}`;
   const crumbs = [
@@ -66,7 +71,7 @@ export default function CaseStudyPage() {
         </div>
         <div className="container-site pb-0">
           <Parallax className="aspect-[16/9] rounded-t md:aspect-[21/9]" strength={30}>
-            <CoverArt seed={study.slug} variant={study.art.variant} tone={study.art.tone === "deep" ? "forest" : study.art.tone} />
+            <Cover image={study.image} seed={study.slug} variant={study.art.variant} tone={study.art.tone === "deep" ? "forest" : study.art.tone} />
           </Parallax>
         </div>
       </section>
@@ -174,6 +179,29 @@ export default function CaseStudyPage() {
               })}
             </ul>
           </Row>
+          {(study.video || (study.gallery && study.gallery.length > 0) || study.url) && (
+            <Row index="★" label="See it">
+              <div className="space-y-6">
+                {study.video && (
+                  <div className="overflow-hidden rounded-xl border border-ink/10">
+                    <VideoEmbed src={study.video} title={study.title} />
+                  </div>
+                )}
+                {study.gallery && study.gallery.length > 0 && (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {study.gallery.map((g, i) => (
+                      <MediaImage key={i} src={g} alt={`${study.client} — ${i + 1}`} className="aspect-[4/3] w-full rounded-xl border border-ink/10 object-cover" />
+                    ))}
+                  </div>
+                )}
+                {study.url && (
+                  <a href={study.url} target="_blank" rel="noopener noreferrer" className="group/btn inline-flex items-center gap-3 font-medium text-ink">
+                    <span className="link-underline">Visit the live project</span> <Arrow />
+                  </a>
+                )}
+              </div>
+            </Row>
+          )}
         </div>
       </article>
 

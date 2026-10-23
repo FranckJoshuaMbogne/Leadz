@@ -1,157 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import type { Timestamp } from "firebase/firestore/lite";
-import { Seo } from "@/lib/seo";
-import { getDb } from "@/lib/firebase";
-import { Logo } from "@/components/layout/Logo";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 import { inputBase } from "@/components/forms/Field";
 import { Markdown } from "@/lib/markdown";
+import { getDb } from "@/lib/firebase";
 import { cn, formatDate, readingTime, slugify } from "@/lib/utils";
 import { EDITORIAL_AUTHOR, insightCategories, staticInsights } from "@/data/insights";
-import { pillars, services } from "@/data/services";
+import { useContent } from "@/content/ContentProvider";
 import type { InsightDoc } from "@/lib/insights";
-import { useAdmin, signOutAdmin } from "./useAdmin";
-
-/* ------------------------------------------------------------------ */
-/* Leads                                                               */
-/* ------------------------------------------------------------------ */
-
-const leadStatuses = ["new", "contacted", "qualified", "won", "closed"] as const;
-
-interface Lead {
-  id: string;
-  intent: string;
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  website?: string;
-  industry?: string;
-  channels?: string[];
-  budget?: string;
-  challenge?: string;
-  outcome?: string;
-  message?: string;
-  page?: string;
-  status: string;
-  createdAt?: Timestamp;
-}
-
-function LeadsPanel() {
-  const [leads, setLeads] = useState<Lead[] | null>(null);
-  const [error, setError] = useState("");
-  const [filter, setFilter] = useState<string>("all");
-  const [open, setOpen] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    setError("");
-    try {
-      const [db, fs] = await Promise.all([getDb(), import("firebase/firestore/lite")]);
-      const snap = await fs.getDocs(fs.query(fs.collection(db, "leads"), fs.orderBy("createdAt", "desc"), fs.limit(300)));
-      setLeads(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Lead, "id">) })));
-    } catch (e) {
-      setError("Could not load leads. Check that your account is an admin and that the Firestore rules are deployed.");
-      console.error(e);
-    }
-  }, []);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
-
-  const setStatus = async (id: string, status: string) => {
-    const [db, fs] = await Promise.all([getDb(), import("firebase/firestore/lite")]);
-    await fs.updateDoc(fs.doc(db, "leads", id), { status });
-    setLeads((ls) => ls?.map((l) => (l.id === id ? { ...l, status } : l)) ?? null);
-  };
-
-  const shown = (leads ?? []).filter((l) => filter === "all" || l.status === filter);
-
-  return (
-    <section aria-labelledby="leads-h">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 id="leads-h" className="font-display text-3xl text-ink">
-          Leads
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {["all", ...leadStatuses].map((s) => (
-            <button
-              key={s}
-              type="button"
-              aria-pressed={filter === s}
-              onClick={() => setFilter(s)}
-              className={cn("min-h-[36px] rounded-full border px-4 text-sm capitalize", filter === s ? "border-forest bg-forest text-ivory" : "border-ink/20 text-ink-muted")}
-            >
-              {s}
-            </button>
-          ))}
-          <button type="button" onClick={() => load()} className="min-h-[36px] px-3 text-sm text-ink-muted underline">
-            Refresh
-          </button>
-        </div>
-      </div>
-
-      {error && <p role="alert" className="mt-6 text-[#9B2C2C]">{error}</p>}
-      {!leads && !error && <p className="mt-6 text-ink-muted">Loading…</p>}
-      {leads && shown.length === 0 && <p className="mt-6 text-ink-muted">No leads in this view.</p>}
-
-      <ul className="mt-6 divide-y divide-ink/10 rounded border border-ink/10 bg-ivory-50">
-        {shown.map((l) => (
-          <li key={l.id} className="p-5">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <button type="button" onClick={() => setOpen(open === l.id ? null : l.id)} aria-expanded={open === l.id} className="text-left">
-                <p className="font-medium text-ink">
-                  {l.name} {l.company && <span className="text-ink-muted">· {l.company}</span>}
-                </p>
-                <p className="mt-1 text-sm text-ink-muted">
-                  {l.intent === "strategy-call" ? "Strategy call" : "General"} · {l.challenge ?? l.message?.slice(0, 80)}
-                </p>
-              </button>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-ink-soft">{l.createdAt ? l.createdAt.toDate().toLocaleString() : ""}</span>
-                <label className="sr-only" htmlFor={`st-${l.id}`}>
-                  Status
-                </label>
-                <select id={`st-${l.id}`} value={l.status} onChange={(e) => setStatus(l.id, e.target.value)} className="h-9 rounded-full border border-ink/20 bg-ivory px-3 text-sm capitalize">
-                  {leadStatuses.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            {open === l.id && (
-              <dl className="mt-4 grid gap-3 rounded bg-ivory p-4 text-sm sm:grid-cols-2">
-                {(
-                  [
-                    ["Email", l.email && <a className="underline" href={`mailto:${l.email}?subject=${encodeURIComponent("Your Springs 360 enquiry")}`}>{l.email}</a>],
-                    ["Phone", l.phone && <a className="underline" href={`tel:${l.phone.replace(/\s/g, "")}`}>{l.phone}</a>],
-                    ["Website", l.website],
-                    ["Industry", l.industry],
-                    ["Budget", l.budget],
-                    ["Channels", l.channels?.join(", ")],
-                    ["Desired outcome", l.outcome],
-                    ["Message", l.message],
-                    ["Submitted from", l.page],
-                  ] as const
-                )
-                  .filter(([, v]) => v)
-                  .map(([k, v]) => (
-                    <div key={k} className={k === "Desired outcome" || k === "Message" ? "sm:col-span-2" : undefined}>
-                      <dt className="text-ink-soft">{k}</dt>
-                      <dd className="mt-0.5 whitespace-pre-wrap text-ink">{v}</dd>
-                    </div>
-                  ))}
-              </dl>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* Insights CMS                                                        */
@@ -179,6 +35,7 @@ const emptyDraft = (): Draft => ({
 });
 
 function InsightEditor({ initial, onSaved, onCancel }: { initial: Draft; onSaved: () => void; onCancel: () => void }) {
+  const { pillars, services } = useContent();
   const [d, setD] = useState<Draft>(initial);
   const [slugTouched, setSlugTouched] = useState(!!initial.id);
   const [preview, setPreview] = useState(false);
@@ -387,7 +244,7 @@ function InsightEditor({ initial, onSaved, onCancel }: { initial: Draft; onSaved
   );
 }
 
-function InsightsPanel() {
+export function InsightsPanel() {
   const [items, setItems] = useState<Draft[] | null>(null);
   const [editing, setEditing] = useState<Draft | null>(null);
   const [error, setError] = useState("");
@@ -471,60 +328,3 @@ function InsightsPanel() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Shell                                                               */
-/* ------------------------------------------------------------------ */
-
-export default function AdminDashboard() {
-  const admin = useAdmin();
-  const navigate = useNavigate();
-  const [tab, setTab] = useState<"leads" | "insights">("leads");
-
-  useEffect(() => {
-    if (admin.status === "signed-out" || admin.status === "forbidden") navigate("/admin", { replace: true });
-  }, [admin, navigate]);
-
-  return (
-    <div className="min-h-screen bg-ivory-200">
-      <Seo title="Dashboard" description="Springs 360 administration." path="/dashboard" noindex />
-      <header className="on-dark bg-deep text-ivory">
-        <div className="container-site flex h-16 items-center justify-between gap-6">
-          <Link to="/" aria-label="View site">
-            <Logo />
-          </Link>
-          {admin.status === "admin" && (
-            <div className="flex items-center gap-5 text-sm">
-              <span className="hidden text-ivory/70 sm:inline">{admin.user.email}</span>
-              <button type="button" onClick={() => signOutAdmin()} className="underline">
-                Sign out
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
-      <main id="main" className="container-site py-10">
-        {admin.status !== "admin" ? (
-          <p className="text-ink-muted">Checking access…</p>
-        ) : (
-          <>
-            <div role="tablist" aria-label="Dashboard sections" className="mb-10 flex gap-2 border-b border-ink/15">
-              {(["leads", "insights"] as const).map((t) => (
-                <button
-                  key={t}
-                  role="tab"
-                  type="button"
-                  aria-selected={tab === t}
-                  onClick={() => setTab(t)}
-                  className={cn("-mb-px border-b-2 px-4 py-3 text-sm font-medium capitalize", tab === t ? "border-forest text-ink" : "border-transparent text-ink-muted")}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-            <div role="tabpanel">{tab === "leads" ? <LeadsPanel /> : <InsightsPanel />}</div>
-          </>
-        )}
-      </main>
-    </div>
-  );
-}

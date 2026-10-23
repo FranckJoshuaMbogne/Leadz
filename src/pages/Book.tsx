@@ -1,9 +1,9 @@
 import { Seo, breadcrumbLd } from "@/lib/seo";
-import { site } from "@/config/site";
 import { StrategyCallForm } from "@/components/forms/StrategyCallForm";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { MaskText } from "@/components/animations/MaskText";
+import { useContact } from "@/content/ContentProvider";
 
 const expectations = [
   { t: "Before the call", d: "We review your website, channels and anything you share, so the conversation starts with substance." },
@@ -12,6 +12,7 @@ const expectations = [
 ];
 
 export default function Book() {
+  const contact = useContact();
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Free Strategy Call", path: "/book" },
@@ -49,12 +50,12 @@ export default function Book() {
               </ol>
               <p className="mt-10 text-sm text-ivory/70">
                 Prefer to talk now?{" "}
-                <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="text-ivory underline decoration-gold underline-offset-4">
+                <a href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="text-ivory underline decoration-gold underline-offset-4">
                   WhatsApp us
                 </a>{" "}
                 or call{" "}
-                <a href={site.contact.phoneHref} className="text-ivory underline decoration-gold underline-offset-4">
-                  {site.contact.phoneDisplay}
+                <a href={contact.phoneHref} className="text-ivory underline decoration-gold underline-offset-4">
+                  {contact.phoneDisplay}
                 </a>
                 .
               </p>

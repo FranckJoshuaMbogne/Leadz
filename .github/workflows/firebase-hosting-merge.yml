@@ -6,6 +6,11 @@ on:
   push:
     branches:
       - main
+  # Rebuild nightly so search engines see the latest admin changes
+  # (visitors see them instantly).
+  schedule:
+    - cron: "15 21 * * *" # 02:45 IST
+  workflow_dispatch:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

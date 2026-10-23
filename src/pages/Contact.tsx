@@ -1,11 +1,12 @@
 import { Seo, breadcrumbLd, organizationLd } from "@/lib/seo";
-import { site } from "@/config/site";
 import { PageHero } from "@/components/sections/PageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { ButtonLink } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { useContact } from "@/content/ContentProvider";
 
 export default function Contact() {
+  const contact = useContact();
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Contact", path: "/contact" },
@@ -34,34 +35,34 @@ export default function Contact() {
               <div>
                 <dt className="eyebrow text-ink-muted">Phone</dt>
                 <dd className="mt-2 text-lg">
-                  <a href={site.contact.phoneHref} className="link-underline">{site.contact.phoneDisplay}</a>
+                  <a href={contact.phoneHref} className="link-underline">{contact.phoneDisplay}</a>
                 </dd>
               </div>
               <div>
                 <dt className="eyebrow text-ink-muted">WhatsApp</dt>
                 <dd className="mt-2 text-lg">
-                  <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="link-underline">
+                  <a href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="link-underline">
                     Message us
                   </a>
                 </dd>
               </div>
-              {site.contact.email && (
+              {contact.email && (
                 <div>
                   <dt className="eyebrow text-ink-muted">Email</dt>
                   <dd className="mt-2 text-lg">
-                    <a href={`mailto:${site.contact.email}`} className="link-underline">{site.contact.email}</a>
+                    <a href={`mailto:${contact.email}`} className="link-underline">{contact.email}</a>
                   </dd>
                 </div>
               )}
-              {site.contact.address && (
+              {contact.address && (
                 <div>
                   <dt className="eyebrow text-ink-muted">Studio</dt>
-                  <dd className="mt-2 text-lg">{site.contact.address}</dd>
+                  <dd className="mt-2 text-lg">{contact.address}</dd>
                 </div>
               )}
               <div>
                 <dt className="eyebrow text-ink-muted">Hours</dt>
-                <dd className="mt-2 text-lg">{site.contact.hours}</dd>
+                <dd className="mt-2 text-lg">{contact.hours}</dd>
               </div>
             </dl>
           </div>

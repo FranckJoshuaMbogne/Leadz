@@ -17,8 +17,7 @@ const Contact = lazy(() => import("@/pages/Contact"));
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 const Legal = lazy(() => import("@/pages/Legal"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
-const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
-const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
+const Admin = lazy(() => import("@/admin/Admin"));
 
 function PageFallback() {
   return <div className="min-h-screen bg-deep" aria-busy="true" />;
@@ -53,8 +52,8 @@ export function AppRoutes() {
         <Route path="404" element={<S><NotFound /></S>} />
         <Route path="*" element={<S><NotFound /></S>} />
       </Route>
-      <Route path="admin" element={<S><AdminLogin /></S>} />
-      <Route path="dashboard" element={<S><AdminDashboard /></S>} />
+      <Route path="admin/*" element={<S><Admin /></S>} />
+      <Route path="dashboard" element={<Navigate to="/admin" replace />} />
     </Routes>
   );
 }

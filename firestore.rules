@@ -7,16 +7,25 @@ rules_version = '2';
 //                   only admins may read, update or delete.
 //   insights/{slug} Insights CMS. Public may read PUBLISHED articles only;
 //                   admins have full access.
-//   admins/{uid}    Admin allow-list. Create these documents manually in the
+//   content/{id}    Website content edited in /admin (public read).
+//   media/{id}      Images uploaded in /admin (public read).
+//   admins/{uid}    Extra admins. Create these documents manually in the
 //                   Firebase console (document ID = the user's Auth UID).
 //                   Never writable from the client.
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Admin = one of these verified emails, or a document admins/{uid}.
     function isAdmin() {
-      return request.auth != null
-        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return request.auth != null && (
+        (request.auth.token.email_verified == true && request.auth.token.email in [
+          'franckjoshuambogne@gmail.com',
+          'fngoueyoumbongne@gmail.com',
+          'theblutailor@gmail.com'
+        ])
+        || exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
     }
 
     function optString(d, k, max) {
@@ -61,7 +70,19 @@ service cloud.firestore {
       allow create: if validLead(request.resource.data);
       allow read, delete: if isAdmin();
       allow update: if isAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes']);
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes', 'updatedAt']);
+    }
+
+    match /content/{section} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && section in ['settings', 'catalog', 'growth', 'pillars', 'services', 'work', 'industries', 'faqs'];
+    }
+
+    match /media/{id} {
+      allow read: if true;
+      allow create, update: if isAdmin() && request.resource.data.data is string && request.resource.data.data.size() < 1000000;
+      allow delete: if isAdmin();
     }
 
     match /insights/{slug} {

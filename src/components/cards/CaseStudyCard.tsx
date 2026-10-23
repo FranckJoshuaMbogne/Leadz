@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import type { CaseStudy } from "@/data/caseStudies";
-import { CoverArt } from "@/components/art/CoverArt";
+import { Cover } from "@/components/art/Cover";
 import { IllustrativeBadge } from "@/components/ui/Tag";
 import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ export function CaseStudyCard({ study, size = "md", className }: { study: CaseSt
       <Link to={`/work/${study.slug}`} className="block">
         <div className={cn("relative overflow-hidden rounded", size === "lg" ? "aspect-[4/3] md:aspect-[16/10]" : "aspect-[4/3]")}>
           <div className="h-full w-full transition-transform duration-[900ms] ease-editorial group-hover/btn:scale-[1.04]">
-            <CoverArt seed={study.slug} variant={study.art.variant} tone={study.art.tone} />
+            <Cover image={study.image} seed={study.slug} variant={study.art.variant} tone={study.art.tone} />
           </div>
           <div className="absolute left-4 top-4 flex gap-2">
             {!study.verified && <IllustrativeBadge light={study.art.tone === "deep" || study.art.tone === "forest"} />}

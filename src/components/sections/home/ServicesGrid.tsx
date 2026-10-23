@@ -1,10 +1,11 @@
-import { topServices } from "@/data/catalog";
+import { useSite } from "@/content/useSite";
 import { ServiceTile } from "@/components/cards/ServiceTile";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/animations/Reveal";
 
 export function ServicesGrid() {
+  const { topServices } = useSite();
   return (
     <section aria-labelledby="services-title" className="bg-ivory py-section">
       <div className="container-site">

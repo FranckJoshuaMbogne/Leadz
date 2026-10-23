@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import type { CatalogItem } from "@/data/catalog";
 import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { iconFor } from "@/lib/icons";
 
 /** Plain, scannable service card: icon, the service name customers use, one-line outcome. */
 export function ServiceTile({ item, compact = false, dark = false }: { item: CatalogItem; compact?: boolean; dark?: boolean }) {
-  const Icon = item.icon;
+  const Icon = iconFor(item.icon);
   return (
     <Link
       to={`/services/${item.slug}`}

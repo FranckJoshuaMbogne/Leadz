@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { industries } from "@/data/industries";
+import { useSite } from "@/content/useSite";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Arrow, ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/animations/Reveal";
 
 export function IndustriesPreview() {
+  const { industries } = useSite();
   return (
     <section aria-labelledby="industries-title" className="bg-ivory-200 py-section">
       <div className="container-site">

@@ -10,15 +10,14 @@ import {
   strategyCallSchema,
   type StrategyCallValues,
 } from "@/lib/validation";
-import { industries } from "@/data/industries";
+import { useSite } from "@/content/useSite";
 import { submitLead } from "@/lib/leads";
 import { track } from "@/lib/analytics";
-import { site } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Honeypot, SelectField, TextAreaField, TextField } from "./Field";
+import { useContact } from "@/content/ContentProvider";
 
-const industryOptions = [...industries.map((i) => i.name), "Other"];
 const steps = ["Your business", "Your goals", "Your details"] as const;
 const stepFields: (keyof StrategyCallValues)[][] = [
   ["company", "website", "industry"],
@@ -27,6 +26,9 @@ const stepFields: (keyof StrategyCallValues)[][] = [
 ];
 
 export function StrategyCallForm() {
+  const contact = useContact();
+  const { industries } = useSite();
+  const industryOptions = [...industries.map((i) => i.name), "Other"];
   const [step, setStep] = useState(0);
   const [failed, setFailed] = useState(false);
   const started = useRef(false);
@@ -247,7 +249,7 @@ export function StrategyCallForm() {
       {failed && (
         <div role="alert" className="mt-8 rounded-xl border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 p-4 text-sm text-ink">
           Something went wrong sending your request. Please try again, or{" "}
-          <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="underline">
+          <a href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="underline">
             message us on WhatsApp
           </a>
           .

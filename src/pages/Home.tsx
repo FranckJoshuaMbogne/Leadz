@@ -1,7 +1,6 @@
 import { Seo, faqLd, organizationLd, professionalServiceLd, websiteLd } from "@/lib/seo";
 import { site } from "@/config/site";
-import { catalog } from "@/data/catalog";
-import { homeFaqs } from "@/data/faqs";
+import { useSite } from "@/content/useSite";
 import { Hero } from "@/components/sections/home/Hero";
 import { ServicesGrid } from "@/components/sections/home/ServicesGrid";
 import { Problem } from "@/components/sections/home/Problem";
@@ -16,6 +15,7 @@ import { FaqSection } from "@/components/sections/FaqSection";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 export default function Home() {
+  const { catalog, faqs: homeFaqs } = useSite();
   return (
     <>
       <Seo

@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { primaryNav, site } from "@/config/site";
-import { topServices } from "@/data/catalog";
+import { useSite } from "@/content/useSite";
 import { Logo } from "./Logo";
 import { Arrow } from "@/components/ui/Button";
+import { useContact } from "@/content/ContentProvider";
 
 export function Footer() {
+  const contact = useContact();
+  const { topServices } = useSite();
   const year = new Date().getFullYear();
   return (
     <footer className="on-dark relative overflow-hidden bg-deep text-ivory">
@@ -60,24 +63,24 @@ export function Footer() {
               <p className="eyebrow text-ivory/55">Contact</p>
               <ul className="mt-5 space-y-3 text-[0.95rem]">
                 <li>
-                  <a href={site.contact.phoneHref} className="link-underline text-ivory/80 hover:text-ivory">
-                    {site.contact.phoneDisplay}
+                  <a href={contact.phoneHref} className="link-underline text-ivory/80 hover:text-ivory">
+                    {contact.phoneDisplay}
                   </a>
                 </li>
                 <li>
-                  <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="link-underline text-ivory/80 hover:text-ivory">
+                  <a href={contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="link-underline text-ivory/80 hover:text-ivory">
                     WhatsApp
                   </a>
                 </li>
-                {site.contact.email && (
+                {contact.email && (
                   <li>
-                    <a href={`mailto:${site.contact.email}`} className="link-underline text-ivory/80 hover:text-ivory">
-                      {site.contact.email}
+                    <a href={`mailto:${contact.email}`} className="link-underline text-ivory/80 hover:text-ivory">
+                      {contact.email}
                     </a>
                   </li>
                 )}
-                <li className="text-ivory/55">{site.contact.hours}</li>
-                {site.social.map((s) => (
+                <li className="text-ivory/55">{contact.hours}</li>
+                {contact.social.map((s) => (
                   <li key={s.href}>
                     <a href={s.href} target="_blank" rel="noopener noreferrer" className="link-underline text-ivory/80 hover:text-ivory">
                       {s.label}

@@ -9,8 +9,8 @@ export type AdminState =
   | { status: "admin"; user: User };
 
 /**
- * Admin access = signed in with Firebase Auth AND a document exists at
- * admins/{uid}. The same check is enforced by Firestore security rules.
+ * Admin = signed in AND allowed by firestore.rules (isAdmin()). We test it by
+ * reading one lead, which only admins may do.
  */
 export function useAdmin() {
   const [state, setState] = useState<AdminState>({ status: "loading" });
@@ -25,8 +25,8 @@ export function useAdmin() {
         if (!user) return setState({ status: "signed-out" });
         try {
           const [db, fs] = await Promise.all([getDb(), import("firebase/firestore/lite")]);
-          const snap = await fs.getDoc(fs.doc(db, "admins", user.uid));
-          setState(snap.exists() ? { status: "admin", user } : { status: "forbidden", user });
+          await fs.getDocs(fs.query(fs.collection(db, "leads"), fs.limit(1)));
+          setState({ status: "admin", user });
         } catch {
           setState({ status: "forbidden", user });
         }
@@ -39,6 +39,18 @@ export function useAdmin() {
   }, []);
 
   return state;
+}
+
+export async function signInWithGoogle() {
+  const [auth, { GoogleAuthProvider, signInWithPopup }] = await Promise.all([getFirebaseAuth(), import("firebase/auth")]);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  await signInWithPopup(auth, provider);
+}
+
+export async function signInWithEmail(email: string, password: string) {
+  const [auth, { signInWithEmailAndPassword }] = await Promise.all([getFirebaseAuth(), import("firebase/auth")]);
+  await signInWithEmailAndPassword(auth, email, password);
 }
 
 export async function signOutAdmin() {

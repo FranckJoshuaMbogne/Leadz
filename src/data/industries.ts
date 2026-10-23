@@ -13,6 +13,7 @@ export interface Industry {
   solution: string;
   capabilities: string[]; // service slugs
   art: ArtVariant;
+  image?: string;
 }
 
 export const industries: Industry[] = [

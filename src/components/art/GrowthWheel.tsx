@@ -1,15 +1,14 @@
 import { motion, type MotionValue, useReducedMotion } from "framer-motion";
-import { growthStages } from "@/data/growthSystem";
+import { useContent } from "@/content/ContentProvider";
 import { cn } from "@/lib/utils";
 
 const S = 520;
 const C = S / 2;
 const R = 190;
-const N = growthStages.length;
 const FONT = "Plus Jakarta Sans Variable, Plus Jakarta Sans, sans-serif";
 
-function polar(i: number, r = R) {
-  const a = -Math.PI / 2 + (i / N) * Math.PI * 2;
+function polar(i: number, n: number, r = R) {
+  const a = -Math.PI / 2 + (i / n) * Math.PI * 2;
   return { x: C + r * Math.cos(a), y: C + r * Math.sin(a) };
 }
 
@@ -19,12 +18,14 @@ function polar(i: number, r = R) {
  */
 export function GrowthWheel({ active, progress, className, compact = false }: { active: number; progress?: MotionValue<number>; className?: string; compact?: boolean }) {
   const reduce = useReducedMotion();
+  const growthStages = useContent().growth;
+  const N = growthStages.length || 1;
   return (
     <svg
       viewBox={compact ? `20 20 ${S - 40} ${S - 40}` : `-150 -30 ${S + 300} ${S + 60}`}
       className={cn("h-auto w-full", className)}
       role="img"
-      aria-label="The Springs 360 growth wheel: Get seen, Get customers, Close the sale, Grow what works — connected in a continuous loop."
+      aria-label={`The Springs 360 growth wheel: ${growthStages.map((g) => g.name).join(", ")} — connected in a continuous loop.`}
     >
       <circle cx={C} cy={C} r={R + 54} fill="none" stroke="#F5F1E8" strokeOpacity="0.08" />
       <circle cx={C} cy={C} r={R} fill="none" stroke="#F5F1E8" strokeOpacity="0.18" />
@@ -36,14 +37,14 @@ export function GrowthWheel({ active, progress, className, compact = false }: { 
       )}
 
       {growthStages.map((_, i) => {
-        const p = polar(i, R - 70);
-        const q = polar(i, R);
+        const p = polar(i, N, R - 70);
+        const q = polar(i, N, R);
         return <line key={`s${i}`} x1={p.x} y1={p.y} x2={q.x} y2={q.y} stroke="#F5F1E8" strokeOpacity={i === active ? 0.5 : 0.1} />;
       })}
 
       {growthStages.map((s, i) => {
-        const p = polar(i);
-        const l = polar(i, R + 58);
+        const p = polar(i, N);
+        const l = polar(i, N, R + 58);
         const on = i === active;
         const anchor = i === 1 ? "start" : i === 3 ? "end" : "middle";
         const dy = i === 0 ? -8 : i === 2 ? 16 : 5;
