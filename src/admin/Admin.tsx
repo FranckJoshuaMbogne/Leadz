@@ -15,6 +15,10 @@ import {
   Menu,
   Settings as SettingsIcon,
   Factory,
+  GraduationCap,
+  PanelsTopLeft,
+  Receipt,
+  Wallet,
   X,
 } from "lucide-react";
 import { Seo } from "@/lib/seo";
@@ -28,6 +32,10 @@ import { FieldsForm, inputCls } from "./fields";
 import { CollectionEditor } from "./CollectionEditor";
 import { Leads } from "./Leads";
 import { InsightsPanel } from "./InsightsPanel";
+import { LandingPanel } from "./LandingPanel";
+import { CoursesPanel } from "./CoursesPanel";
+import { OrdersPanel, PaymentsPanel } from "./ShopPanels";
+import { listOrders } from "./landingApi";
 import * as S from "./schemas";
 
 /* ------------------------------------------------------------------ */
@@ -133,10 +141,14 @@ function SignIn({ forbiddenEmail }: { forbiddenEmail?: string | null }) {
 /* Dashboard                                                           */
 /* ------------------------------------------------------------------ */
 
-type Tab = "leads" | "insights" | SectionId;
+type Tab = "leads" | "insights" | "landing" | "courses" | "orders" | "payments" | SectionId;
 
 const tabs: { id: Tab; label: string; icon: typeof Inbox; hint: string }[] = [
   { id: "leads", label: "Leads", icon: Inbox, hint: "Strategy-call and contact-form enquiries." },
+  { id: "landing", label: "Landing pages", icon: PanelsTopLeft, hint: "High-conversion pages at springs360.in/<url>: free audit, training, offers. Create as many as you like." },
+  { id: "orders", label: "Course orders", icon: Receipt, hint: "Verify payments and send access passwords." },
+  { id: "courses", label: "Courses", icon: GraduationCap, hint: "Online courses: price, free preview video and the full lessons." },
+  { id: "payments", label: "Payment methods", icon: Wallet, hint: "UPI, Google Pay, card, Apple Pay, PayPal: what buyers see in the payment pop-up." },
   { id: "insights", label: "Insights (blog)", icon: FileText, hint: "Write, publish and edit articles." },
   { id: "settings", label: "Hero, contact & links", icon: SettingsIcon, hint: "Home hero text and image, main button, phone, WhatsApp, email, hours and social links." },
   { id: "catalog", label: "Services menu", icon: LayoutGrid, hint: "The service cards customers see (name, outcome, icon, home page)." },
@@ -184,7 +196,8 @@ function autoSlugs(c: Content, id: SectionId): Content {
   return c;
 }
 
-const isSection = (t: Tab): t is SectionId => t !== "leads" && t !== "insights";
+const panels: Tab[] = ["leads", "insights", "landing", "courses", "orders", "payments"];
+const isSection = (t: Tab): t is SectionId => !panels.includes(t);
 
 function Dashboard({ email }: { email: string | null }) {
   const [tab, setTab] = useState<Tab>("leads");
@@ -195,6 +208,13 @@ function Dashboard({ email }: { email: string | null }) {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [newCount, setNewCount] = useState(0);
+  const [pendingOrders, setPendingOrders] = useState(0);
+
+  useEffect(() => {
+    listOrders()
+      .then((o) => setPendingOrders(o.filter((x) => x.status === "pending").length))
+      .catch(() => {});
+  }, []);
   const [menu, setMenu] = useState(false);
 
   useEffect(() => {
@@ -286,6 +306,7 @@ function Dashboard({ email }: { email: string | null }) {
                   <t.icon size={17} />
                   <span className="flex-1">{t.label}</span>
                   {t.id === "leads" && newCount > 0 && <span className="rounded-full bg-gold px-2 text-xs font-bold text-deep">{newCount}</span>}
+                  {t.id === "orders" && pendingOrders > 0 && <span className="rounded-full bg-gold px-2 text-xs font-bold text-deep">{pendingOrders}</span>}
                   {isSection(t.id) && dirty[t.id] && <span className="h-2 w-2 rounded-full bg-gold" title="Unsaved changes" />}
                 </button>
               </li>
@@ -309,6 +330,14 @@ function Dashboard({ email }: { email: string | null }) {
                 <Leads onCount={setNewCount} />
               ) : tab === "insights" ? (
                 <InsightsPanel />
+              ) : tab === "landing" ? (
+                <LandingPanel />
+              ) : tab === "courses" ? (
+                <CoursesPanel />
+              ) : tab === "orders" ? (
+                <OrdersPanel onCount={setPendingOrders} />
+              ) : tab === "payments" ? (
+                <PaymentsPanel />
               ) : loadError ? (
                 <p className="rounded-xl bg-red-50 p-4 text-red-800">{loadError}</p>
               ) : !draft ? (

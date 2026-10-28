@@ -9,6 +9,15 @@ rules_version = '2';
 //                   admins have full access.
 //   content/{id}    Website content edited in /admin (public read).
 //   media/{id}      Images uploaded in /admin (public read).
+//   landingPages/{slug}   Landing pages (springs360.in/{slug}). Public read when published.
+//   courses/{slug}        Courses for sale. Public read when published.
+//   courseLessons/{slug}  Full lesson videos. Readable only with a grant for that course.
+//   shop/config           Payment methods and checkout texts (public read).
+//   learners/{uid}        Learner profile (name, Google email, phone). Own + admins.
+//   orders/{id}           "I have paid" submissions. Created by signed-in learners, verified by admins.
+//   accessKeys/{password} Issued by admins (email + course). A learner can read one only
+//                         when it was issued to their own Google email.
+//   grants/{uid_course}   Created by a learner holding a valid password; unlocks courseLessons.
 //   admins/{uid}    Extra admins. Create these documents manually in the
 //                   Firebase console (document ID = the user's Auth UID).
 //                   Never writable from the client.
@@ -32,17 +41,37 @@ service cloud.firestore {
       return !(k in d) || (d[k] is string && d[k].size() <= max);
     }
 
+    function signedIn() {
+      return request.auth != null && request.auth.token.email is string;
+    }
+
+    function authEmail() {
+      return request.auth.token.email.lower();
+    }
+
+    function optEmail(d) {
+      return !('email' in d) || (d.email is string && d.email.size() <= 160 && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$'));
+    }
+
     function validLead(d) {
       return d.keys().hasOnly([
           'intent', 'name', 'email', 'phone', 'company', 'website', 'industry',
           'channels', 'budget', 'challenge', 'outcome', 'message', 'page',
+          'area', 'score', 'weakest', 'scores', 'source',
           'status', 'createdAt'
         ])
-        && d.keys().hasAll(['intent', 'name', 'email', 'status', 'createdAt'])
-        && d.intent in ['strategy-call', 'general']
+        && d.keys().hasAll(['intent', 'name', 'status', 'createdAt'])
+        && d.intent in ['strategy-call', 'general', 'audit', 'landing']
         && d.name is string && d.name.size() >= 2 && d.name.size() <= 100
-        && d.email is string && d.email.size() <= 160
-        && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        // Website forms need an email; audit and landing-page forms need a WhatsApp number.
+        && ((d.intent in ['audit', 'landing'] && 'phone' in d && d.phone is string && d.phone.size() >= 10)
+            || (d.intent in ['strategy-call', 'general'] && 'email' in d))
+        && optEmail(d)
+        && optString(d, 'area', 120)
+        && optString(d, 'weakest', 120)
+        && optString(d, 'source', 80)
+        && (!('score' in d) || (d.score is number && d.score >= 0 && d.score <= 100))
+        && (!('scores' in d) || (d.scores is map && d.scores.size() <= 20))
         && d.status == 'new'
         && d.createdAt == request.time
         && optString(d, 'phone', 30)
@@ -88,6 +117,93 @@ service cloud.firestore {
     match /insights/{slug} {
       allow read: if resource.data.status == 'published' || isAdmin();
       allow create, update: if isAdmin() && validInsight(request.resource.data) && request.resource.data.slug == slug;
+      allow delete: if isAdmin();
+    }
+
+    /* ---------------- Landing pages & courses ---------------- */
+
+    match /landingPages/{slug} {
+      allow get: if resource == null || resource.data.status == 'published' || isAdmin();
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin() && slug.matches('^[a-z0-9]+(-[a-z0-9]+)*$');
+    }
+
+    match /courses/{slug} {
+      allow get: if resource == null || resource.data.status == 'published' || isAdmin();
+      allow list: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin() && slug.matches('^[a-z0-9]+(-[a-z0-9]+)*$');
+    }
+
+    match /courseLessons/{slug} {
+      allow read: if isAdmin()
+        || (signedIn() && exists(/databases/$(database)/documents/grants/$(request.auth.uid + '_' + slug)));
+      allow write: if isAdmin();
+    }
+
+    match /shop/{id} {
+      allow read: if true;
+      allow write: if isAdmin() && id == 'config';
+    }
+
+    match /learners/{uid} {
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'email', 'phone', 'updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() <= 100
+        && request.resource.data.phone is string && request.resource.data.phone.size() <= 30
+        && request.resource.data.email == authEmail();
+      allow delete: if isAdmin();
+    }
+
+    function validOrder(d) {
+      let course = get(/databases/$(database)/documents/courses/$(d.courseSlug)).data;
+      return d.keys().hasOnly(['uid', 'email', 'phone', 'courseSlug', 'courseTitle', 'amount', 'currency', 'method', 'methodLabel', 'payerName', 'payerPhone', 'txnRef', 'status', 'createdAt'])
+        && d.keys().hasAll(['uid', 'email', 'courseSlug', 'amount', 'method', 'payerName', 'payerPhone', 'status', 'createdAt'])
+        && d.uid == request.auth.uid
+        && d.email == authEmail()
+        && d.status == 'pending'
+        && d.createdAt == request.time
+        && course.status == 'published'
+        && d.amount == course.price
+        && d.payerName is string && d.payerName.size() >= 2 && d.payerName.size() <= 100
+        && d.payerPhone is string && d.payerPhone.size() <= 30
+        && optString(d, 'phone', 30)
+        && optString(d, 'txnRef', 120)
+        && optString(d, 'courseTitle', 200)
+        && optString(d, 'methodLabel', 60)
+        && d.method is string && d.method.size() <= 40;
+    }
+
+    match /orders/{id} {
+      allow create: if signedIn() && validOrder(request.resource.data);
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'note', 'keyHint', 'updatedAt']);
+      allow delete: if isAdmin();
+    }
+
+    match /accessKeys/{key} {
+      allow get: if isAdmin() || (signedIn() && resource.data.email == authEmail());
+      allow list, write: if isAdmin();
+    }
+
+    function validGrant(id, d) {
+      let k = get(/databases/$(database)/documents/accessKeys/$(d.key)).data;
+      return id == request.auth.uid + '_' + d.courseSlug
+        && d.keys().hasOnly(['uid', 'email', 'courseSlug', 'key', 'createdAt'])
+        && d.uid == request.auth.uid
+        && d.email == authEmail()
+        && d.createdAt == request.time
+        && d.key is string && d.key.matches('^[A-Z0-9-]{6,64}$')
+        && k.email == d.email
+        && k.courseSlug == d.courseSlug
+        && k.revoked != true;
+    }
+
+    match /grants/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if signedIn() && validGrant(id, request.resource.data);
+      allow update: if false;
       allow delete: if isAdmin();
     }
 

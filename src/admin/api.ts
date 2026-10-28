@@ -94,6 +94,11 @@ export interface Lead {
   outcome?: string;
   message?: string;
   page?: string;
+  area?: string;
+  score?: number;
+  weakest?: string;
+  scores?: Record<string, number>;
+  source?: string;
   status: LeadStatus;
   notes?: string;
   createdAt?: Date;

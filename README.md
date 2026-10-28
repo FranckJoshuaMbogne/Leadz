@@ -68,3 +68,20 @@ Images are compressed and stored in Firestore (no paid Storage plan needed). Vid
 **One-time setup (Firebase console → project leadzindb):** Authentication → Sign-in method → enable Google;
 Authentication → Settings → Authorized domains → add `springs360.in` and `www.springs360.in`;
 then `firebase deploy --only firestore:rules`. Admins = emails in `firestore.rules` → `isAdmin()` or documents in `admins/{uid}`.
+
+## Landing pages, courses & payments (/admin)
+
+| Tab | What it does |
+|---|---|
+| Landing pages | Create unlimited high-conversion pages at `springs360.in/<url>` from 3 templates: **Free audit (quiz)**, **Online training**, **Lead form**. Edit every text, the quiz (pillars, questions, advice), sections (cards, list, steps, tags, FAQ, testimonials, text), images, video, SEO/share text. Draft → Preview → Publish. `/audit` and `/training` work out of the box and become editable once saved. |
+| Course orders | Payments to verify. Check your UPI / PayPal / bank account, then **Payment received · create password**. Send the ready-made message on WhatsApp in one tap. Turn any password off to remove access. You can also create a password without an order (cash, gifts). |
+| Courses | Title, price, old price, free ~30 s preview video, cover, outcomes, and the full lesson videos (only visible after unlocking). |
+| Payment methods | UPI, Google Pay, card, Apple Pay, PayPal (or any other): pay-to ID with copy button, QR image, payment link and step-by-step instructions shown in the payment pop-up. Only methods switched on are offered. |
+
+**Buyer flow:** course page → free preview → *Get the full course* → sign in with Google → phone number → choose payment method → pop-up with your instructions → pays → enters name + phone used to pay (+ optional transaction ID) → you verify in **Course orders** → you send the password → learner opens **springs360.in/learn**, signed in with the same Google email, enters the password → that course only is unlocked.
+
+Security: passwords are bound to the buyer's Google email and one course (enforced in `firestore.rules`). Lesson videos are only readable with an unlocked grant. Host lesson videos on Vimeo with *domain-level privacy* (springs360.in) so a copied link doesn't play elsewhere.
+
+Leads from audit and lead-form pages appear in **Leads** with score, weakest pillar, area and source (`?src=instagram` on your links).
+
+**After merging, deploy the new rules once:** `firebase deploy --only firestore:rules` (or Firebase console → Firestore → Rules → paste `firestore.rules` → Publish). Google sign-in must be enabled (it already is for the admin).

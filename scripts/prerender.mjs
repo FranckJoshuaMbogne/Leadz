@@ -19,7 +19,7 @@ const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
 const server = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
-const { render, site, staticInsights, docToInsight, defaultContent, mergeContent } = server;
+const { render, site, staticInsights, docToInsight, defaultContent, mergeContent, buildHeadTags, headTagsToString, builtInPages, normalizePage } = server;
 
 const template = await fs.readFile(path.join(dist, "index.html"), "utf8");
 
@@ -100,9 +100,53 @@ if (process.env.PRERENDER_CMS !== "false") {
   }
 }
 
+/* Landing pages + courses (admin → Landing pages / Courses) */
+
+async function runQuery(collectionId) {
+  const res = await fetch(`${fsApi}:runQuery?key=${fsKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(15000),
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId }],
+        where: { fieldFilter: { field: { fieldPath: "status" }, op: "EQUAL", value: { stringValue: "published" } } },
+      },
+    }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const rows = await res.json();
+  return rows.filter((r) => r.document).map((r) => ({ ...fromFirestoreValue({ mapValue: { fields: r.document.fields } }), slug: r.document.name.split("/").pop() }));
+}
+
+let landingPages = [];
+let savedLandingSlugs = new Set();
+let courses = [];
+if (process.env.PRERENDER_CMS !== "false") {
+  try {
+    const saved = await runQuery("landingPages");
+    savedLandingSlugs = new Set(saved.map((p) => p.slug));
+    landingPages = saved.map((p) => normalizePage(p));
+    console.log(`  Landing pages: ${landingPages.length} published`);
+  } catch (err) {
+    console.warn(`  Landing pages: skipped (${err.message})`);
+  }
+  try {
+    courses = await runQuery("courses");
+    console.log(`  Courses: ${courses.length} published`);
+  } catch (err) {
+    console.warn(`  Courses: skipped (${err.message})`);
+  }
+}
+// Built-in pages (/audit, /training) work until they are edited in the admin.
+// If the admin saved one as a draft, its saved copy wins (and it isn't published).
+for (const [slug, make] of Object.entries(builtInPages)) {
+  if (!savedLandingSlugs.has(slug)) landingPages.push(make());
+}
+
 // Export uploaded images ("media:<id>") as static files.
 const mediaIds = new Set();
-JSON.stringify(content, (_k, v) => {
+JSON.stringify([content, landingPages, courses], (_k, v) => {
   if (typeof v === "string" && v.startsWith("media:")) mediaIds.add(v.slice(6));
   return v;
 });
@@ -197,6 +241,34 @@ for (const r of routes) {
   count++;
 }
 
+// Landing pages and course pages: page-specific <head> (Google, WhatsApp previews)
+// + the page data, rendered in the browser.
+const mediaUrl = (ref) => (typeof ref === "string" && ref.startsWith("media:") ? `/media/${ref.slice(6)}` : ref || undefined);
+function shell(seo, extra = "") {
+  const head = headTagsToString(buildHeadTags(seo));
+  return template
+    .replace("<!--app-head-->", () => `${preloadFonts}\n    ${head}`)
+    .replace("<!--app-html-->", "")
+    .replace("<!--app-data-->", () => `${extra}${contentPayload}`);
+}
+for (const p of landingPages) {
+  const json = JSON.stringify(p).replace(/</g, "\\u003c");
+  const html = shell(
+    { title: p.seoTitle || p.name, description: p.seoDescription || p.hero.text, path: `/${p.slug}`, image: mediaUrl(p.ogImage) },
+    `<script id="__LANDING__" type="application/json">${json}</script>`
+  );
+  await fs.writeFile(path.join(dist, `${p.slug}.html`), html);
+  routes.push({ path: `/${p.slug}`, priority: 0.8 });
+  count++;
+}
+await fs.mkdir(path.join(dist, "courses"), { recursive: true });
+for (const c of courses) {
+  const html = shell({ title: c.title, description: c.subtitle || String(c.description ?? "").slice(0, 155), path: `/courses/${c.slug}`, image: mediaUrl(c.cover) });
+  await fs.writeFile(path.join(dist, "courses", `${c.slug}.html`), html);
+  routes.push({ path: `/courses/${c.slug}`, priority: 0.7 });
+  count++;
+}
+
 // SPA shell for client-only routes (admin, CMS articles newer than the last build).
 await fs.writeFile(
   path.join(dist, "app.html"),
@@ -234,6 +306,7 @@ Allow: /
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /thank-you
+Disallow: /learn
 
 Sitemap: ${site.url}/sitemap.xml
 `
