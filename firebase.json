@@ -58,6 +58,22 @@
       {
         "source": "/industries/**",
         "destination": "/app.html"
+      },
+      {
+        "source": "/courses/**",
+        "destination": "/app.html"
+      },
+      {
+        "source": "/learn",
+        "destination": "/app.html"
+      },
+      {
+        "source": "/learn/**",
+        "destination": "/app.html"
+      },
+      {
+        "source": "/*",
+        "destination": "/app.html"
       }
     ],
     "headers": [

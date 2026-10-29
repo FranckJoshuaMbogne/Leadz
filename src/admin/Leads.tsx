@@ -11,12 +11,14 @@ const statuses: { value: RequestStatus; label: string; cls: string }[] = [
   { value: "closed", label: "Closed", cls: "bg-ink/10 text-ink-muted" },
   { value: "spam", label: "Spam", cls: "bg-red-100 text-red-800" },
 ];
+const intentLabel = (r: ConsultationRequest) =>
+  r.intent === "strategy-call" ? "Strategy call" : r.intent === "audit" ? `Audit · ${r.score ?? "?"}/100` : r.intent === "landing" ? `Landing page ${r.page ?? ""}` : "Contact form";
 const statusCls = (s: RequestStatus) => statuses.find((x) => x.value === s)?.cls ?? "";
 
 const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
 function csv(rows: ConsultationRequest[]) {
-  const cols: (keyof ConsultationRequest)[] = ["createdAt", "intent", "status", "name", "email", "phone", "company", "website", "industry", "channels", "budget", "challenge", "outcome", "message", "notes", "page"];
+  const cols: (keyof ConsultationRequest)[] = ["createdAt", "intent", "status", "name", "email", "phone", "company", "website", "industry", "area", "score", "weakest", "source", "channels", "budget", "challenge", "outcome", "message", "notes", "page"];
   const esc = (v: unknown) => {
     const s = v instanceof Date ? v.toISOString() : Array.isArray(v) ? v.join("; ") : String(v ?? "");
     return `"${s.replace(/"/g, '""')}"`;
@@ -127,7 +129,8 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
 
       <ul className="mt-5 space-y-3">
         {shown.map((r) => {
-          const digits = (r.phone ?? "").replace(/[^\d]/g, "");
+          const raw = (r.phone ?? "").replace(/[^\d]/g, "");
+          const digits = raw.length === 10 ? `91${raw}` : raw;
           const isOpen = open === r.id;
           return (
             <li key={r.id} className="rounded-2xl border border-ink/10 bg-white">
@@ -136,7 +139,7 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
                 <span className="font-semibold text-ink">{r.name}</span>
                 {r.company && <span className="text-sm text-ink-muted">· {r.company}</span>}
                 <span className="flex items-center gap-1 text-sm text-ink-muted">
-                  <Calendar size={14} /> {r.intent === "strategy-call" ? "Strategy call" : "Contact form"}
+                  <Calendar size={14} /> {intentLabel(r)}
                   {r.challenge ? ` · ${r.challenge}` : ""}
                 </span>
                 <span className="ml-auto text-xs text-ink-soft">{r.createdAt ? fmt.format(r.createdAt) : ""}</span>
@@ -147,6 +150,10 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
                     {(r.outcome || r.message) && <p className="whitespace-pre-wrap rounded-xl bg-ivory-50 p-3 text-ink">{r.outcome || r.message}</p>}
                     <dl className="grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
                       {[
+                        ["Audit score", r.score !== undefined ? `${r.score}/100` : undefined],
+                        ["Weakest pillar", r.weakest],
+                        ["Area", r.area],
+                        ["Source", r.source],
                         ["Challenge", r.challenge],
                         ["Industry", r.industry],
                         ["Budget", r.budget],
@@ -168,13 +175,13 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
                   <div className="space-y-3">
                     <div className="flex flex-wrap gap-2">
                       {digits && (
-                        <a href={`https://wa.me/${digits}?text=${encodeURIComponent(`Hi ${r.name.split(" ")[0]}, this is Springs 360 — thanks for reaching out.`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2 text-sm font-semibold text-white">
+                        <a href={`https://wa.me/${digits}?text=${encodeURIComponent(r.intent === "audit" ? `Hi ${r.name.split(" ")[0]}, this is Springs 360. Thanks for taking the growth audit${r.company ? ` for ${r.company}` : ""}: you scored ${r.score}/100, and your biggest opportunity is ${r.weakest ?? "follow-up"}. Here's what we found:` : `Hi ${r.name.split(" ")[0]}, this is Springs 360 — thanks for reaching out.`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2 text-sm font-semibold text-white">
                           <MessageCircle size={15} /> WhatsApp
                         </a>
                       )}
-                      <a href={`mailto:${r.email}?subject=${encodeURIComponent("Springs 360 — your enquiry")}`} className="inline-flex items-center gap-1.5 rounded-full bg-forest px-3 py-2 text-sm font-semibold text-ivory">
+                      {r.email && <a href={`mailto:${r.email}?subject=${encodeURIComponent("Springs 360 — your enquiry")}`} className="inline-flex items-center gap-1.5 rounded-full bg-forest px-3 py-2 text-sm font-semibold text-ivory">
                         <Mail size={15} /> Email
-                      </a>
+                      </a>}
                       {digits && (
                         <a href={`tel:+${digits}`} className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 px-3 py-2 text-sm font-semibold">
                           <Phone size={15} /> Call

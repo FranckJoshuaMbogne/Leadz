@@ -18,6 +18,10 @@ const ThankYou = lazy(() => import("@/pages/ThankYou"));
 const Legal = lazy(() => import("@/pages/Legal"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Admin = lazy(() => import("@/admin/Admin"));
+const LandingRoute = lazy(() => import("@/landing/LandingRoute"));
+const CoursePage = lazy(() => import("@/landing/CoursePage"));
+const MyCourses = lazy(() => import("@/landing/Learn").then((m) => ({ default: m.MyCourses })));
+const CoursePlayer = lazy(() => import("@/landing/Learn").then((m) => ({ default: m.CoursePlayer })));
 
 function PageFallback() {
   return <div className="min-h-screen bg-deep" aria-busy="true" />;
@@ -53,6 +57,11 @@ export function AppRoutes() {
         <Route path="*" element={<S><NotFound /></S>} />
       </Route>
       <Route path="admin/*" element={<S><Admin /></S>} />
+      {/* Landing pages built in /admin → Landing pages (springs360.in/audit, /training, …) */}
+      <Route path=":slug" element={<S><LandingRoute /></S>} />
+      <Route path="courses/:slug" element={<S><CoursePage /></S>} />
+      <Route path="learn" element={<S><MyCourses /></S>} />
+      <Route path="learn/:slug" element={<S><CoursePlayer /></S>} />
       <Route path="dashboard" element={<Navigate to="/admin" replace />} />
     </Routes>
   );
