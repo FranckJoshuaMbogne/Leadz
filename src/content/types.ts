@@ -3,8 +3,9 @@ import type { Pillar, Service } from "@/data/services";
 import type { CaseStudy } from "@/data/caseStudies";
 import type { Industry } from "@/data/industries";
 import type { GrowthStage } from "@/data/growthSystem";
+import type { Location } from "@/data/locations";
 
-export type { CatalogItem, Pillar, Service, CaseStudy, Industry, GrowthStage };
+export type { CatalogItem, Pillar, Service, CaseStudy, Industry, GrowthStage, Location };
 
 /**
  * Everything editable in /admin. Stored in Firestore, collection `content`,
@@ -46,5 +47,6 @@ export interface Content {
   services: Service[];
   work: CaseStudy[];
   industries: Industry[];
+  locations: Location[];
   faqs: Faq[];
 }

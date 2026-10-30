@@ -42,6 +42,12 @@ const courseFields: Field[] = [
   { k: "order", label: "Position in lists (lower = first)", type: "number" },
 ];
 
+const groupFields: Field[] = [
+  { k: "groupLink", label: "Course group link (Telegram)", type: "url", hint: "Only shown to learners who unlocked the course. Tip: create the invite link with “Request admin approval” on, so you approve each member." },
+  { k: "groupNote", label: "Message shown with the link", type: "textarea", placeholder: "Join to get lesson summaries, projects, home classes and to chat with other learners." },
+  { k: "groupLabel", label: "Public line on the course page", type: "text", hint: "Shown to everyone (without the link), e.g. Private Telegram group: summaries, projects, home classes." },
+];
+
 const lessonFields: Field[] = [
   {
     k: "lessons",
@@ -78,6 +84,9 @@ const blank = (): CourseWithLessons => ({
   outcomes: [],
   includes: [],
   lessons: [],
+  groupLink: "",
+  groupNote: "",
+  groupLabel: "Private Telegram group: lesson summaries, projects, home classes and chat with other learners",
 });
 
 function CourseEditor({ initial, isNew, onDone }: { initial: CourseWithLessons; isNew: boolean; onDone: () => void }) {
@@ -126,8 +135,14 @@ function CourseEditor({ initial, isNew, onDone }: { initial: CourseWithLessons; 
         <div className="rounded-2xl border border-ink/10 bg-white p-5 sm:p-6">
           <FieldsForm fields={courseFields} value={c} onChange={(v) => setC(v as CourseWithLessons)} content={content} />
         </div>
-        <div className="h-fit rounded-2xl border border-ink/10 bg-white p-5 sm:p-6">
-          <FieldsForm fields={lessonFields} value={c} onChange={(v) => setC(v as CourseWithLessons)} content={content} />
+        <div className="grid h-fit gap-6">
+          <div className="rounded-2xl border border-ink/10 bg-white p-5 sm:p-6">
+            <p className="mb-4 text-sm font-bold text-ink">Course group</p>
+            <FieldsForm fields={groupFields} value={c} onChange={(v) => setC(v as CourseWithLessons)} content={content} />
+          </div>
+          <div className="rounded-2xl border border-ink/10 bg-white p-5 sm:p-6">
+            <FieldsForm fields={lessonFields} value={c} onChange={(v) => setC(v as CourseWithLessons)} content={content} />
+          </div>
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur lg:pl-[17rem]">
@@ -193,7 +208,7 @@ export function CoursesPanel() {
                 <span className={cn("rounded-full px-2 py-0.5 text-[0.65rem] font-bold uppercase", c.status === "published" ? "bg-emerald-100 text-emerald-800" : "bg-ink/10 text-ink-muted")}>{c.status === "published" ? "On sale" : "Draft"}</span>
               </span>
               <span className="mt-0.5 block truncate text-sm text-ink-soft">
-                {money(c.price, c.currency)} · {c.lessons.length} lesson{c.lessons.length === 1 ? "" : "s"} · {c.previewVideo ? "preview ✓" : "no preview yet"} · /courses/{c.slug}
+                {money(c.price, c.currency)} · {c.lessons.length} lesson{c.lessons.length === 1 ? "" : "s"} · {c.previewVideo ? "preview ✓" : "no preview yet"} · {c.groupLink ? "group ✓" : "no group"} · /courses/{c.slug}
               </span>
             </button>
             <button

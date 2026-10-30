@@ -7,7 +7,7 @@ import { useContact } from "@/content/ContentProvider";
 
 export function Footer() {
   const contact = useContact();
-  const { topServices } = useSite();
+  const { topServices, locations } = useSite();
   const year = new Date().getFullYear();
   return (
     <footer className="on-dark relative overflow-hidden bg-deep text-ivory">
@@ -60,7 +60,17 @@ export function Footer() {
               </ul>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <p className="eyebrow text-ivory/55">Contact</p>
+              <p className="eyebrow text-ivory/55">Locations</p>
+              <ul className="mt-5 space-y-3 text-[0.95rem]">
+                {locations.map((l) => (
+                  <li key={l.slug}>
+                    <Link to={`/locations/${l.slug}`} className="link-underline text-ivory/80 hover:text-ivory">
+                      Digital marketing in {l.city}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="eyebrow mt-10 text-ivory/55">Contact</p>
               <ul className="mt-5 space-y-3 text-[0.95rem]">
                 <li>
                   <a href={contact.phoneHref} className="link-underline text-ivory/80 hover:text-ivory">

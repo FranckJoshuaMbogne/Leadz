@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { Seo, breadcrumbLd, faqLd, serviceLd } from "@/lib/seo";
+import { Seo, breadcrumbLd, faqLd, serviceLd, areaServedLd } from "@/lib/seo";
 import type { Pillar, Service } from "@/data/services";
 import { useSite } from "@/content/useSite";
 import { useContentState } from "@/content/ContentProvider";
@@ -95,7 +95,7 @@ function RelatedInsights({ serviceSlugs }: { serviceSlugs: string[] }) {
 }
 
 function PillarPage({ pillar }: { pillar: Pillar }) {
-  const { servicesForPillar } = useSite();
+  const { servicesForPillar, locations } = useSite();
   const detail = servicesForPillar(pillar.slug);
   const path = `/services/${pillar.slug}`;
   const crumbs = [
@@ -109,7 +109,7 @@ function PillarPage({ pillar }: { pillar: Pillar }) {
         title={`${pillar.name} Services`}
         description={pillar.summary}
         path={path}
-        jsonLd={[serviceLd({ name: pillar.name, description: pillar.summary, path }), breadcrumbLd(crumbs), faqLd(pillar.faqs)]}
+        jsonLd={[serviceLd({ name: pillar.name, description: pillar.summary, path, areaServed: areaServedLd(locations) }), breadcrumbLd(crumbs), faqLd(pillar.faqs)]}
       />
       <PageHero eyebrow={`${pillar.index} — ${pillar.name}`} titleLines={[pillar.headline]} intro={pillar.summary} breadcrumbs={crumbs} art={{ seed: pillar.slug, variant: pillar.art }}>
         <ButtonLink to="/book" variant="light" size="lg">
@@ -190,7 +190,7 @@ function PillarPage({ pillar }: { pillar: Pillar }) {
 
 function ServicePage({ service }: { service: Service }) {
   const contact = useContact();
-  const { getPillar, getService } = useSite();
+  const { getPillar, getService, locations } = useSite();
   const pillar = getPillar(service.pillar) ?? { slug: service.pillar, name: "Services", index: "", headline: "", summary: "", problem: "", approach: [], services: [], measures: [], art: "flow", cta: "", faqs: [] } as unknown as Pillar;
   const path = `/services/${service.slug}`;
   const crumbs = [
@@ -207,7 +207,7 @@ function ServicePage({ service }: { service: Service }) {
         title={service.name}
         description={`${service.short} ${service.intro}`.slice(0, 300)}
         path={path}
-        jsonLd={[serviceLd({ name: service.name, description: service.intro, path, category: pillar.name }), breadcrumbLd(crumbs)]}
+        jsonLd={[serviceLd({ name: service.name, description: service.intro, path, category: pillar.name, areaServed: areaServedLd(locations) }), breadcrumbLd(crumbs)]}
       />
       <PageHero eyebrow={pillar.name} titleLines={[service.name]} intro={service.short} breadcrumbs={crumbs} art={{ seed: service.slug, variant: pillar.art }}>
         <div className="flex flex-col gap-3 xs:flex-row xs:flex-wrap">

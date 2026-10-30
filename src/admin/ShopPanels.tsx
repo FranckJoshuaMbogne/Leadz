@@ -134,6 +134,8 @@ To watch:
 2. Sign in with Google: ${email}
 3. Enter your password: ${key}
 
+Inside the course you'll also find the link to the private course group.
+
 This password works only with ${email}. Enjoy the course!
 — Springs 360`;
 }

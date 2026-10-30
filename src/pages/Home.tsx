@@ -1,4 +1,4 @@
-import { Seo, faqLd, organizationLd, professionalServiceLd, websiteLd } from "@/lib/seo";
+import { Seo, faqLd, organizationLd, professionalServiceLd, websiteLd, areaServedLd } from "@/lib/seo";
 import { site } from "@/config/site";
 import { useSite } from "@/content/useSite";
 import { Hero } from "@/components/sections/home/Hero";
@@ -17,7 +17,8 @@ import { AuditPromo } from "@/components/sections/home/AuditPromo";
 import { CoursesPromo } from "@/components/sections/home/CoursesPromo";
 
 export default function Home() {
-  const { catalog, faqs: homeFaqs } = useSite();
+  const { catalog, faqs: homeFaqs, locations } = useSite();
+  const areas = areaServedLd(locations);
   return (
     <>
       <Seo
@@ -25,9 +26,9 @@ export default function Home() {
         description="Springs 360 is an all-in-one 360° digital marketing agency: social media, Meta & Google Ads, websites, content, branding and lead management — one team that brings you customers."
         path="/"
         jsonLd={[
-          organizationLd(),
+          organizationLd(areas),
           websiteLd(),
-          professionalServiceLd({ serviceTypes: catalog.map((c) => c.label) }),
+          professionalServiceLd({ serviceTypes: catalog.map((c) => c.label), areaServed: areas }),
           faqLd(homeFaqs),
         ]}
       />

@@ -17,6 +17,8 @@ const Contact = lazy(() => import("@/pages/Contact"));
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 const Legal = lazy(() => import("@/pages/Legal"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const Locations = lazy(() => import("@/pages/Locations"));
+const LocationPage = lazy(() => import("@/pages/LocationPage"));
 const Admin = lazy(() => import("@/admin/Admin"));
 const LandingRoute = lazy(() => import("@/landing/LandingRoute"));
 const CoursePage = lazy(() => import("@/landing/CoursePage"));
@@ -43,6 +45,8 @@ export function AppRoutes() {
         <Route path="work/:slug" element={<S><CaseStudy /></S>} />
         <Route path="industries" element={<S><Industries /></S>} />
         <Route path="industries/:slug" element={<S><Industry /></S>} />
+        <Route path="locations" element={<S><Locations /></S>} />
+        <Route path="locations/:slug" element={<S><LocationPage /></S>} />
         <Route path="insights" element={<S><Insights /></S>} />
         <Route path="insights/:slug" element={<S><Article /></S>} />
         <Route path="about" element={<S><About /></S>} />

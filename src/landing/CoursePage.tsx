@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Check, Clock, PlayCircle, Signal, User } from "lucide-react";
+import { Check, Clock, PlayCircle, Send, Signal, User } from "lucide-react";
 import { HeroField } from "@/components/art/HeroField";
 import { VideoEmbed } from "@/components/ui/VideoEmbed";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import NotFound from "@/pages/NotFound";
-import { Seo } from "@/lib/seo";
+import { Seo, breadcrumbLd, courseLd } from "@/lib/seo";
 import { track } from "@/lib/analytics";
 import { fetchCourse } from "./api";
 import { Checkout } from "./Checkout";
@@ -47,7 +47,13 @@ export default function CoursePage() {
 
   return (
     <>
-      <Seo title={course.title} description={course.subtitle || course.description.slice(0, 155)} path={`/courses/${course.slug}`} image={mediaPath(course.cover)} />
+      <Seo
+        title={course.title}
+        description={course.subtitle || course.description.slice(0, 155)}
+        path={`/courses/${course.slug}`}
+        image={mediaPath(course.cover)}
+        jsonLd={[courseLd(course, mediaPath(course.cover)), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Courses", path: "/training" }, { name: course.title, path: `/courses/${course.slug}` }])]}
+      />
       <LpHeader
         tag="Online training"
         right={
@@ -146,6 +152,11 @@ export default function CoursePage() {
             <aside className="min-w-0">
               <div className="sticky top-6 grid gap-5 rounded-[1.5rem] border border-ink/10 bg-white p-6">
                 <Price course={course} large />
+                {course.hasGroup && (
+                  <p className="flex gap-2.5 rounded-xl bg-[#229ED9]/[0.08] p-3 text-[0.95rem] text-ink">
+                    <Send size={18} className="mt-0.5 shrink-0 text-[#229ED9]" /> {course.groupLabel || "Private Telegram group for learners"}
+                  </p>
+                )}
                 {course.includes?.filter(Boolean).length > 0 && (
                   <ul className="grid gap-2.5">
                     {course.includes.filter(Boolean).map((x) => (

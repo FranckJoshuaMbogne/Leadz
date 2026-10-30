@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Clock, Loader2, Play, Signal } from "lucide-react";
+import { Clock, Loader2, Play, Send, Signal } from "lucide-react";
 import { useMedia } from "@/content/ContentProvider";
 import { VideoEmbed } from "@/components/ui/VideoEmbed";
 import { track } from "@/lib/analytics";
@@ -76,6 +76,11 @@ export function CourseCard({ course, onPreview, onBuy }: { course: Course; onPre
           {course.level && (
             <span className="inline-flex items-center gap-1.5">
               <Signal size={14} /> {course.level}
+            </span>
+          )}
+          {course.hasGroup && (
+            <span className="inline-flex items-center gap-1.5">
+              <Send size={14} /> Private group
             </span>
           )}
         </p>

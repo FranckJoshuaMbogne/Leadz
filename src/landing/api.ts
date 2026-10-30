@@ -1,7 +1,7 @@
 import { getDb, getFirebaseAuth } from "@/lib/firebase";
 import { track } from "@/lib/analytics";
 import { builtInPages, normalizePage, normalizeShop } from "./defaults";
-import type { Course, Grant, LandingPage, Lesson, Order, ShopConfig } from "./types";
+import type { Course, CoursePrivate, Grant, LandingPage, Lesson, Order, ShopConfig } from "./types";
 
 const fsLite = () => import("firebase/firestore/lite");
 
@@ -60,11 +60,16 @@ export async function fetchCourse(slug: string): Promise<Course | null> {
   }
 }
 
-export async function fetchLessons(slug: string): Promise<Lesson[]> {
+/** Lessons and the private group link. Only works once the course is unlocked. */
+export async function fetchCoursePrivate(slug: string): Promise<CoursePrivate> {
   await authReady();
   const { fs, d } = await db();
-  const snap = await fs.getDoc(fs.doc(d, "courseLessons", slug));
-  return ((snap.data()?.lessons as Lesson[]) ?? []).filter((l) => l.title || l.video);
+  const data = (await fs.getDoc(fs.doc(d, "courseLessons", slug))).data() ?? {};
+  return {
+    lessons: ((data.lessons as Lesson[]) ?? []).filter((l) => l.title || l.video),
+    groupLink: (data.groupLink as string) ?? "",
+    groupNote: (data.groupNote as string) ?? "",
+  };
 }
 
 export async function fetchShop(): Promise<ShopConfig> {

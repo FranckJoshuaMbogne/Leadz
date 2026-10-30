@@ -155,7 +155,7 @@ export function Seo(props: SeoProps & { status?: number }) {
 /* Structured data helpers                                             */
 /* ------------------------------------------------------------------ */
 
-export const organizationLd = () => ({
+export const organizationLd = (areaServed?: unknown[]) => ({
   "@context": "https://schema.org",
   "@type": "Organization",
   "@id": `${site.url}/#organization`,
@@ -164,6 +164,7 @@ export const organizationLd = () => ({
   logo: absoluteUrl("/favicon.svg"),
   description: site.description,
   ...(site.social.length ? { sameAs: site.social.map((s) => s.href) } : {}),
+  ...(areaServed?.length ? { areaServed } : {}),
   ...(site.contact.phoneDisplay
     ? {
         contactPoint: {
@@ -185,7 +186,7 @@ export const websiteLd = () => ({
   publisher: { "@id": `${site.url}/#organization` },
 });
 
-export const professionalServiceLd = (opts: { name?: string; description?: string; path?: string; serviceTypes?: string[] } = {}) => ({
+export const professionalServiceLd = (opts: { name?: string; description?: string; path?: string; serviceTypes?: string[]; areaServed?: unknown[] } = {}) => ({
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: opts.name ?? site.name,
@@ -194,10 +195,11 @@ export const professionalServiceLd = (opts: { name?: string; description?: strin
   provider: { "@id": `${site.url}/#organization` },
   ...(site.contact.phoneDisplay ? { telephone: site.contact.phoneHref.replace("tel:", "") } : {}),
   ...(opts.serviceTypes ? { serviceType: opts.serviceTypes } : {}),
+  ...(opts.areaServed?.length ? { areaServed: opts.areaServed } : {}),
   image: absoluteUrl(site.defaultOgImage),
 });
 
-export const serviceLd = (opts: { name: string; description: string; path: string; category?: string }) => ({
+export const serviceLd = (opts: { name: string; description: string; path: string; category?: string; areaServed?: unknown[] }) => ({
   "@context": "https://schema.org",
   "@type": "Service",
   name: opts.name,
@@ -205,6 +207,7 @@ export const serviceLd = (opts: { name: string; description: string; path: strin
   url: absoluteUrl(opts.path),
   provider: { "@id": `${site.url}/#organization` },
   ...(opts.category ? { category: opts.category } : {}),
+  ...(opts.areaServed?.length ? { areaServed: opts.areaServed } : {}),
 });
 
 export const breadcrumbLd = (items: { name: string; path: string }[]) => ({
@@ -251,4 +254,139 @@ export const articleLd = (a: {
     ? { "@type": "Organization", name: a.author, url: site.url }
     : { "@type": "Person", name: a.author },
   publisher: { "@id": `${site.url}/#organization` },
+});
+
+/* ---------------- Local SEO ---------------- */
+
+type LocalPlace = {
+  slug: string;
+  city: string;
+  region: string;
+  cities: string[];
+  areas: string[];
+  seoDescription: string;
+  geo: { lat: number; lng: number };
+  address?: { street: string; locality: string; postalCode: string };
+  phone?: string;
+  mapsUrl?: string;
+};
+
+/** Cities and districts as schema.org places. */
+export const areaServedLd = (places: Pick<LocalPlace, "cities" | "region">[]) =>
+  places.flatMap((p) => p.cities.map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: p.region } })));
+
+/**
+ * One city page. ProfessionalService is a LocalBusiness type; the street
+ * address is only included when a real one is entered in the admin.
+ */
+export const localBusinessLd = (l: LocalPlace, services: { name: string; slug: string }[]) => {
+  const url = absoluteUrl(`/locations/${l.slug}`);
+  const phone = (l.phone || site.contact.phoneHref.replace("tel:", "")).replace(/[^\d+]/g, "");
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": `${url}#business`,
+    name: `${site.name} — Digital Marketing Agency in ${l.city}`,
+    description: l.seoDescription,
+    url,
+    image: absoluteUrl(site.defaultOgImage),
+    logo: absoluteUrl("/favicon.svg"),
+    parentOrganization: { "@id": `${site.url}/#organization` },
+    ...(phone ? { telephone: phone } : {}),
+    priceRange: "₹₹",
+    ...(l.address?.street
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: l.address.street,
+            addressLocality: l.address.locality || l.city,
+            addressRegion: l.region,
+            postalCode: l.address.postalCode,
+            addressCountry: "IN",
+          },
+          geo: { "@type": "GeoCoordinates", latitude: l.geo.lat, longitude: l.geo.lng },
+        }
+      : {}),
+    ...(l.mapsUrl ? { hasMap: l.mapsUrl } : {}),
+    areaServed: [
+      ...areaServedLd([l]),
+      ...l.areas.map((name) => ({ "@type": "Place", name: `${name}, ${l.city}` })),
+    ],
+    knowsAbout: services.map((s) => s.name),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Digital marketing services in ${l.city}`,
+      itemListElement: services.map((s) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: `${s.name} in ${l.city}`,
+          url: absoluteUrl(`/services/${s.slug}`),
+          areaServed: areaServedLd([l]),
+          provider: { "@id": `${site.url}/#organization` },
+        },
+      })),
+    },
+  };
+};
+
+/* ---------------- Courses ---------------- */
+
+type CourseLike = {
+  slug: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  price: number;
+  currency?: string;
+  cover?: string;
+  duration?: string;
+  level?: string;
+  instructor?: string;
+  outcomes?: string[];
+};
+
+/** ISO-8601 duration from "3h 40m" / "90 min" (Course workload), or undefined. */
+export function isoDuration(text?: string) {
+  if (!text) return undefined;
+  const h = /(\d+(?:\.\d+)?)\s*h/i.exec(text);
+  const m = /(\d+)\s*m/i.exec(text.replace(/(\d+(?:\.\d+)?)\s*h/i, ""));
+  if (!h && !m) return undefined;
+  const hours = h ? Math.floor(Number(h[1])) : 0;
+  const mins = (m ? Number(m[1]) : 0) + (h ? Math.round((Number(h[1]) % 1) * 60) : 0);
+  return `PT${hours ? `${hours}H` : ""}${mins ? `${mins}M` : ""}`;
+}
+
+export const courseLd = (c: CourseLike, imageUrl?: string) => ({
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "@id": `${absoluteUrl(`/courses/${c.slug}`)}#course`,
+  name: c.title,
+  description: (c.subtitle || c.description || c.title).slice(0, 500),
+  url: absoluteUrl(`/courses/${c.slug}`),
+  ...(imageUrl ? { image: absoluteUrl(imageUrl) } : {}),
+  inLanguage: "en-IN",
+  ...(c.level ? { educationalLevel: c.level } : {}),
+  ...(c.outcomes?.filter(Boolean).length ? { teaches: c.outcomes.filter(Boolean) } : {}),
+  provider: { "@type": "Organization", "@id": `${site.url}/#organization`, name: site.name, sameAs: site.url },
+  offers: {
+    "@type": "Offer",
+    category: "Paid",
+    price: c.price,
+    priceCurrency: c.currency || "INR",
+    availability: "https://schema.org/InStock",
+    url: absoluteUrl(`/courses/${c.slug}`),
+  },
+  hasCourseInstance: {
+    "@type": "CourseInstance",
+    courseMode: "Online",
+    ...(isoDuration(c.duration) ? { courseWorkload: isoDuration(c.duration) } : {}),
+    ...(c.instructor ? { instructor: { "@type": "Person", name: c.instructor } } : {}),
+  },
+});
+
+export const courseListLd = (courses: { slug: string }[]) => ({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: courses.map((c, i) => ({ "@type": "ListItem", position: i + 1, url: absoluteUrl(`/courses/${c.slug}`) })),
 });

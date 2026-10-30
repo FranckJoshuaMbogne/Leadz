@@ -6,6 +6,7 @@ import { pillars, services } from "@/data/services";
 import { caseStudies } from "@/data/caseStudies";
 import { industries } from "@/data/industries";
 import { homeFaqs } from "@/data/faqs";
+import { locations } from "@/data/locations";
 
 export const defaultContent: Content = {
   settings,
@@ -16,11 +17,12 @@ export const defaultContent: Content = {
   services,
   work: caseStudies.map((c) => ({ ...c, published: c.published ?? true })),
   industries,
+  locations,
   faqs: homeFaqs,
 };
 
 /** Firestore document ids (collection `content`). */
-export const sectionIds = ["settings", "catalog", "growth", "pillars", "services", "work", "industries", "faqs"] as const;
+export const sectionIds = ["settings", "catalog", "growth", "pillars", "services", "work", "industries", "locations", "faqs"] as const;
 export type SectionId = (typeof sectionIds)[number];
 
 type Docs = Record<string, Record<string, unknown> | undefined>;
@@ -41,6 +43,7 @@ export function mergeContent(docs: Docs, base: Content = defaultContent): Conten
     services: items(docs, "services", base.services),
     work: items(docs, "work", base.work).map((w) => ({ ...w, published: w.published !== false })),
     industries: items(docs, "industries", base.industries),
+    locations: items(docs, "locations", base.locations).map((l) => ({ ...l, published: l.published !== false })),
     faqs: items(docs, "faqs", base.faqs),
   };
 }
