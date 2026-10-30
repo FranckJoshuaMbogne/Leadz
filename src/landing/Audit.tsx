@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { cn } from "@/lib/utils";
 import { submitLandingLead } from "./api";
@@ -226,11 +226,59 @@ export function AuditFlow({ page, onClose }: { page: LandingPage; onClose: () =>
 
 type ResultData = { max: number[]; got: number[]; values: number[]; total: number; order: { p: QuizPillar; v: number; i: number }[] };
 
+function Chips({ options, value, onChange, multi, label, hint }: { options: string[]; value: string[]; onChange: (v: string[]) => void; multi?: boolean; label: string; hint?: string }) {
+  return (
+    <fieldset className="grid gap-2">
+      <legend className="text-sm font-semibold text-ink">
+        {label}
+        {hint && <span className="ml-1.5 font-normal text-ink-soft">{hint}</span>}
+      </legend>
+      <div className="mt-1 flex flex-wrap gap-2">
+        {options.map((o) => {
+          const on = value.includes(o);
+          return (
+            <button
+              key={o}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onChange(multi ? (on ? value.filter((x) => x !== o) : [...value, o]) : on ? [] : [o])}
+              className={cn("inline-flex min-h-[44px] items-center gap-1.5 rounded-full border-[1.5px] px-4 text-[0.95rem] font-medium", on ? "border-forest bg-forest text-ivory" : "border-ink/15 bg-white text-ink hover:border-forest-500")}
+            >
+              {on && <Check size={15} aria-hidden="true" />}
+              {o}
+            </button>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
+type FormState = {
+  company: string;
+  industry: string;
+  website: string;
+  noWebsite: boolean;
+  locations: string;
+  revenue: string[];
+  targetRevenue: string[];
+  channels: string[];
+  preferredChannels: string[];
+  budget: string[];
+  name: string;
+  phone: string;
+  email: string;
+};
+
+const STEPS = ["Your business", "Your goals", "Your plan"];
+
 function Result({ page, result, answers, onDone }: { page: LandingPage; result: ResultData; answers: number[]; onDone: (d: { name: string }) => void }) {
-  const { pillars } = page.quiz;
-  const [f, setF] = useState({ name: "", company: "", industry: "", area: "", phone: "" });
+  const { pillars, revenueRanges, contactChannels, budgetRanges, businessTypes } = page.quiz;
+  const [f, setF] = useState<FormState>({ company: "", industry: "", website: "", noWebsite: false, locations: "", revenue: [], targetRevenue: [], channels: [], preferredChannels: [], budget: [], name: "", phone: "", email: "" });
+  const [step, setStep] = useState(0);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const verdict =
     result.total >= 75
       ? "Strong foundation. You're ready to scale with more ad spend."
@@ -238,23 +286,56 @@ function Result({ page, result, answers, onDone }: { page: LandingPage; result: 
         ? "You're leaving enquiries on the table. One or two fixes will move the needle fast."
         : "Customers are slipping past you at several points. The first fixes are quick.";
   const fixes = result.order.filter((x) => x.v < 1).slice(0, 3);
+  const hasGoals = revenueRanges.length > 0 || contactChannels.length > 0 || budgetRanges.length > 0;
+  const steps = hasGoals ? STEPS : [STEPS[0], STEPS[2]];
+  const current = steps[step];
+
+  const set = <K extends keyof FormState>(k: K, v: FormState[K]) => setF((x) => ({ ...x, [k]: v }));
+  const text = (k: "company" | "website" | "locations" | "name" | "phone" | "email") => (e: { target: { value: string } }) => set(k, e.target.value);
+
+  function go(next: number) {
+    setErr("");
+    setStep(next);
+    window.requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function validStep() {
+    if (current === "Your business") {
+      if (!f.company.trim()) return "Please enter your business name.";
+      const w = f.website.trim();
+      if (w && !/^(https?:\/\/)?[^\s.]+\.[^\s]{2,}$/i.test(w)) return "That website address doesn't look right, e.g. mybusiness.in";
+    }
+    if (current === "Your plan") {
+      if (f.name.trim().length < 2) return "Please enter your name.";
+      if (f.phone.replace(/\D/g, "").length < 10) return "Enter a WhatsApp number with at least 10 digits, e.g. +91 98765 43210.";
+      if (f.email.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) return "That email address doesn't look right.";
+    }
+    return "";
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    const digits = f.phone.replace(/\D/g, "");
-    if (f.name.trim().length < 2 || !f.company.trim()) return setErr("Please fill in your name and business name.");
-    if (digits.length < 10) return setErr("Enter a WhatsApp number with at least 10 digits, e.g. +91 98765 43210.");
-    setErr("");
+    const problem = validStep();
+    if (problem) return setErr(problem);
+    if (step < steps.length - 1) return go(step + 1);
     setBusy(true);
     try {
       const scores = Object.fromEntries(pillars.map((p, i) => [p.key, result.got[i]]));
+      const site = f.noWebsite ? "No website yet" : f.website.trim();
       await submitLandingLead({
         intent: "audit",
         name: f.name.trim().slice(0, 100),
         phone: f.phone.trim().slice(0, 30),
+        email: f.email.trim().slice(0, 160) || undefined,
         company: f.company.trim().slice(0, 120),
-        industry: f.industry.slice(0, 80),
-        area: f.area.trim().slice(0, 120),
+        industry: f.industry.slice(0, 80) || undefined,
+        website: site.slice(0, 200) || undefined,
+        area: f.locations.trim().slice(0, 120) || undefined,
+        revenue: f.revenue[0],
+        targetRevenue: f.targetRevenue[0],
+        channels: f.channels.slice(0, 10),
+        preferredChannels: f.preferredChannels.slice(0, 10),
+        budget: f.budget[0],
         score: result.total,
         weakest: result.order[0]?.p.name.slice(0, 120),
         scores,
@@ -270,7 +351,7 @@ function Result({ page, result, answers, onDone }: { page: LandingPage; result: 
     }
   }
 
-  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
+  const last = step === steps.length - 1;
   return (
     <>
       <p className="eyebrow text-forest-500">Your 360° growth score</p>
@@ -294,48 +375,114 @@ function Result({ page, result, answers, onDone }: { page: LandingPage; result: 
           ))}
         </div>
       )}
-      <form onSubmit={submit} noValidate className="grid gap-4 rounded-2xl border border-ink/10 bg-white p-5 sm:p-6">
+      <form ref={formRef} onSubmit={submit} noValidate className="grid scroll-mt-4 gap-5 rounded-2xl border border-ink/10 bg-white p-5 sm:p-6">
         <div>
           <h3 className="text-xl font-bold text-ink">{page.quiz.formTitle}</h3>
-          {page.quiz.formText && <p className="mt-1 text-sm text-ink-muted">{page.quiz.formText}</p>}
+          {step === 0 && page.quiz.formText && <p className="mt-1 text-sm text-ink-muted">{page.quiz.formText}</p>}
         </div>
-        <label className="grid gap-1.5 text-sm font-semibold text-ink">
-          Your name
-          <input id="audit-name" className={lpInput} autoComplete="name" value={f.name} onChange={set("name")} />
-        </label>
-        <label className="grid gap-1.5 text-sm font-semibold text-ink">
-          Business name
-          <input id="audit-company" className={lpInput} autoComplete="organization" value={f.company} onChange={set("company")} />
-        </label>
-        {page.quiz.businessTypes.length > 0 && (
-          <label className="grid gap-1.5 text-sm font-semibold text-ink">
-            Type of business
-            <select id="audit-type" className={lpInput} value={f.industry} onChange={set("industry")}>
-              <option value="">Choose one</option>
-              {page.quiz.businessTypes.map((t) => (
-                <option key={t}>{t}</option>
-              ))}
-            </select>
-          </label>
+        <ol className="grid gap-2" style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }} aria-label="Form steps">
+          {steps.map((label, i) => (
+            <li key={label} className="grid gap-1.5" aria-current={i === step ? "step" : undefined}>
+              <span className={cn("h-1.5 rounded-full", i <= step ? "bg-forest-500" : "bg-[#E4EBE6]")} />
+              <span className={cn("truncate text-xs font-semibold", i === step ? "text-ink" : "text-ink-soft")}>
+                {i + 1}. {label}
+              </span>
+            </li>
+          ))}
+        </ol>
+
+        {current === "Your business" && (
+          <>
+            <label className="grid gap-1.5 text-sm font-semibold text-ink">
+              Business name
+              <input id="audit-company" className={lpInput} autoComplete="organization" value={f.company} onChange={text("company")} />
+            </label>
+            {businessTypes.length > 0 && (
+              <label className="grid gap-1.5 text-sm font-semibold text-ink">
+                Type of business
+                <select id="audit-type" className={lpInput} value={f.industry} onChange={(e) => set("industry", e.target.value)}>
+                  <option value="">Choose one</option>
+                  {businessTypes.map((t) => (
+                    <option key={t}>{t}</option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <div className="grid gap-1.5">
+              <label htmlFor="audit-website" className="text-sm font-semibold text-ink">
+                Website <span className="font-normal text-ink-soft">(so we can review it)</span>
+              </label>
+              <input id="audit-website" className={cn(lpInput, f.noWebsite && "opacity-50")} type="url" inputMode="url" autoComplete="url" placeholder="mybusiness.in" disabled={f.noWebsite} value={f.website} onChange={text("website")} />
+              <label className="mt-1 flex items-center gap-2.5 text-sm text-ink">
+                <input id="audit-nowebsite" type="checkbox" className="h-5 w-5 accent-[#123B2A]" checked={f.noWebsite} onChange={(e) => set("noWebsite", e.target.checked)} />
+                I don't have a website yet
+              </label>
+            </div>
+            {page.quiz.areaLabel && (
+              <label className="grid gap-1.5 text-sm font-semibold text-ink">
+                {page.quiz.areaLabel}
+                <input id="audit-locations" className={lpInput} placeholder="e.g. Madhapur, Gachibowli · 2 branches" value={f.locations} onChange={text("locations")} />
+              </label>
+            )}
+          </>
         )}
-        {page.quiz.areaLabel && (
-          <label className="grid gap-1.5 text-sm font-semibold text-ink">
-            {page.quiz.areaLabel}
-            <input id="audit-area" className={lpInput} value={f.area} onChange={set("area")} />
-          </label>
+
+        {current === "Your goals" && (
+          <>
+            {revenueRanges.length > 0 && (
+              <>
+                <Chips label="Monthly revenue today" options={revenueRanges} value={f.revenue} onChange={(v) => set("revenue", v)} />
+                <Chips label="Monthly revenue you want in 12 months" options={revenueRanges} value={f.targetRevenue} onChange={(v) => set("targetRevenue", v)} />
+              </>
+            )}
+            {contactChannels.length > 0 && (
+              <>
+                <Chips multi label="How do customers reach you today?" hint="Choose all that apply" options={contactChannels} value={f.channels} onChange={(v) => set("channels", v)} />
+                <Chips multi label="How would you like customers to reach you?" hint="Choose all that apply" options={contactChannels} value={f.preferredChannels} onChange={(v) => set("preferredChannels", v)} />
+              </>
+            )}
+            {budgetRanges.length > 0 && <Chips label="Monthly marketing budget" options={budgetRanges} value={f.budget} onChange={(v) => set("budget", v)} />}
+            <p className="text-xs text-ink-soft">Your answers stay private. They help us size a plan that fits your business.</p>
+          </>
         )}
-        <label className="grid gap-1.5 text-sm font-semibold text-ink">
-          WhatsApp number
-          <input id="audit-phone" className={lpInput} type="tel" inputMode="tel" autoComplete="tel" placeholder="+91 98xxx xxxxx" value={f.phone} onChange={set("phone")} />
-        </label>
+
+        {current === "Your plan" && (
+          <>
+            <label className="grid gap-1.5 text-sm font-semibold text-ink">
+              Your name
+              <input id="audit-name" className={lpInput} autoComplete="name" value={f.name} onChange={text("name")} />
+            </label>
+            <label className="grid gap-1.5 text-sm font-semibold text-ink">
+              <span>
+                WhatsApp number <span className="font-normal text-ink-soft">(we send your plan here)</span>
+              </span>
+              <input id="audit-phone" className={lpInput} type="tel" inputMode="tel" autoComplete="tel" placeholder="+91 98xxx xxxxx" value={f.phone} onChange={text("phone")} />
+            </label>
+            <label className="grid gap-1.5 text-sm font-semibold text-ink">
+              <span>
+                Email <span className="font-normal text-ink-soft">(optional)</span>
+              </span>
+              <input id="audit-email" className={lpInput} type="email" autoComplete="email" value={f.email} onChange={text("email")} />
+            </label>
+            <p className="text-xs text-ink-soft">No cold calls. We only use your number to send your plan and follow up on it.</p>
+          </>
+        )}
+
         {err && (
           <p role="alert" className="text-sm text-[#9B2C2C]">
             {err}
           </p>
         )}
-        <button type="submit" disabled={busy} className={lpBtn}>
-          {busy && <Loader2 size={18} className="animate-spin" />} Send me my review
-        </button>
+        <div className="flex flex-col gap-2 sm:flex-row-reverse sm:items-center">
+          <button type="submit" disabled={busy} className={cn(lpBtn, "sm:flex-1")}>
+            {busy && <Loader2 size={18} className="animate-spin" />} {last ? "Send me my growth plan" : "Continue"} {!last && <span aria-hidden="true">→</span>}
+          </button>
+          {step > 0 && (
+            <button type="button" onClick={() => go(step - 1)} className="min-h-[48px] rounded-full px-5 font-semibold text-ink-muted hover:text-ink">
+              ← Back
+            </button>
+          )}
+        </div>
       </form>
     </>
   );

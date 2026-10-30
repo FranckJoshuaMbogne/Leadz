@@ -99,6 +99,9 @@ export interface Lead {
   weakest?: string;
   scores?: Record<string, number>;
   source?: string;
+  revenue?: string;
+  targetRevenue?: string;
+  preferredChannels?: string[];
   status: LeadStatus;
   notes?: string;
   createdAt?: Date;
