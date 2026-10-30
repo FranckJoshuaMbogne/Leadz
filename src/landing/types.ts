@@ -78,6 +78,12 @@ export interface LandingPage {
     formText: string;
     businessTypes: string[];
     areaLabel: string;
+    /** Monthly revenue ranges, used for "today" and "goal". Empty = questions hidden. */
+    revenueRanges: string[];
+    /** Ways customers contact a business (call, WhatsApp, walk-in…). Empty = questions hidden. */
+    contactChannels: string[];
+    /** Monthly marketing budget ranges. Empty = question hidden. */
+    budgetRanges: string[];
     doneText: string;
   };
   courses: {

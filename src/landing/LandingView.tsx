@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { HeroField } from "@/components/art/HeroField";
 import { VideoEmbed } from "@/components/ui/VideoEmbed";
@@ -115,6 +115,11 @@ function LeadForm({ page }: { page: LandingPage }) {
 export function LandingView({ page, preview }: { page: LandingPage; preview?: boolean }) {
   const [quiz, setQuiz] = useState(false);
   const { hero } = page;
+
+  // springs360.in/audit?start=1 opens the quiz straight away (used by the home page).
+  useEffect(() => {
+    if (page.template === "audit" && new URLSearchParams(window.location.search).has("start")) setQuiz(true);
+  }, [page.template]);
 
   const cta = () => {
     if (page.template === "audit") return setQuiz(true);

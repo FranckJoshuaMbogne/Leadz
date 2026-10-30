@@ -18,7 +18,7 @@ const statusCls = (s: RequestStatus) => statuses.find((x) => x.value === s)?.cls
 const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
 function csv(rows: ConsultationRequest[]) {
-  const cols: (keyof ConsultationRequest)[] = ["createdAt", "intent", "status", "name", "email", "phone", "company", "website", "industry", "area", "score", "weakest", "source", "channels", "budget", "challenge", "outcome", "message", "notes", "page"];
+  const cols: (keyof ConsultationRequest)[] = ["createdAt", "intent", "status", "name", "email", "phone", "company", "website", "industry", "area", "score", "weakest", "revenue", "targetRevenue", "channels", "preferredChannels", "budget", "source", "challenge", "outcome", "message", "notes", "page"];
   const esc = (v: unknown) => {
     const s = v instanceof Date ? v.toISOString() : Array.isArray(v) ? v.join("; ") : String(v ?? "");
     return `"${s.replace(/"/g, '""')}"`;
@@ -140,6 +140,7 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
                 {r.company && <span className="text-sm text-ink-muted">· {r.company}</span>}
                 <span className="flex items-center gap-1 text-sm text-ink-muted">
                   <Calendar size={14} /> {intentLabel(r)}
+                  {r.intent === "audit" && r.targetRevenue ? ` · goal ${r.targetRevenue}` : ""}
                   {r.challenge ? ` · ${r.challenge}` : ""}
                 </span>
                 <span className="ml-auto text-xs text-ink-soft">{r.createdAt ? fmt.format(r.createdAt) : ""}</span>
@@ -152,12 +153,15 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
                       {[
                         ["Audit score", r.score !== undefined ? `${r.score}/100` : undefined],
                         ["Weakest pillar", r.weakest],
-                        ["Area", r.area],
+                        ["Revenue today (monthly)", r.revenue],
+                        ["Revenue goal (12 months)", r.targetRevenue],
+                        [r.intent === "audit" ? "Customers reach them via" : "Channels today", r.channels?.join(", ")],
+                        ["Wants customers via", r.preferredChannels?.join(", ")],
+                        [r.intent === "audit" ? "Locations" : "Area", r.area],
                         ["Source", r.source],
                         ["Challenge", r.challenge],
                         ["Industry", r.industry],
-                        ["Budget", r.budget],
-                        ["Channels today", r.channels?.join(", ")],
+                        [r.intent === "audit" ? "Marketing budget (monthly)" : "Budget", r.budget],
                         ["Email", r.email],
                         ["Phone", r.phone],
                         ["Website", r.website],
@@ -175,7 +179,7 @@ export function Leads({ onCount }: { onCount: (n: number) => void }) {
                   <div className="space-y-3">
                     <div className="flex flex-wrap gap-2">
                       {digits && (
-                        <a href={`https://wa.me/${digits}?text=${encodeURIComponent(r.intent === "audit" ? `Hi ${r.name.split(" ")[0]}, this is Springs 360. Thanks for taking the growth audit${r.company ? ` for ${r.company}` : ""}: you scored ${r.score}/100, and your biggest opportunity is ${r.weakest ?? "follow-up"}. Here's what we found:` : `Hi ${r.name.split(" ")[0]}, this is Springs 360 — thanks for reaching out.`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2 text-sm font-semibold text-white">
+                        <a href={`https://wa.me/${digits}?text=${encodeURIComponent(r.intent === "audit" ? `Hi ${r.name.split(" ")[0]}, this is Springs 360. Thanks for taking the growth audit${r.company ? ` for ${r.company}` : ""}: you scored ${r.score}/100, and your biggest opportunity is ${r.weakest ?? "follow-up"}.${r.targetRevenue ? ` Here's how we'd get you to ${r.targetRevenue} a month:` : " Here's what we found:"}` : `Hi ${r.name.split(" ")[0]}, this is Springs 360 — thanks for reaching out.`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3 py-2 text-sm font-semibold text-white">
                           <MessageCircle size={15} /> WhatsApp
                         </a>
                       )}

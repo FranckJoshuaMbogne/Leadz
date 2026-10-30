@@ -183,14 +183,37 @@ export interface LandingLead {
   score?: number;
   weakest?: string;
   scores?: Record<string, number>;
+  website?: string;
+  revenue?: string;
+  targetRevenue?: string;
+  channels?: string[];
+  preferredChannels?: string[];
+  budget?: string;
   source?: string;
   page: string;
 }
 
+/** Fields added after the first release of the rules (kept in `outcome` if the rules are older). */
+const NEWER_FIELDS = ["revenue", "targetRevenue", "preferredChannels"] as const;
+
 export async function submitLandingLead(lead: LandingLead) {
-  const clean = Object.fromEntries(Object.entries({ ...lead, source: lead.source?.slice(0, 80), page: lead.page.slice(0, 200) }).filter(([, v]) => v !== undefined && v !== ""));
+  const clean: Record<string, unknown> = Object.fromEntries(
+    Object.entries({ ...lead, source: lead.source?.slice(0, 80), page: lead.page.slice(0, 200) }).filter(([, v]) => v !== undefined && v !== "" && !(Array.isArray(v) && v.length === 0))
+  );
   const { fs, d } = await db();
-  await fs.addDoc(fs.collection(d, "leads"), { ...clean, status: "new", createdAt: fs.serverTimestamp() });
+  try {
+    await fs.addDoc(fs.collection(d, "leads"), { ...clean, status: "new", createdAt: fs.serverTimestamp() });
+  } catch (e) {
+    // Older security rules don't know the newest fields: keep them as text so the lead isn't lost.
+    if ((e as { code?: string }).code !== "permission-denied" || !NEWER_FIELDS.some((k) => k in clean)) throw e;
+    const extra = [
+      clean.revenue && `Revenue today: ${clean.revenue}`,
+      clean.targetRevenue && `Revenue goal: ${clean.targetRevenue}`,
+      Array.isArray(clean.preferredChannels) && `Wants customers via: ${clean.preferredChannels.join(", ")}`,
+    ].filter(Boolean);
+    const legacy = Object.fromEntries(Object.entries(clean).filter(([k]) => !(NEWER_FIELDS as readonly string[]).includes(k)));
+    await fs.addDoc(fs.collection(d, "leads"), { ...legacy, outcome: extra.join("\n").slice(0, 1500), status: "new", createdAt: fs.serverTimestamp() });
+  }
   track("generate_lead", { form: lead.intent, page: lead.page, score: lead.score });
   try {
     const w = window as Window & { fbq?: (...a: unknown[]) => void };

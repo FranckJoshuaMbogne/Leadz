@@ -13,6 +13,8 @@ import { IndustriesPreview } from "@/components/sections/home/IndustriesPreview"
 import { InsightsPreview } from "@/components/sections/home/InsightsPreview";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { AuditPromo } from "@/components/sections/home/AuditPromo";
+import { CoursesPromo } from "@/components/sections/home/CoursesPromo";
 
 export default function Home() {
   const { catalog, faqs: homeFaqs } = useSite();
@@ -33,6 +35,7 @@ export default function Home() {
       <ServicesGrid />
       <BrandStatement />
       <Problem />
+      <AuditPromo />
       <HowItWorks />
       <GrowthSystem />
       <SelectedWork />
@@ -40,6 +43,7 @@ export default function Home() {
       <IndustriesPreview />
       <FaqSection faqs={homeFaqs} />
       <InsightsPreview />
+      <CoursesPromo />
       <CtaBand />
     </>
   );

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Check } from "lucide-react";
 import { MaskText } from "@/components/animations/MaskText";
 import { ButtonA } from "@/components/ui/Button";
@@ -42,6 +43,9 @@ export function Hero() {
               Chat on WhatsApp
             </ButtonA>
           </div>
+          <Link to="/audit" className="anim-fade-up mt-5 inline-flex items-center gap-2 text-[0.95rem] font-medium text-gold-light underline decoration-gold/50 underline-offset-4 hover:decoration-gold-light" style={{ animationDelay: "0.65s" }}>
+            Not sure where to start? Get your free growth score in 3 minutes →
+          </Link>
           <ul className="anim-fade-up mt-8 flex flex-col gap-2 text-sm text-ivory/75 sm:flex-row sm:flex-wrap sm:gap-x-6" style={{ animationDelay: "0.7s" }}>
             {s.reassurance.map((r) => (
               <li key={r} className="flex items-center gap-2">

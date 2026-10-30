@@ -52,6 +52,8 @@ export const site = {
 } as const;
 
 export const primaryNav = [
+  { to: "/training", label: "Courses" },
+  { to: "/audit", label: "Audit" },
   { to: "/services", label: "Services" },
   { to: "/work", label: "Work" },
   { to: "/industries", label: "Industries" },

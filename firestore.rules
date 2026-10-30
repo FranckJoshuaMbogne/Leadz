@@ -58,6 +58,7 @@ service cloud.firestore {
           'intent', 'name', 'email', 'phone', 'company', 'website', 'industry',
           'channels', 'budget', 'challenge', 'outcome', 'message', 'page',
           'area', 'score', 'weakest', 'scores', 'source',
+          'revenue', 'targetRevenue', 'preferredChannels',
           'status', 'createdAt'
         ])
         && d.keys().hasAll(['intent', 'name', 'status', 'createdAt'])
@@ -70,6 +71,9 @@ service cloud.firestore {
         && optString(d, 'area', 120)
         && optString(d, 'weakest', 120)
         && optString(d, 'source', 80)
+        && optString(d, 'revenue', 60)
+        && optString(d, 'targetRevenue', 60)
+        && (!('preferredChannels' in d) || (d.preferredChannels is list && d.preferredChannels.size() <= 10))
         && (!('score' in d) || (d.score is number && d.score >= 0 && d.score <= 100))
         && (!('scores' in d) || (d.scores is map && d.scores.size() <= 20))
         && d.status == 'new'
