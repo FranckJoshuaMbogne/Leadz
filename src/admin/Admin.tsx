@@ -16,6 +16,7 @@ import {
   Settings as SettingsIcon,
   Factory,
   GraduationCap,
+  MapPin,
   PanelsTopLeft,
   Receipt,
   Wallet,
@@ -157,6 +158,7 @@ const tabs: { id: Tab; label: string; icon: typeof Inbox; hint: string }[] = [
   { id: "services", label: "Service pages", icon: ListChecks, hint: "Detailed service pages: intro, approach, deliverables, measures." },
   { id: "work", label: "Work / case studies", icon: FolderKanban, hint: "Case studies (use cases). Drafts stay hidden until published." },
   { id: "industries", label: "Industries", icon: Factory, hint: "Industry pages and the home page industries list." },
+  { id: "locations", label: "Locations (local SEO)", icon: MapPin, hint: "City pages for local Google searches (springs360.in/locations/hyderabad …) with local structured data." },
   { id: "faqs", label: "FAQ", icon: HelpCircle, hint: "Questions on the home and services pages." },
 ];
 
@@ -176,6 +178,7 @@ function validate(c: Content, id: SectionId): string | null {
   };
   if (id === "work") return uniq(c.work.map((p) => p.slug), "case study");
   if (id === "industries") return uniq(c.industries.map((p) => p.slug), "industry");
+  if (id === "locations") return uniq(c.locations.map((p) => p.slug), "location");
   if (id === "pillars" || id === "services") {
     const e = id === "pillars" ? uniq(c.pillars.map((p) => p.slug), "capability") : uniq(c.services.map((p) => p.slug), "service");
     if (e) return e;
@@ -191,6 +194,7 @@ function validate(c: Content, id: SectionId): string | null {
 function autoSlugs(c: Content, id: SectionId): Content {
   if (id === "work") return { ...c, work: c.work.map((p) => (p.slug ? p : { ...p, slug: slugify(`${p.client} ${p.title}`) })) };
   if (id === "industries") return { ...c, industries: c.industries.map((p) => (p.slug ? p : { ...p, slug: slugify(p.name) })) };
+  if (id === "locations") return { ...c, locations: c.locations.map((p) => (p.slug ? p : { ...p, slug: slugify(p.city) })) };
   if (id === "services") return { ...c, services: c.services.map((p) => (p.slug ? p : { ...p, slug: slugify(p.name) })) };
   if (id === "pillars") return { ...c, pillars: c.pillars.map((p) => (p.slug ? p : { ...p, slug: slugify(p.name) as typeof p.slug })) };
   return c;
@@ -414,6 +418,8 @@ function SectionView({ tab, draft, set }: { tab: SectionId; draft: Content; set:
       return <CollectionEditor noun="case study" items={draft.work} onChange={(v) => set("work", v)} fields={S.workFields} newItem={S.newWork} title={(x) => x.client} subtitle={(x) => `${x.verified ? "Real" : "Illustrative"} · ${x.title}`} thumb={(x) => x.image} viewHref={(x) => (x.slug && x.published !== false ? `/work/${x.slug}` : null)} content={draft} />;
     case "industries":
       return <CollectionEditor noun="industry" items={draft.industries} onChange={(v) => set("industries", v)} fields={S.industryFields} newItem={S.newIndustry} title={(x) => x.name} subtitle={(x) => x.summary} thumb={(x) => x.image} viewHref={(x) => (x.slug ? `/industries/${x.slug}` : null)} content={draft} />;
+    case "locations":
+      return <CollectionEditor noun="city" items={draft.locations} onChange={(v) => set("locations", v)} fields={S.locationFields} newItem={S.newLocation} title={(x) => x.city} subtitle={(x) => `${x.published === false ? "Hidden · " : ""}/locations/${x.slug || "…"}`} viewHref={(x) => (x.slug && x.published !== false ? `/locations/${x.slug}` : null)} content={draft} />;
     case "faqs":
       return <CollectionEditor noun="question" items={draft.faqs} onChange={(v) => set("faqs", v)} fields={S.faqFields} newItem={S.newFaq} title={(f) => f.question} content={draft} />;
   }

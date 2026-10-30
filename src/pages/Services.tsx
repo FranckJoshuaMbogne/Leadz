@@ -1,4 +1,4 @@
-import { Seo, breadcrumbLd, faqLd, professionalServiceLd } from "@/lib/seo";
+import { Seo, breadcrumbLd, faqLd, professionalServiceLd, areaServedLd } from "@/lib/seo";
 import { useSite } from "@/content/useSite";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -14,7 +14,7 @@ import { useContact } from "@/content/ContentProvider";
 
 export default function Services() {
   const contact = useContact();
-  const { catalog, topServices, faqs: homeFaqs } = useSite();
+  const { catalog, topServices, faqs: homeFaqs, locations } = useSite();
   const engagementFaqs = [
   homeFaqs[0],
   homeFaqs[1],
@@ -34,7 +34,7 @@ export default function Services() {
         description="We create a 360° ecosystem to boost your sales: social media management, Meta & Google Ads, website development, content, branding, design & video, promotions, Google Business Profile, lead management and more."
         path="/services"
         jsonLd={[
-          professionalServiceLd({ path: "/services", serviceTypes: catalog.map((c) => c.label) }),
+          professionalServiceLd({ path: "/services", serviceTypes: catalog.map((c) => c.label), areaServed: areaServedLd(locations) }),
           breadcrumbLd([
             { name: "Home", path: "/" },
             { name: "Services", path: "/services" },

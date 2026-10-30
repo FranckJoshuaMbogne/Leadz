@@ -85,3 +85,17 @@ Security: passwords are bound to the buyer's Google email and one course (enforc
 Leads from audit and lead-form pages appear in **Leads** with score, weakest pillar, area and source (`?src=instagram` on your links).
 
 **After merging, deploy the new rules once:** `firebase deploy --only firestore:rules` (or Firebase console → Firestore → Rules → paste `firestore.rules` → Publish). Google sign-in must be enabled (it already is for the admin).
+
+## Local SEO (/admin → Locations)
+
+City pages at `/locations/hyderabad`, `/locations/bengaluru`, `/locations/delhi-ncr` (+ `/locations` index), prerendered with
+`ProfessionalService` (LocalBusiness) structured data: areas served, neighbourhoods, service catalogue, FAQ and breadcrumbs.
+Organization, home, services and service pages declare the same areas served. Courses carry `Course` structured data
+(price, online mode, workload) and `/training` an `ItemList` of courses. Add an office address to a city only if you
+really operate from it; link each city's Google Business Profile in *Google Maps link*.
+
+## Course groups
+
+Each course can have a private Telegram group (Courses → Course group). The link is stored with the lessons, so only
+learners who unlocked the course can see it (in the player at /learn/<course>). Create the Telegram invite link with
+"Request admin approval" so forwarded links can't be used without you approving.

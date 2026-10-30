@@ -109,7 +109,7 @@ service cloud.firestore {
     match /content/{section} {
       allow read: if true;
       allow write: if isAdmin()
-        && section in ['settings', 'catalog', 'growth', 'pillars', 'services', 'work', 'industries', 'faqs'];
+        && section in ['settings', 'catalog', 'growth', 'pillars', 'services', 'work', 'industries', 'locations', 'faqs'];
     }
 
     match /media/{id} {

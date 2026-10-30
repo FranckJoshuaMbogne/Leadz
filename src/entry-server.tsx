@@ -11,7 +11,7 @@ export { staticInsights } from "./data/insights";
 export { defaultContent, mergeContent } from "./content/defaults";
 export { site } from "./config/site";
 export { docToInsight } from "./lib/insights";
-export { buildHeadTags, headTagsToString } from "./lib/seo";
+export { buildHeadTags, headTagsToString, courseLd, courseListLd, breadcrumbLd } from "./lib/seo";
 export { builtInPages, normalizePage } from "./landing/defaults";
 
 export async function render(url: string, cmsInsights: Insight[], initial: InitialContent) {

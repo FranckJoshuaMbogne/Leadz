@@ -36,21 +36,25 @@ export async function pageExists(slug: string) {
 
 /* ---------------- Courses ---------------- */
 
-export type CourseWithLessons = Course & { lessons: Lesson[] };
+export type CourseWithLessons = Course & { lessons: Lesson[]; groupLink: string; groupNote: string };
 
 export async function listCoursesAdmin(): Promise<CourseWithLessons[]> {
   const { fs, d } = await db();
   const [cs, ls] = await Promise.all([fs.getDocs(fs.collection(d, "courses")), fs.getDocs(fs.collection(d, "courseLessons"))]);
-  const lessons = new Map(ls.docs.map((x) => [x.id, (x.data().lessons as Lesson[]) ?? []]));
-  return sortCourses(cs.docs.map((x) => ({ ...(x.data() as Course), slug: x.id }))).map((c) => ({ ...c, lessons: lessons.get(c.slug) ?? [] }));
+  const priv = new Map(ls.docs.map((x) => [x.id, x.data()]));
+  return sortCourses(cs.docs.map((x) => ({ ...(x.data() as Course), slug: x.id }))).map((c) => {
+    const p = priv.get(c.slug) ?? {};
+    return { ...c, lessons: (p.lessons as Lesson[]) ?? [], groupLink: (p.groupLink as string) ?? "", groupNote: (p.groupNote as string) ?? "" };
+  });
 }
 
 export async function saveCourse(c: CourseWithLessons, previousSlug?: string) {
   const { fs, d } = await db();
-  const { lessons, ...course } = c;
+  const { lessons, groupLink = "", groupNote = "", ...course } = c;
+  const hasGroup = !!groupLink.trim();
   const syllabus = lessons.filter((l) => l.title).map((l) => ({ title: l.title, duration: l.duration ?? "" }));
-  await fs.setDoc(fs.doc(d, "courses", c.slug), { ...plain(course), syllabus, price: Number(course.price) || 0, compareAt: Number(course.compareAt) || 0, order: Number(course.order) || 0, updatedAt: fs.serverTimestamp() });
-  await fs.setDoc(fs.doc(d, "courseLessons", c.slug), { lessons: plain(lessons), updatedAt: fs.serverTimestamp() });
+  await fs.setDoc(fs.doc(d, "courses", c.slug), { ...plain(course), syllabus, hasGroup, groupLabel: course.groupLabel ?? "", price: Number(course.price) || 0, compareAt: Number(course.compareAt) || 0, order: Number(course.order) || 0, updatedAt: fs.serverTimestamp() });
+  await fs.setDoc(fs.doc(d, "courseLessons", c.slug), { lessons: plain(lessons), groupLink: groupLink.trim(), groupNote: groupNote.trim(), updatedAt: fs.serverTimestamp() });
   if (previousSlug && previousSlug !== c.slug) {
     await fs.deleteDoc(fs.doc(d, "courses", previousSlug));
     await fs.deleteDoc(fs.doc(d, "courseLessons", previousSlug));

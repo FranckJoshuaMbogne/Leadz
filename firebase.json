@@ -60,6 +60,10 @@
         "destination": "/app.html"
       },
       {
+        "source": "/locations/**",
+        "destination": "/app.html"
+      },
+      {
         "source": "/courses/**",
         "destination": "/app.html"
       },

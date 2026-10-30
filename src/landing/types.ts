@@ -129,6 +129,17 @@ export interface Course {
   includes: string[];
   /** Lesson titles shown publicly (copied from the lessons when saved in the admin). */
   syllabus?: { title: string; duration: string }[];
+  /** True when the course has a private group (the link itself is only in courseLessons). */
+  hasGroup?: boolean;
+  /** Public description of the group, e.g. "Telegram group: summaries, projects, live classes". */
+  groupLabel?: string;
+}
+
+/** Private part of a course, readable only after unlocking (courseLessons/{slug}). */
+export interface CoursePrivate {
+  lessons: Lesson[];
+  groupLink: string;
+  groupNote: string;
 }
 
 export interface Lesson {

@@ -1,3 +1,4 @@
+import type { Location } from "@/data/locations";
 import type { Field } from "./fields";
 import type { CaseStudy, CatalogItem, GrowthStage, Industry, Pillar, Service } from "@/content/types";
 import type { Faq } from "@/content/types";
@@ -228,3 +229,67 @@ export const faqFields: Field[] = [
   { k: "answer", label: "Answer", type: "textarea" },
 ];
 export const newFaq = (): Faq => ({ question: "", answer: "" });
+
+/* ---------------- Locations (local SEO) ---------------- */
+
+export const locationFields: Field[] = [
+  { k: "published", label: "Published", type: "bool", hint: "Unpublished cities are hidden from the site, footer and sitemap." },
+  { k: "city", label: "City (as people search it)", type: "text", placeholder: "Hyderabad" },
+  { k: "slug", label: "URL", type: "text", hint: "springs360.in/locations/<this>" },
+  { k: "region", label: "State", type: "text", placeholder: "Telangana" },
+  { k: "seoTitle", label: "Google title", type: "text", hint: "Put the search phrase first, e.g. Digital Marketing Agency in Hyderabad." },
+  { k: "seoDescription", label: "Google description", type: "textarea", hint: "About 150 characters. Mention the city, 2–3 services and a few areas." },
+  { k: "headline", label: "Hero lines", type: "slist", hint: "One line per row. *Asterisks* = accent italic." },
+  { k: "intro", label: "Hero text", type: "textarea" },
+  { k: "context", label: "“Marketing in <city>” paragraphs", type: "slist", multiline: true, hint: "Write what is specific to this city. Unique local text is what helps a city page rank." },
+  { k: "services", label: "Services shown", type: "refs", source: "services" },
+  { k: "areas", label: "Neighbourhoods / business districts", type: "tags" },
+  { k: "cities", label: "Cities covered (for Google)", type: "tags", hint: "e.g. Delhi, Noida, Gurugram. Used in the structured data as areas served." },
+  {
+    k: "faqs",
+    label: "City FAQ",
+    type: "list",
+    addLabel: "Add question",
+    itemTitle: (f) => f.question,
+    newItem: () => ({ question: "", answer: "" }),
+    fields: [
+      { k: "question", label: "Question", type: "text" },
+      { k: "answer", label: "Answer", type: "textarea" },
+    ],
+  },
+  { k: "phone", label: "Local phone (optional)", type: "text", hint: "Leave empty to use the main number." },
+  {
+    k: "address",
+    label: "Office address (only if you have a real office here)",
+    type: "group",
+    hint: "Leave empty if you serve this city without an office. Google penalises addresses a business doesn't operate from.",
+    fields: [
+      { k: "street", label: "Street address", type: "text" },
+      { k: "locality", label: "Area / locality", type: "text" },
+      { k: "postalCode", label: "PIN code", type: "text" },
+    ],
+  },
+  { k: "mapsUrl", label: "Google Maps link of your Business Profile (optional)", type: "url" },
+  { k: "geo", label: "Map position", type: "group", hint: "Latitude / longitude of the office or the city centre.", fields: [
+    { k: "lat", label: "Latitude", type: "number" },
+    { k: "lng", label: "Longitude", type: "number" },
+  ] },
+  { k: "art", label: "Cover art style", type: "select", options: artOptions },
+];
+export const newLocation = (): Location => ({
+  slug: "",
+  published: false,
+  city: "New city",
+  region: "",
+  cities: [],
+  areas: [],
+  seoTitle: "",
+  seoDescription: "",
+  headline: ["Digital marketing agency", "in *City.*"],
+  intro: "",
+  context: [],
+  services: ["local-seo", "google-business-profile", "google-ads", "meta-ads", "website-development", "social-media-management"],
+  faqs: [],
+  geo: { lat: 0, lng: 0 },
+  art: "flow",
+});

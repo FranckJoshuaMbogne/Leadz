@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Clock, KeyRound, Loader2, LogOut, PlayCircle } from "lucide-react";
+import { Clock, KeyRound, Loader2, LogOut, PlayCircle, Send } from "lucide-react";
 import { VideoEmbed } from "@/components/ui/VideoEmbed";
 import { Seo } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { fetchCourse, fetchLessons, fetchShop, learnerSignIn, learnerSignOut, myGrants, myOrders, redeemPassword } from "./api";
+import { fetchCourse, fetchCoursePrivate, fetchShop, learnerSignIn, learnerSignOut, myGrants, myOrders, redeemPassword } from "./api";
 import { GoogleMark } from "./Checkout";
 import { CourseCover } from "./Courses";
 import { authErrorMessage, useLearner } from "./useLearner";
@@ -203,6 +203,7 @@ export function CoursePlayer() {
   const learner = useLearner();
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[] | null>(null);
+  const [group, setGroup] = useState<{ link: string; note: string }>({ link: "", note: "" });
   const [denied, setDenied] = useState(false);
   const [i, setI] = useState(0);
   const user = learner.status === "signed-in" ? learner.user : null;
@@ -210,8 +211,11 @@ export function CoursePlayer() {
   useEffect(() => {
     if (!user) return;
     fetchCourse(slug).then(setCourse);
-    fetchLessons(slug)
-      .then(setLessons)
+    fetchCoursePrivate(slug)
+      .then((p) => {
+        setLessons(p.lessons);
+        setGroup({ link: p.groupLink, note: p.groupNote });
+      })
       .catch(() => setDenied(true));
   }, [user, slug]);
 
@@ -252,6 +256,7 @@ export function CoursePlayer() {
         ← My courses
       </Link>
       <h1 className="mt-3 font-display text-display-md font-bold text-ink">{course?.title ?? ""}</h1>
+      {group.link && <GroupCard link={group.link} note={group.note} />}
       {!lessons ? (
         <Loader2 className="mt-8 animate-spin text-ink-soft" />
       ) : lessons.length === 0 ? (
@@ -291,5 +296,24 @@ export function CoursePlayer() {
         </div>
       )}
     </Shell>
+  );
+}
+
+function GroupCard({ link, note }: { link: string; note: string }) {
+  return (
+    <div className="mt-6 flex flex-col gap-4 rounded-[1.25rem] border border-[#229ED9]/25 bg-[#229ED9]/[0.07] p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-w-0 gap-4">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#229ED9] text-white">
+          <Send size={20} />
+        </span>
+        <span className="min-w-0">
+          <b className="block text-ink">Your private course group on Telegram</b>
+          <span className="block text-sm text-ink-muted">{note || "Lesson summaries, projects, home classes and chat with other learners."}</span>
+        </span>
+      </div>
+      <a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[48px] shrink-0 items-center justify-center rounded-full bg-[#229ED9] px-6 font-semibold text-white hover:bg-[#1B8BC2]">
+        Join the group
+      </a>
+    </div>
   );
 }

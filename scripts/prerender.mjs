@@ -19,7 +19,7 @@ const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
 const server = await import(pathToFileURL(path.join(ssrDir, "entry-server.js")).href);
-const { render, site, staticInsights, docToInsight, defaultContent, mergeContent, buildHeadTags, headTagsToString, builtInPages, normalizePage } = server;
+const { render, site, staticInsights, docToInsight, defaultContent, mergeContent, buildHeadTags, headTagsToString, builtInPages, normalizePage, courseLd, courseListLd, breadcrumbLd } = server;
 
 const template = await fs.readFile(path.join(dist, "index.html"), "utf8");
 
@@ -170,6 +170,7 @@ if (mediaIds.size) console.log(`  Media: exported ${builtMedia.length}/${mediaId
 const initial = { content, builtMedia };
 const contentPayload = `<script id="__CONTENT__" type="application/json">${JSON.stringify(initial).replace(/</g, "\\u003c")}</script>`;
 const { pillars, services, industries } = content;
+const locations = (content.locations ?? []).filter((l) => l.published !== false);
 const caseStudies = content.work.filter((c) => c.published !== false);
 
 /* ---------------------------------------------------------------- */
@@ -190,6 +191,8 @@ const routes = [
   ...caseStudies.map((c) => ({ path: `/work/${c.slug}`, priority: 0.6 })),
   { path: "/industries", priority: 0.7 },
   ...industries.map((i) => ({ path: `/industries/${i.slug}`, priority: 0.6 })),
+  { path: "/locations", priority: 0.8 },
+  ...locations.map((l) => ({ path: `/locations/${l.slug}`, priority: 0.9 })),
   { path: "/insights", priority: 0.8 },
   ...insightSlugs.map((s) => ({ path: `/insights/${s}`, priority: 0.7 })),
   { path: "/about", priority: 0.7 },
@@ -253,8 +256,18 @@ function shell(seo, extra = "") {
 }
 for (const p of landingPages) {
   const json = JSON.stringify(p).replace(/</g, "\\u003c");
+  const listed = p.template === "courses" ? (p.courses.slugs.length ? p.courses.slugs.map((s) => courses.find((c) => c.slug === s)).filter(Boolean) : courses) : [];
   const html = shell(
-    { title: p.seoTitle || p.name, description: p.seoDescription || p.hero.text, path: `/${p.slug}`, image: mediaUrl(p.ogImage) },
+    {
+      title: p.seoTitle || p.name,
+      description: p.seoDescription || p.hero.text,
+      path: `/${p.slug}`,
+      image: mediaUrl(p.ogImage),
+      jsonLd: [
+        breadcrumbLd([{ name: "Home", path: "/" }, { name: p.name, path: `/${p.slug}` }]),
+        ...(listed.length ? [courseListLd(listed), ...listed.map((c) => courseLd(c, mediaUrl(c.cover)))] : []),
+      ],
+    },
     `<script id="__LANDING__" type="application/json">${json}</script>`
   );
   await fs.writeFile(path.join(dist, `${p.slug}.html`), html);
@@ -263,7 +276,13 @@ for (const p of landingPages) {
 }
 await fs.mkdir(path.join(dist, "courses"), { recursive: true });
 for (const c of courses) {
-  const html = shell({ title: c.title, description: c.subtitle || String(c.description ?? "").slice(0, 155), path: `/courses/${c.slug}`, image: mediaUrl(c.cover) });
+  const html = shell({
+    title: c.title,
+    description: c.subtitle || String(c.description ?? "").slice(0, 155),
+    path: `/courses/${c.slug}`,
+    image: mediaUrl(c.cover),
+    jsonLd: [courseLd(c, mediaUrl(c.cover)), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Courses", path: "/training" }, { name: c.title, path: `/courses/${c.slug}` }])],
+  });
   await fs.writeFile(path.join(dist, "courses", `${c.slug}.html`), html);
   routes.push({ path: `/courses/${c.slug}`, priority: 0.7 });
   count++;
