@@ -118,7 +118,11 @@ function Faq({ items }: { items: LpSection["items"] }) {
             {it.title}
             <ChevronDown size={20} className={cn("shrink-0 text-forest-500 transition-transform", open === i && "rotate-180")} />
           </button>
-          {open === i && <p className="max-w-prose pb-6 text-ink-muted">{it.text}</p>}
+          <div inert={open !== i} className={cn("grid transition-[grid-template-rows] duration-300 ease-out", open === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
+            <div className="overflow-hidden">
+              <p className="max-w-prose pb-6 text-ink-muted">{it.text}</p>
+            </div>
+          </div>
         </div>
       ))}
     </div>

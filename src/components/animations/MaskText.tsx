@@ -27,6 +27,8 @@ export function MaskText({
             style={{ animationDelay: `${delay + i * step}s` } as CSSProperties}
           >
             {line}
+            {/* keeps words apart in the page text (what Google and screen readers read) */}
+            {i < lines.length - 1 ? " " : null}
           </span>
         </span>
       ))}

@@ -25,13 +25,16 @@ export function FaqList({ faqs, light = false }: { faqs: { question: string; ans
                 </span>
               </button>
             </h3>
+            {/* Answers stay in the page (collapsed, not removed) so search engines read them. */}
             <div
               id={`${id}-${i}`}
               role="region"
-              hidden={!isOpen}
-              className={cn("max-w-3xl pb-7", light ? "text-ivory/75" : "text-ink-muted")}
+              inert={!isOpen}
+              className={cn("grid transition-[grid-template-rows] duration-300 ease-out", isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}
             >
-              {f.answer}
+              <div className="overflow-hidden">
+                <p className={cn("max-w-3xl pb-7", light ? "text-ivory/75" : "text-ink-muted")}>{f.answer}</p>
+              </div>
             </div>
           </div>
         );
